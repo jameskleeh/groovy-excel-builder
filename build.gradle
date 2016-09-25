@@ -1,0 +1,86 @@
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+
+group 'com.jameskleeh'
+version '1.0.0.BUILD-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.codehaus.groovy:groovy-all:2.4.7'
+    compile "org.apache.poi:poi-ooxml:3.14"
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+project.ext {
+    githubUrl = 'https://github.com/jameskleeh/groovy-excel-builder'
+    artifactId = 'excel-builder'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['maven']
+    pkg {
+        repo = 'com.jameskleeh'
+        name = 'excel-builder'
+        licenses = ['Apache-2.0']
+        vcsUrl = project.githubUrl
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId project.artifactId
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name project.artifactId
+                    description project.description
+                    url project.githubUrl
+                    scm {
+                        url project.githubUrl
+                        connection "scm:${project.githubUrl}.git"
+                        developerConnection "scm:${project.githubUrl}.git"
+                    }
+                    licenses {
+                        license {
+                            name 'Apache License, Version 2.0'
+                            url 'https://www.apache.org/licenses/LICENSE-2.0'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'jameskleeh'
+                            name 'James Kleeh'
+                            email 'james.kleeh@gmail.com'
+                        }
+                    }
+                }
+            }
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
