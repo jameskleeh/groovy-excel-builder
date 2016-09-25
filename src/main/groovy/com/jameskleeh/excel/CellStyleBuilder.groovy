@@ -2,8 +2,12 @@ package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
+import org.apache.poi.ss.usermodel.BorderStyle
+import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.Font as FontType
 import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.HorizontalAlignment
+import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
@@ -11,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
+
 import java.awt.Color
 
 /**
@@ -58,8 +63,8 @@ class CellStyleBuilder {
     }
 
     private static void convertBorderOptions(Map options, String key) {
-        if (options.containsKey(key) && options[key] instanceof Border) {
-            Border border = (Border)options.remove(key)
+        if (options.containsKey(key) && options[key] instanceof BorderStyle) {
+            BorderStyle border = (BorderStyle)options.remove(key)
             options.put(key, [style: border])
         }
     }
@@ -68,15 +73,15 @@ class CellStyleBuilder {
      *
      * A method to convert global options into specific options.
      * Example:
-     * [border: Border.THIN] would convert to
-     * [border: [style: Border.THIN, left: [style: Border.THIN], right: ...]]
+     * [border: BorderStyle.THIN] would convert to
+     * [border: [style: BorderStyle.THIN, left: [style: BorderStyle.THIN], right: ...]]
      *
      * @param options A map of options
      */
      static void convertSimpleOptions(Map options) {
         if (options) {
-            if (options.containsKey(BORDER) && options[BORDER] instanceof Border) {
-                Border border = (Border)options.remove(BORDER)
+            if (options.containsKey(BORDER) && options[BORDER] instanceof BorderStyle) {
+                BorderStyle border = (BorderStyle)options.remove(BORDER)
                 options.put(BORDER, [style: border])
             }
             if (options.containsKey(FONT) && options[FONT] instanceof Font) {
@@ -193,11 +198,11 @@ class CellStyleBuilder {
         new XSSFColor(color)
     }
 
-    private short getBorderStyle(Object obj) {
-        if (obj instanceof Border) {
-            return (short)obj.ordinal()
+    private BorderStyle getBorderStyle(Object obj) {
+        if (obj instanceof BorderStyle) {
+            return (BorderStyle)obj
         }
-        throw new IllegalArgumentException("The border style must be an instance of ${Border.canonicalName}")
+        throw new IllegalArgumentException("The border style must be an instance of ${BorderStyle.canonicalName}")
     }
 
     private void setBorder(Map border, String key, Closure borderCallable, Closure colorCallable) {
@@ -274,7 +279,7 @@ class CellStyleBuilder {
 
     private void setBorder(XSSFCellStyle cellStyle, Map border) {
         if (border.containsKey(STYLE)) {
-            short style = getBorderStyle(border[STYLE])
+            BorderStyle style = getBorderStyle(border[STYLE])
             cellStyle.setBorderBottom(style)
             cellStyle.setBorderTop(style)
             cellStyle.setBorderLeft(style)
@@ -294,8 +299,15 @@ class CellStyleBuilder {
     }
 
     private void setFill(XSSFCellStyle cellStyle, Object fill) {
-        if (fill instanceof Fill) {
-            cellStyle.setFillPattern((short)((Fill)fill).ordinal())
+        FillPatternType fillPattern
+        if (fill instanceof FillPatternType) {
+            fillPattern = (FillPatternType) fill
+        } else if (fill instanceof String) {
+            fillPattern = FillPatternType.valueOf(fill.toUpperCase())
+        }
+
+        if (fillPattern != null) {
+            cellStyle.setFillPattern(fillPattern)
         } else {
             throw new IllegalArgumentException("The fill pattern must be an instance of ${Short.canonicalName}")
         }
@@ -361,7 +373,7 @@ class CellStyleBuilder {
         if (options.containsKey(FILL)) {
             setFill(cellStyle, options[FILL])
         } else {
-            setFill(cellStyle, Fill.SOLID_FOREGROUND)
+            setFill(cellStyle, FillPatternType.SOLID_FOREGROUND)
         }
         if (options.containsKey(FOREGROUND_COLOR)) {
             setForegroundColor(cellStyle, options[FOREGROUND_COLOR])
