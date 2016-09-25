@@ -5,6 +5,9 @@ import org.apache.poi.ss.util.WorkbookUtil
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
+/**
+ * A class used to create a workbook in an excel document
+ */
 @CompileStatic
 class WorkBook {
 
@@ -40,7 +43,7 @@ class WorkBook {
             if (width instanceof Integer) {
                 sheet.setDefaultColumnWidth(width)
             } else {
-                throw new RuntimeException("Sheet default column width must be an integer")
+                throw new IllegalArgumentException('Sheet default column width must be an integer')
             }
         }
         if (options.containsKey(HEIGHT)) {
@@ -50,7 +53,7 @@ class WorkBook {
             } else if (height instanceof Float) {
                 sheet.setDefaultRowHeightInPoints(height)
             } else {
-                throw new RuntimeException("Sheet default row height must be a short or float")
+                throw new IllegalArgumentException('Sheet default row height must be a short or float')
             }
         }
         callable.delegate = new Sheet(wb, sheet)

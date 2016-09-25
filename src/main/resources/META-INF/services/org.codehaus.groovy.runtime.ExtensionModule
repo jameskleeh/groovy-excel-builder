@@ -1,0 +1,3 @@
+moduleName = excel-builder
+moduleVersion = 0.1.0
+extensionClasses = com.jameskleeh.excel.extensions.StringExtension

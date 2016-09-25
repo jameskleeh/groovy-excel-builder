@@ -1,23 +1,33 @@
 plugins {
     id "com.jfrog.bintray" version "1.7"
+    id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
+    id "nebula.provided-base" version "3.1.0"
+    id 'org.ajoberstar.github-pages' version '1.1.0'
 }
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'codenarc'
 
 
 group 'com.jameskleeh'
-version '1.0.0.BUILD-SNAPSHOT'
+version '0.1.0.BUILD-SNAPSHOT'
+targetCompatibility = 1.7
 
 repositories {
+    mavenLocal()
+    jcenter()
     mavenCentral()
 }
 
 dependencies {
-    compileOnly 'org.codehaus.groovy:groovy-all:2.4.7'
+    provided 'org.codehaus.groovy:groovy-all:2.4.7'
     compile "org.apache.poi:poi-ooxml:3.14"
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    codenarc 'org.codenarc:CodeNarc:0.25.2'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'cglib:cglib-nodep:3.1'
+    //testCompile 'org.objenesis:objenesis:2.1'
 }
 
 project.ext {
@@ -83,4 +93,43 @@ publishing {
             artifact javadocJar
         }
     }
+}
+
+asciidoctor {
+    sourceDir = file('docs')
+
+    resources {
+        from(sourceDir) {
+            include 'css/**', 'images/**'
+        }
+    }
+
+    attributes 'source-highlighter': 'prettify',
+            'docinfo1': ['version': project.version],
+            'imagesdir': 'images',
+            'stylesdir': 'css',
+            icons: 'font',
+            'toc': 'left',
+            version: project.version,
+            'projectUrl': project.githubUrl
+}
+
+githubPages {
+    repoUri = "${project.githubUrl}.git"
+
+    credentials {
+        username = githubKey
+        password = ''
+    }
+
+    pages {
+        from file(asciidoctor.outputDir.path + '/html5')
+    }
+}
+
+publishGhPages.dependsOn asciidoctor
+
+codenarc {
+    toolVersion = '0.25.2'
+    configFile = file("${rootProject.projectDir}/config/codenarc/rules.groovy")
 }

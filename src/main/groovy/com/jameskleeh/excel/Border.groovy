@@ -89,5 +89,5 @@ enum Border {
      * slanted dash-dot border
      */
 
-    SLANTED_DASH_DOT;
+    SLANTED_DASH_DOT
 }

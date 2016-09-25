@@ -5,6 +5,9 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
+/**
+ * A class used to store fonts and styles for reuse in workbooks
+ */
 @CompileStatic
 class WorkbookCache {
 

@@ -6,6 +6,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
+/**
+ * A class used to create a row in an excel document
+ */
 @CompileStatic
 class Row {
 
@@ -45,7 +48,7 @@ class Row {
         if (columnIndexes && columnIndexes.containsKey(id)) {
             cellIdx = columnIndexes[id]
         } else {
-            throw new RuntimeException("Column index not specified for " + id)
+            throw new IllegalArgumentException("Column index not specified for $id")
         }
     }
 
@@ -60,16 +63,16 @@ class Row {
         columnIndexes[id] = cell.columnIndex
     }
 
-    void formula(String _formula, final Map style) {
+    void formula(String formula, final Map style) {
         XSSFCell cell = nextCell()
-        if (_formula.startsWith('=')) {
-            _formula = _formula.substring(1)
+        if (formula.startsWith('=')) {
+            formula = formula[1..-1]
         }
-        cell.setCellFormula(_formula)
+        cell.setCellFormula(formula)
         setStyle(null, cell, style)
     }
-    void formula(String _formula) {
-        formula(_formula, null)
+    void formula(String formula) {
+        this.formula(formula, null)
     }
     void formula(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
         formula(null, callable)
@@ -78,21 +81,21 @@ class Row {
         XSSFCell cell = nextCell()
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.delegate = new Formula(cell, columnIndexes)
-        String _formula
+        String formula
         if (callable.maximumNumberOfParameters == 1) {
-            _formula = (String)callable.call(cell)
+            formula = (String)callable.call(cell)
         } else {
-            _formula = (String)callable.call()
+            formula = (String)callable.call()
         }
-        if (_formula.startsWith('=')) {
-            _formula = _formula.substring(1)
+        if (formula.startsWith('=')) {
+            formula = formula[1..-1]
         }
-        cell.setCellFormula(_formula)
+        cell.setCellFormula(formula)
         setStyle(null, cell, style)
     }
 
     void cell() {
-        nextCell().setCellValue("")
+        nextCell().setCellValue('')
     }
     void cell(Object value) {
         cell(value, null)

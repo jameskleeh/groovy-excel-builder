@@ -5,7 +5,7 @@ import org.apache.poi.ss.util.CellReference
 import org.apache.poi.xssf.usermodel.XSSFCell
 
 /**
- * Border enum mapped to {@link org.apache.poi.ss.usermodel.BorderStyle}
+ * A class to get references to cells for use in formulas
  *
  * @author James Kleeh
  * @since 1.0.0
@@ -30,7 +30,11 @@ class Formula {
     }
 
     private int relativeRow(int index) {
-        row + index
+        int rowIndex = row + index
+        if (rowIndex < 1) {
+            throw new IllegalArgumentException("An invalid row index of $rowIndex was specified")
+        }
+        rowIndex
     }
 
     private String relativeColumn(int index) {
@@ -38,7 +42,11 @@ class Formula {
     }
 
     private String exactColumn(int index) {
-        CellReference.convertNumToColString(index)
+        if (index > -1) {
+            CellReference.convertNumToColString(index)
+        } else {
+            throw new IllegalArgumentException("An invalid column index of $index was specified")
+        }
     }
 
     String relativeCell(int columnIndex, int rowIndex) {
@@ -50,6 +58,9 @@ class Formula {
     }
 
     String exactCell(int columnIndex, int rowIndex) {
+        if (rowIndex < 0) {
+            throw new IllegalArgumentException("An invalid row index of $rowIndex was specified")
+        }
         exactColumn(columnIndex) + (rowIndex + 1)
     }
 
@@ -57,7 +68,7 @@ class Formula {
         if (columnIndexes && columnIndexes.containsKey(columnName)) {
             exactCell(columnIndexes[columnName], rowIndex)
         } else {
-            throw new RuntimeException("Column index not specified for " + columnName)
+            throw new IllegalArgumentException("Column index not specified for $columnName")
         }
     }
 

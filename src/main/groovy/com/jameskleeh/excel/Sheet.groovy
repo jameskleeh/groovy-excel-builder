@@ -5,6 +5,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
+/**
+ * A class used to create a sheet in an excel document
+ */
 @CompileStatic
 class Sheet {
 
