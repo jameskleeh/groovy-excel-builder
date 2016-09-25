@@ -217,16 +217,30 @@ class CellStyleBuilder {
     }
 
     private void setHorizontalAlignment(XSSFCellStyle cellStyle, Object horizontalAlignment) {
+        HorizontalAlignment hAlign
         if (horizontalAlignment instanceof HorizontalAlignment) {
-            cellStyle.setAlignment((short)((HorizontalAlignment)horizontalAlignment).ordinal())
+            hAlign = (HorizontalAlignment)horizontalAlignment
+        } else if (horizontalAlignment instanceof String) {
+            hAlign = HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase())
+        }
+
+        if (hAlign != null) {
+            cellStyle.setAlignment((short)hAlign.ordinal())
         } else {
             throw new IllegalArgumentException("The horizontal alignment must be an instance of ${HorizontalAlignment.canonicalName}")
         }
     }
 
     private void setVerticalAlignment(XSSFCellStyle cellStyle, Object verticalAlignment) {
+        VerticalAlignment vAlign
         if (verticalAlignment instanceof VerticalAlignment) {
-            cellStyle.setVerticalAlignment((short)((VerticalAlignment)verticalAlignment).ordinal())
+            vAlign = (VerticalAlignment) verticalAlignment
+        } else if (verticalAlignment instanceof String) {
+            vAlign = VerticalAlignment.valueOf(verticalAlignment.toUpperCase())
+        }
+
+        if (vAlign != null) {
+            cellStyle.setVerticalAlignment((short)vAlign.ordinal())
         } else {
             throw new IllegalArgumentException("The vertical alignment must be an instance of ${VerticalAlignment.canonicalName}")
         }
@@ -235,6 +249,24 @@ class CellStyleBuilder {
     private void setWrapped(XSSFCellStyle cellStyle, Object wrapped) {
         if (wrapped instanceof Boolean) {
             cellStyle.setWrapText((Boolean)wrapped)
+        } else {
+            throw new IllegalArgumentException("The wrapped option must be an instance of ${Boolean.canonicalName}")
+        }
+    }
+
+
+    private void setLocked(XSSFCellStyle cellStyle, Object locked) {
+        if (locked instanceof Boolean) {
+            cellStyle.setLocked((Boolean)locked)
+        } else {
+            throw new IllegalArgumentException("The wrapped option must be an instance of ${Boolean.canonicalName}")
+        }
+    }
+
+
+    private void setHidden(XSSFCellStyle cellStyle, Object hidden) {
+        if (hidden instanceof Boolean) {
+            cellStyle.setHidden((Boolean)hidden)
         } else {
             throw new IllegalArgumentException("The wrapped option must be an instance of ${Boolean.canonicalName}")
         }
@@ -303,10 +335,10 @@ class CellStyleBuilder {
             setFont(cellStyle, options[FONT])
         }
         if (options.containsKey(HIDDEN)) {
-            cellStyle.setHidden((boolean) options[HIDDEN])
+            setHidden(cellStyle, options[HIDDEN])
         }
         if (options.containsKey(LOCKED)) {
-            cellStyle.setLocked((boolean) options[LOCKED])
+            setLocked(cellStyle, options[LOCKED])
         }
         if (options.containsKey(WRAPPED)) {
             setWrapped(cellStyle, options[WRAPPED])
@@ -315,7 +347,7 @@ class CellStyleBuilder {
             setHorizontalAlignment(cellStyle, options[HORIZONTAL_ALIGNMENT])
         }
         if (options.containsKey(VERTICAL_ALIGNMENT)) {
-            setVerticalAlignment(cellStyle, options[HORIZONTAL_ALIGNMENT])
+            setVerticalAlignment(cellStyle, options[VERTICAL_ALIGNMENT])
         }
         if (options.containsKey(ROTATION)) {
             cellStyle.setRotation((short) options[ROTATION])

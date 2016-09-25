@@ -158,4 +158,149 @@ class CellStyleBuilderSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
     }
+
+    void "test buildStyle hidden"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [hidden: true])
+
+        then:
+        cellStyle.hidden
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [hidden: false])
+
+        then:
+        !cellStyle.hidden
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [hidden: "x"])
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    void "test buildStyle locked"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [locked: true])
+
+        then:
+        cellStyle.locked
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [locked: false])
+
+        then:
+        !cellStyle.locked
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [locked: "x"])
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    void "test buildStyle wrapped"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [wrapped: true])
+
+        then:
+        cellStyle.wrapText
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [wrapped: false])
+
+        then:
+        !cellStyle.wrapText
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [wrapped: "x"])
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    void "test buildStyle vertical alignment"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: VerticalAlignment.BOTTOM])
+
+        then:
+        cellStyle.verticalAlignment == (short)VerticalAlignment.BOTTOM.ordinal()
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: 'bottom'])
+
+        then:
+        cellStyle.verticalAlignment == (short)VerticalAlignment.BOTTOM.ordinal()
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: 'x'])
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    void "test buildStyle rotation"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [rotation: 0])
+
+        then:
+        cellStyle.rotation == (short)0
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [rotation: 1L])
+
+        then:
+        cellStyle.rotation == (short)1
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [rotation: "foo"])
+
+        then:
+        thrown(ClassCastException)
+    }
+
+    void "test buildStyle indention"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [indent: 0])
+
+        then:
+        cellStyle.indention == (short)0
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [indent: 1L])
+
+        then:
+        cellStyle.indention == (short)1
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [indent: "foo"])
+
+        then:
+        thrown(ClassCastException)
+    }
+
 }
