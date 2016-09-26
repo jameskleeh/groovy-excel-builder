@@ -114,7 +114,7 @@ class CellStyleBuilder {
     }
 
     private void setFormat(XSSFCellStyle cellStyle, Object format) {
-        if (format instanceof Short) {
+        if (format instanceof Integer) {
             cellStyle.setDataFormat(format)
         } else if (format instanceof String) {
             cellStyle.setDataFormat(workbook.creationHelper.createDataFormat().getFormat(format))

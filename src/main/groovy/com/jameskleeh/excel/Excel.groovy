@@ -1,6 +1,7 @@
 package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
+import org.apache.poi.ss.usermodel.BuiltinFormats
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -11,25 +12,25 @@ import java.util.concurrent.atomic.AtomicInteger
 @CompileStatic
 class Excel {
 
-    protected static SortedSet<Entry> excelEntries = [] as SortedSet
+    protected static SortedSet<Entry> rendererEntries = [] as SortedSet
     protected static SortedSet<FormatEntry> formatEntries = [] as SortedSet
 
     protected static final AtomicInteger RENDERER_SEQUENCE = new AtomicInteger(0)
     protected static final AtomicInteger FORMAT_SEQUENCE = new AtomicInteger(0)
 
     static {
-        registerCellFormat(BigDecimal, (short)8)
-        registerCellFormat(Double, (short)4)
-        registerCellFormat(Float, (short)4)
-        registerCellFormat(Integer, (short)3)
-        registerCellFormat(Long, (short)3)
-        registerCellFormat(Short, (short)3)
-        registerCellFormat(BigInteger, (short)3)
+        registerCellFormat(BigDecimal, 8)
+        registerCellFormat(Double, 4)
+        registerCellFormat(Float, 4)
+        registerCellFormat(Integer, 3)
+        registerCellFormat(Long, 3)
+        registerCellFormat(Short, 3)
+        registerCellFormat(BigInteger, 3)
         registerCellFormat(Date, 'm/d/yyyy')
     }
 
     static void registerCellRenderer(Class clazz, Integer priority, Closure callable) {
-        excelEntries.add(new Entry(clazz, callable, priority))
+        rendererEntries.add(new Entry(clazz, callable, priority))
     }
 
     static void registerCellRenderer(Class clazz, Closure callable) {
@@ -44,16 +45,16 @@ class Excel {
         registerCellFormat(clazz, -1, format)
     }
 
-    static void registerCellFormat(Class clazz, Integer priority, short format) {
+    static void registerCellFormat(Class clazz, Integer priority, int format) {
         formatEntries.add(new FormatEntry(clazz, format, priority))
     }
 
-    static void registerCellFormat(Class clazz, short format) {
+    static void registerCellFormat(Class clazz, int format) {
         registerCellFormat(clazz, -1, format)
     }
 
     static Closure getRenderer(Class clazz) {
-        for (Entry entry : excelEntries) {
+        for (Entry entry : rendererEntries) {
             if (entry.clazz == clazz || entry.clazz.isAssignableFrom(clazz)) {
                 return entry.renderer
             }

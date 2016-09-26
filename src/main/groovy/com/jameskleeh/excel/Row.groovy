@@ -116,7 +116,7 @@ class Row {
         } else {
             Closure callable = Excel.getRenderer(value.class)
             if (callable != null) {
-                cell.setCellValue((String)callable.call())
+                cell.setCellValue((String)callable.call(value))
             } else {
                 cell.setCellValue(value.toString())
             }

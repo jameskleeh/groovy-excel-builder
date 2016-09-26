@@ -60,7 +60,7 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle.dataFormatString == "foo"
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle(null, [format: (short)1])
+        cellStyle = cellStyleBuilder.buildStyle(null, [format: 1])
 
         then:
         cellStyle.dataFormat == (short)1
