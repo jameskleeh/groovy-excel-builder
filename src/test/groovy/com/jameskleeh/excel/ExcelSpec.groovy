@@ -7,9 +7,13 @@ import spock.lang.Specification
  */
 class ExcelSpec extends Specification {
 
+    void cleanup() {
+        Excel.formatEntries.clear()
+        Excel.rendererEntries.clear()
+    }
+
     void "test getRenderer order"() {
         given:
-        Excel.rendererEntries.clear()
         Excel.registerCellRenderer(Integer) {
             it * 2
         }
@@ -25,7 +29,6 @@ class ExcelSpec extends Specification {
     }
 
     void "test getRenderer higher priority"() {
-        Excel.rendererEntries.clear()
         Excel.registerCellRenderer(Integer, 2) {
             it * 3
         }
@@ -41,7 +44,6 @@ class ExcelSpec extends Specification {
     }
 
     void "test getFormat higher priority"() {
-        Excel.formatEntries.clear()
         Excel.registerCellFormat(Integer, 2, 2)
         Excel.registerCellFormat(Integer, 1, 1)
 
@@ -53,7 +55,6 @@ class ExcelSpec extends Specification {
     }
 
     void "test getFormat order"() {
-        Excel.formatEntries.clear()
         Excel.registerCellFormat(Integer, 2)
         Excel.registerCellFormat(Integer, 1)
 

@@ -1,7 +1,6 @@
 package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
-import org.apache.poi.ss.usermodel.BuiltinFormats
 
 import java.util.concurrent.atomic.AtomicInteger
 

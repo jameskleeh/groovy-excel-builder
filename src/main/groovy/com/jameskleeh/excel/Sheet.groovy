@@ -50,7 +50,7 @@ class Sheet {
 
     void row(Object...cells) {
         row {
-            cells.eachWithIndex { val, idx ->
+            cells.each { val ->
                 cell(val)
             }
         }

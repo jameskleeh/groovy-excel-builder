@@ -9,15 +9,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 @CompileStatic
 class ExcelBuilder {
 
-    static void output(OutputStream outputStream, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkBook) Closure callable) {
+    static void output(OutputStream outputStream, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Workbook) Closure callable) {
         XSSFWorkbook wb = build(callable)
         wb.write(outputStream)
     }
 
-    static XSSFWorkbook build(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = WorkBook) Closure callable) {
+    static XSSFWorkbook build(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Workbook) Closure callable) {
         XSSFWorkbook wb = new XSSFWorkbook()
         callable.resolveStrategy = Closure.DELEGATE_FIRST
-        callable.delegate = new WorkBook(wb)
+        callable.delegate = new Workbook(wb)
         if (callable.maximumNumberOfParameters == 1) {
             callable.call(wb)
         } else {

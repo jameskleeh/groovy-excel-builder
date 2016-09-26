@@ -4,9 +4,6 @@ import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
 
-/**
- * Created by jameskleeh on 9/25/16.
- */
 class RowSpec extends Specification {
 
     void "test skipCells"() {

@@ -259,7 +259,6 @@ class CellStyleBuilder {
         }
     }
 
-
     private void setLocked(XSSFCellStyle cellStyle, Object locked) {
         if (locked instanceof Boolean) {
             cellStyle.setLocked((Boolean)locked)
@@ -267,7 +266,6 @@ class CellStyleBuilder {
             throw new IllegalArgumentException("The wrapped option must be an instance of ${Boolean.canonicalName}")
         }
     }
-
 
     private void setHidden(XSSFCellStyle cellStyle, Object hidden) {
         if (hidden instanceof Boolean) {

@@ -9,14 +9,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
  * A class used to create a workbook in an excel document
  */
 @CompileStatic
-class WorkBook {
+class Workbook {
 
     private final XSSFWorkbook wb
 
     private static final String WIDTH = 'width'
     private static final String HEIGHT = 'height'
 
-    WorkBook(XSSFWorkbook wb) {
+    Workbook(XSSFWorkbook wb) {
         this.wb = wb
     }
 
@@ -47,7 +47,7 @@ class WorkBook {
             }
         }
         if (options.containsKey(HEIGHT)) {
-            Object height = sheet[HEIGHT]
+            Object height = options[HEIGHT]
             if (height instanceof Short) {
                 sheet.setDefaultRowHeight(height)
             } else if (height instanceof Float) {
