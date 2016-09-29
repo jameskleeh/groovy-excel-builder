@@ -28,6 +28,27 @@ class ExcelSpec extends Specification {
         callable.call(2) == 6
     }
 
+    class Foo {
+
+    }
+
+    class Bar extends Foo {
+
+    }
+
+    void "test getRenderer subclass"() {
+        given:
+        Excel.registerCellRenderer(Foo) {
+            it
+        }
+
+        when:
+        Closure callable = Excel.getRenderer(Bar)
+
+        then: "Renderers registered for super classes work"
+        callable.call(1) instanceof Integer
+    }
+
     void "test getRenderer higher priority"() {
         Excel.registerCellRenderer(Integer, 2) {
             it * 3
@@ -41,6 +62,14 @@ class ExcelSpec extends Specification {
 
         then: "The highest priorty renderer is chosen"
         callable.call(2) == 6
+    }
+
+    void "test getRenderer returns null"() {
+        when:
+        Closure callable = Excel.getRenderer(StringBuilder)
+
+        then:
+        callable == null
     }
 
     void "test getFormat higher priority"() {
@@ -63,5 +92,23 @@ class ExcelSpec extends Specification {
 
         then: "Formats registered later with the same class and priority are chosen"
         format == 1
+    }
+
+    void "test getFormat subclass"() {
+        Excel.registerCellFormat(Foo, 1)
+
+        when:
+        Object format = Excel.getFormat(Bar)
+
+        then: "Formats registered for super classes work for subclasses"
+        format == 1
+    }
+
+    void "test getFormat returns null"() {
+        when:
+        Object format = Excel.getFormat(StringBuilder)
+
+        then:
+        format == null
     }
 }

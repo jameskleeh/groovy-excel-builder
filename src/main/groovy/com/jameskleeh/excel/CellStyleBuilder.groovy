@@ -87,20 +87,10 @@ class CellStyleBuilder {
             if (options.containsKey(FONT) && options[FONT] instanceof Font) {
                 Font font = (Font)options.remove(FONT)
                 Map fontOptions = [:]
-                switch (font) {
-                    case Font.BOLD:
-                        fontOptions[FONT_BOLD] = true
-                        break
-                    case Font.ITALIC:
-                        fontOptions[FONT_ITALIC] = true
-                        break
-                    case Font.STRIKEOUT:
-                        fontOptions[FONT_STRIKEOUT] = true
-                        break
-                    case Font.UNDERLINE:
-                        fontOptions[FONT_UNDERLINE] = (byte)1
-                        break
-                }
+                fontOptions[FONT_BOLD] = (font == Font.BOLD)
+                fontOptions[FONT_ITALIC] = (font == Font.ITALIC)
+                fontOptions[FONT_STRIKEOUT] = (font == Font.STRIKEOUT)
+                fontOptions[FONT_UNDERLINE] = (font == Font.UNDERLINE ? (byte)1 : (byte)0)
                 options[FONT] = fontOptions
             }
             if (options.containsKey(BORDER)) {
@@ -144,11 +134,14 @@ class CellStyleBuilder {
                 setBooleanFont(fontMap, FONT_ITALIC, font.&setItalic)
                 setBooleanFont(fontMap, FONT_STRIKEOUT, font.&setStrikeout)
                 if (fontMap.containsKey(FONT_UNDERLINE)) {
+                    Object underlineOption = fontMap[FONT_UNDERLINE]
                     byte underline
-                    if (fontMap[FONT_UNDERLINE] instanceof Boolean) {
+                    if (underlineOption instanceof Byte) {
+                        underline = (byte)underlineOption
+                    } else if (underlineOption instanceof Boolean) {
                         underline = FontType.U_SINGLE
-                    } else if (fontMap[FONT_UNDERLINE] instanceof String) {
-                        switch (fontMap[FONT_UNDERLINE]) {
+                    } else if (underlineOption instanceof String) {
+                        switch (underlineOption) {
                             case 'single':
                                 underline = FontType.U_SINGLE
                                 break
@@ -201,8 +194,10 @@ class CellStyleBuilder {
     private BorderStyle getBorderStyle(Object obj) {
         if (obj instanceof BorderStyle) {
             return (BorderStyle)obj
+        } else {
+            String className = BorderStyle.class.getCanonicalName()
+            throw new IllegalArgumentException("The border style must be an instance of ${className}")
         }
-        throw new IllegalArgumentException("The border style must be an instance of ${BorderStyle.canonicalName}")
     }
 
     private void setBorder(Map border, String key, Closure borderCallable, Closure colorCallable) {
@@ -232,7 +227,7 @@ class CellStyleBuilder {
         if (hAlign != null) {
             cellStyle.setAlignment((short)hAlign.ordinal())
         } else {
-            throw new IllegalArgumentException("The horizontal alignment must be an instance of ${HorizontalAlignment.canonicalName}")
+            throw new IllegalArgumentException("The horizontal alignment must be an instance of org.apache.poi.ss.usermodel.HorizontalAlignment")
         }
     }
 
@@ -247,7 +242,7 @@ class CellStyleBuilder {
         if (vAlign != null) {
             cellStyle.setVerticalAlignment((short)vAlign.ordinal())
         } else {
-            throw new IllegalArgumentException("The vertical alignment must be an instance of ${VerticalAlignment.canonicalName}")
+            throw new IllegalArgumentException("The vertical alignment must be an instance of org.apache.poi.ss.usermodel.VerticalAlignment")
         }
     }
 
@@ -384,6 +379,7 @@ class CellStyleBuilder {
 
     private XSSFCellStyle getStyle(Object value, Map options, Map defaultOptions = null) {
         convertSimpleOptions(options)
+        convertSimpleOptions(defaultOptions)
         options = merge(defaultOptions, options)
         if (options) {
             WorkbookCache workbookCache = WORKBOOK_CACHE.get(workbook)

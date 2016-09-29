@@ -2,7 +2,9 @@ package com.jameskleeh.excel
 
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
+import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
@@ -37,14 +39,35 @@ class CellStyleBuilderSpec extends Specification {
         cellStyleBuilder.convertSimpleOptions(options)
 
         then:
-        options.font == [bold: true]
+        options.font == [bold: true, italic: false, strikeout: false, underline: (byte)0]
+
+        when:
+        options = [font: Font.ITALIC]
+        cellStyleBuilder.convertSimpleOptions(options)
+
+        then:
+        options.font == [bold: false, italic: true, strikeout: false, underline: (byte)0]
+
+        when:
+        options = [font: Font.STRIKEOUT]
+        cellStyleBuilder.convertSimpleOptions(options)
+
+        then:
+        options.font == [bold: false, italic: false, strikeout: true, underline: (byte)0]
 
         when:
         options = [font: Font.UNDERLINE]
         cellStyleBuilder.convertSimpleOptions(options)
 
         then:
-        options.font == [underline: (byte)1]
+        options.font == [bold: false, italic: false, strikeout: false, underline: (byte)1]
+
+        when:
+        options = [font: 'x']
+        cellStyleBuilder.convertSimpleOptions(options)
+
+        then:
+        options.font == 'x'
     }
 
     void "test buildStyle format"() {
@@ -87,7 +110,8 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle = cellStyleBuilder.buildStyle('', [font: 1])
 
         then:
-        thrown(IllegalArgumentException)
+        def ex = thrown(IllegalArgumentException)
+        ex.message == 'The font option must be an instance of a Map'
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [font: [:]])
@@ -106,6 +130,12 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle.font.italic
         cellStyle.font.strikeout
         cellStyle.font.underline == (byte)1
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [font: [bold: 'foo']])
+
+        then:
+        thrown(IllegalArgumentException)
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [font: [underline: 'single']])
@@ -133,6 +163,12 @@ class CellStyleBuilderSpec extends Specification {
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [font: [underline: 'foo']])
+
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [font: [underline: 1]])
 
         then:
         thrown(IllegalArgumentException)
@@ -234,25 +270,61 @@ class CellStyleBuilderSpec extends Specification {
         thrown(IllegalArgumentException)
     }
 
+    void "test buildStyle horizontal alignment"() {
+        given:
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        XSSFCellStyle cellStyle
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [alignment: HorizontalAlignment.RIGHT])
+
+        then:
+        cellStyle.alignmentEnum == HorizontalAlignment.RIGHT
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [alignment: 'right'])
+
+        then:
+        cellStyle.alignmentEnum == HorizontalAlignment.RIGHT
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [alignment: 'x'])
+
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [alignment: 1])
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
     void "test buildStyle vertical alignment"() {
         given:
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: VerticalAlignment.BOTTOM])
+        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: VerticalAlignment.TOP])
 
         then:
-        cellStyle.verticalAlignmentEnum == VerticalAlignment.BOTTOM
+        cellStyle.verticalAlignmentEnum == VerticalAlignment.TOP
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: 'bottom'])
+        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: 'top'])
 
         then:
-        cellStyle.verticalAlignmentEnum == VerticalAlignment.BOTTOM
+        cellStyle.verticalAlignmentEnum == VerticalAlignment.TOP
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: 'x'])
+
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [verticalAlignment: 1])
 
         then:
         thrown(IllegalArgumentException)
@@ -312,6 +384,12 @@ class CellStyleBuilderSpec extends Specification {
         XSSFCellStyle cellStyle
 
         when:
+        cellStyleBuilder.buildStyle('', [border: [style: 1]])
+
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
         cellStyle = cellStyleBuilder.buildStyle('', [border: [style: BorderStyle.DOTTED, color: Color.RED]])
 
         then:
@@ -363,6 +441,12 @@ class CellStyleBuilderSpec extends Specification {
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [fill: "x"])
+
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [fill: 1])
 
         then:
         thrown(IllegalArgumentException)
@@ -435,5 +519,68 @@ class CellStyleBuilderSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
     }
+
+    void "test getStyle pulls from cache"() {
+        XSSFWorkbook workbook = new XSSFWorkbook()
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
+
+        when:
+        cellStyleBuilder.getStyle('', [hidden: true])
+        cellStyleBuilder.getStyle('', [hidden: true])
+
+        then:
+        cellStyleBuilder.WORKBOOK_CACHE[workbook].containsStyle([hidden: true])
+        cellStyleBuilder.WORKBOOK_CACHE[workbook].styles.size() == 1
+    }
+
+    void "test setStyle cell no options"() {
+        given:
+        XSSFWorkbook workbook = new XSSFWorkbook()
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
+        XSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
+
+        when:
+        XSSFCell cell = defaultCell.row.createCell(1)
+        cellStyleBuilder.setStyle('', cell, null)
+
+        then:
+        cell.cellStyle == defaultCell.cellStyle
+    }
+
+
+    void "test setStyle cell options"() {
+        given:
+        XSSFWorkbook workbook = new XSSFWorkbook()
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
+        XSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
+
+        when:
+        XSSFCell cell = defaultCell.row.createCell(1)
+        cellStyleBuilder.setStyle('', cell, [font: Font.ITALIC])
+
+        then:
+        cell.cellStyle.font.italic
+    }
+
+    void "test setStyle cell options are merged"() {
+        given:
+        XSSFWorkbook workbook = new XSSFWorkbook()
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
+        XSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
+
+        when:
+        XSSFCell cell = defaultCell.row.createCell(1)
+        cellStyleBuilder.setStyle('', cell, [font: Font.ITALIC, border: [left: BorderStyle.DOUBLE]], [font: Font.BOLD, border: BorderStyle.DASH_DOT])
+        XSSFCellStyle style = cell.cellStyle
+
+        then:
+        style.font.italic
+        !style.font.bold
+        style.borderLeftEnum == BorderStyle.DOUBLE
+        style.borderTopEnum == BorderStyle.DASH_DOT
+        style.borderRightEnum == BorderStyle.DASH_DOT
+        style.borderBottomEnum == BorderStyle.DASH_DOT
+    }
+
 
 }

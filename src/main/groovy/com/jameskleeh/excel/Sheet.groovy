@@ -29,7 +29,6 @@ class Sheet {
 
     void defaultStyle(Map options) {
         defaultOptions = options
-        styleBuilder.convertSimpleOptions(defaultOptions)
     }
 
     void skipRows(int num) {
