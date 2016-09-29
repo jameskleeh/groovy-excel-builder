@@ -55,6 +55,7 @@ bintray {
         name = 'excel-builder'
         licenses = ['Apache-2.0']
         vcsUrl = project.githubUrl
+        publish = true
     }
 }
 
