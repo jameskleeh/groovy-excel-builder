@@ -60,6 +60,7 @@ bintray {
             mavenCentralSync {
                 user = project.hasProperty('mavenUser') ? project.property('mavenUser') : System.getenv("MAVEN_USER")
                 password = project.hasProperty('mavenPassword') ? project.property('mavenPassword') : System.getenv("MAVEN_PASSWORD")
+            }
         }
     }
 }
