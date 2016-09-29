@@ -46,8 +46,8 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 bintray {
-    user = bintrayUser
-    key = bintrayKey
+    user = project.hasProperty('bintrayUser') ? bintrayUser : System.getenv("BINTRAY_USER")
+    key = project.hasProperty('bintrayKey') ? bintrayKey : System.getenv('BINTRAY_KEY')
     publications = ['maven']
     pkg {
         repo = 'com.jameskleeh'
@@ -118,7 +118,7 @@ githubPages {
     repoUri = "${project.githubUrl}.git"
 
     credentials {
-        username = githubKey
+        username = project.hasProperty('githubKey') ? project.githubKey : System.getenv('GITHUB_KEY')
         password = ''
     }
 
