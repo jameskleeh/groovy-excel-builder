@@ -512,6 +512,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_defaults">Defaults</a></li>
 <li><a href="#_styling">Styling</a></li>
 <li><a href="#_header_row">Header Row</a></li>
+<li><a href="#_creating_rows">Creating Rows</a></li>
+<li><a href="#_skipping_rows">Skipping Rows</a></li>
 </ul>
 </li>
 </ul>
@@ -592,15 +594,108 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="paragraph">
-<p>In future rows, you can do things like skip to a given column or reference that column in a formula</p>
+<p>In future rows, you can do things like skip to a given column or reference that column in a formula. The first argument is assigned to the cell value and the second argument is the unique identifier</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_creating_rows">Creating Rows</h3>
+<div class="paragraph">
+<p>You can easily create rows with the following syntax</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> ExcelBuilder().build {
+    sheet {
+        <span class="comment">//Empty row</span>
+        row {
+        }
+
+        <span class="comment">//Values in cells A2, B2, C2</span>
+        row(<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>)
+
+        <span class="comment">//Empty row with height specified</span>
+        <span class="comment">//Height can be a Short if you want to set the height in &quot;twips&quot;</span>
+        row([<span class="key">height</span>: <span class="float">10F</span>] {
+        }
+
+        <span class="comment">//Empty row</span>
+        row()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To reference everything you can do in a row, see the section in the documentation on <a href="#rows">Rows</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_skipping_rows">Skipping Rows</h3>
+<div class="paragraph">
+<p>It is very easy to skip any number of rows. See the following example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> ExcelBuilder().build {
+    sheet {
+        row(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>)
+        skipRows(<span class="integer">2</span>)
+        row(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above example will produce a sheet that looks something like this</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">A</th>
+<th class="tableblock halign-left valign-top">B</th>
+<th class="tableblock halign-left valign-top">C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3</strong></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-30 19:50:34 -04:00
+Last updated 2016-09-30 20:48:04 -04:00
 </div>
 </div>
 </body>
