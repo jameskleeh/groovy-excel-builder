@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.0">
-<title>Rows</title>
+<title>Cells</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -506,10 +506,10 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#rows">Rows</a>
+<li><a href="#cells">Cells</a>
 <ul class="sectlevel2">
-<li><a href="#_defaults">Defaults</a></li>
-<li><a href="#_skipping_cells">Skipping Cells</a></li>
+<li><a href="#_cell_values">Cell Values</a></li>
+<li><a href="#_custom_renderers">Custom Renderers</a></li>
 </ul>
 </li>
 </ul>
@@ -517,133 +517,72 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="rows">Rows</h2>
+<h2 id="cells">Cells</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_cell_values">Cell Values</h3>
 <div class="paragraph">
-<p>In addition to creating cells, there are also a few other methods available to you to make documents easier</p>
+<p>This module supports setting basic and custom types to cell values. The following types are supported out of the box:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>String</p>
+</li>
+<li>
+<p>Calendar</p>
+</li>
+<li>
+<p>Date</p>
+</li>
+<li>
+<p>Double</p>
+</li>
+<li>
+<p>Boolean</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Support for additional types can be easily added without the need to convert your custom objects each time.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_defaults">Defaults</h3>
+<h3 id="_custom_renderers">Custom Renderers</h3>
 <div class="paragraph">
-<p>You can apply default styling at the row level in addition to the sheet level. Styles that conflict with defaults at the sheet level will override.</p>
+<p>You can register a custom cell renderer to marshal your custom type into a type that is supported by Excel.</p>
 </div>
 <div class="listingblock">
+<div class="title">MyCustomClass.groovy</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> ExcelBuilder().build {
-    sheet {
-        defaultStyle [:]
-        row {
-            defaultStyle [:]
-        }
-    }
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">MyCustomClass</span> {
+    <span class="predefined-type">String</span> name
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_skipping_cells">Skipping Cells</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> ExcelBuilder().build {
-    sheet {
-        row {
-            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
-            skipCells(<span class="integer">2</span>)
-            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
-        }
-    }
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Excel</span>
+
+<span class="comment">//Register a renderer for your class</span>
+Excel.registerCellRenderer(MyCustomClass) { MyCustomClass c -&gt;
+    c.name
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The previous example will produce a document with "foo" in cell A1 and "bar" in D1</p>
-</div>
-<div class="sect3">
-<h4 id="_skipping_to_a_column">Skipping to a column</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> ExcelBuilder().build {
-    sheet {
-        columns {
-            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
-            skipCells(<span class="integer">1</span>)
-            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
-        }
-        row {
-            skipTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
-            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">C2</span><span class="delimiter">&quot;</span></span>)
-        }
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The example above will put the text "C2" in cell C2.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-The <code>skipTo</code> method will set the cell index so the next cell call will output data into the desired cell. Subsequent cells will start from that index. View the example below
-</td>
-</tr>
-</table>
+<p>Now when you are making calls to <code>cell()</code>, you can pass your entire <code>MyCustomClass</code> instance as the value and it will be converted to just use the name.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> ExcelBuilder().build {
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> c = <span class="keyword">new</span> MyCustomClass(<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Sally</span><span class="delimiter">&quot;</span></span>)
+
+<span class="keyword">new</span> ExcelBuilder.build {
     sheet {
-        columns {
-            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
-            skipCells(<span class="integer">1</span>)
-            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
-        }
-        row {
-            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A2</span><span class="delimiter">&quot;</span></span>)
-            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">B2</span><span class="delimiter">&quot;</span></span>)
-            skipTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
-            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">replaces A2</span><span class="delimiter">&quot;</span></span>)
-        }
+        row(c) <span class="comment">//The value &quot;Sally&quot; will be put into cell A1</span>
     }
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>The first call to <code>cell</code> sets the value to "A2". The <code>skipTo</code> call sets the index so the next call will set the cell value to "replaces A2".</p>
-</div>
-<table class="tableblock frame-all grid-all" style="width: 50%;">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top"></th>
-<th class="tableblock halign-left valign-top">A</th>
-<th class="tableblock halign-left valign-top">B</th>
-<th class="tableblock halign-left valign-top">C</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Foo</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bar</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">replaces A2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">B2</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </div>
@@ -651,7 +590,7 @@ The <code>skipTo</code> method will set the cell index so the next cell call wil
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-02 21:52:27 -04:00
+Last updated 2016-10-03 08:49:15 -04:00
 </div>
 </div>
 </body>
