@@ -48,7 +48,23 @@ ExcelBuilder.build {
 }
 ----
 
+=== Cell Styling
 
+All calls to `cell` can be accompanied with a map of arguments to style the cell. The arguments passed will be merged with the default styles of the row and sheet, if provided
 
+[source,groovy]
+----
+def c = new MyCustomClass(name: "Sally")
+
+ExcelBuilder.build {
+    sheet {
+        row {
+            cell("Test", [:])
+        }
+    }
+}
+----
+
+See the section in this guide on link:#styles[styling cells] to learn what options are available.
 
 

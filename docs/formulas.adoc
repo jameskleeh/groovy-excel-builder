@@ -1,2 +1,110 @@
 [[formuals]]
 == Formulas
+
+The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references
+
+=== Simple String
+
+You can specify the exact text of your formula using the example below
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row {
+            formula("SUM(1,2)")
+        }
+    }
+}
+----
+
+=== Closure Customization
+
+An additional way to create a formula is to supply a closure to the `formula` method. The provided closure will have access to a few methods to make referencing cells easier. Whatever gets returned from the closure will be set as the formula
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row {
+            formula {
+                "SUM(1,2)"
+            }
+        }
+    }
+}
+----
+
+==== Exact Cell Reference
+
+Inside of the forumla closure you can get a reference to an exact cell by providing the index of the row and column
+
+[source,groovy]
+----
+...
+formula {
+    "SUM(${exactCell(0,1)},2)"
+}
+...
+----
+
+The call to `exactCell` will return the string "A2" because the `0` represents the column index ("A") and the `1` represents the row index ("2").
+
+If you have previously defined columns, you can reference exact cells based on the column id.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        columns {
+            column("Foo", "foo")
+        }
+        row {
+            formula {
+                "SUM(${exactCell("foo")}, ${exactCell("foo", 1)})"
+            }
+        }
+    }
+}
+----
+
+The first call to exact cell will return "A1" because the `foo` column is in column "A" in the first row. The second call to exact cell is also specifying a row index and will return "A2" because `foo` is column "A" and the row index of `1` resolves to row "2".
+
+==== Relative Cell References
+
+In addition to retrieving exact cell references, you can also retrieve references relative to the formula
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row()
+        row {
+            cell("A2")
+            formula {
+                "SUM(${relativeCell(-1)}, ${relativeCell(-1, -1)})"
+            }
+        }
+    }
+}
+----
+
+The first call to `relativeCell` will reference the cell in the previous column in the same row. In that example that would be "A2". The second call to `relativeCell` will resolve to "A1" because the first argument indicates to go back 1 column and the second argument says to go back one row. The formula will be put in cell "B2", so minus one column and minus one row would be "A1".
+
+==== Anchoring Cells
+
+Once you have a reference to any cell, you can anchor the column or row or both
+
+[source,groovy]
+----
+...
+
+formula {
+    "SUM(${exactCell(0,1).anchorColumn()}, ${exactCell(0,2).anchorRow()}, ${exactCell(0,3).anchor()})"
+}
+...
+----
+
+The resulting formula will be
+
+`SUM($A2, A$3, $A$4)`
