@@ -1,0 +1,90 @@
+[[rows]]
+== Rows
+
+In addition to creating cells, there are also a few other methods available to you to make documents easier
+
+=== Defaults
+
+You can apply default styling at the row level in addition to the sheet level. Styles that conflict with defaults at the sheet level will override.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        defaultStyle [:]
+        row {
+            defaultStyle [:]
+        }
+    }
+}
+----
+
+=== Skipping Cells
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row {
+            cell("foo")
+            skipCells(2)
+            cell("bar")
+        }
+    }
+}
+----
+
+The previous example will produce a document with "foo" in cell A1 and "bar" in D1
+
+==== Skipping to a column
+
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        columns {
+            column("Foo", "foo")
+            skipCells(1)
+            column("Bar", "bar")
+        }
+        row {
+            skipTo("bar")
+            cell("C2")
+        }
+    }
+}
+----
+
+The example above will put the text "C2" in cell C2.
+
+WARNING: The `skipTo` method will set the cell index so the next cell call will output data into the desired cell. Subsequent cells will start from that index. View the example below
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        columns {
+            column("Foo", "foo")
+            skipCells(1)
+            column("Bar", "bar")
+        }
+        row {
+            cell("A2")
+            cell("B2")
+            skipTo("foo")
+            cell("replaces A2")
+        }
+    }
+}
+----
+
+The first call to `cell` sets the value to "A2". The `skipTo` call sets the index so the next call will set the cell value to "replaces A2".
+
+[width="50%"]
+|=======
+|  |A |B |C
+
+|*1* |Foo | |Bar
+|*2* |replaces A2  |B2  |
+|=======

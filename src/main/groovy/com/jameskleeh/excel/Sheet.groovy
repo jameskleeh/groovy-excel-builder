@@ -61,17 +61,17 @@ class Sheet {
 
     void row(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         XSSFRow row = sheet.createRow(rowIdx)
-        if (options) {
-            if (options.containsKey(HEIGHT)) {
-                Object heightObj = options.remove(HEIGHT)
-
-                if (heightObj instanceof Number) {
-                    row.setHeightInPoints(((Number)heightObj).floatValue())
-                }
-
+        if (options?.containsKey(HEIGHT)) {
+            Object height = options[HEIGHT]
+            if (height instanceof Short) {
+                row.setHeight(height)
+            } else if (height instanceof Float) {
+                row.setHeightInPoints(height)
+            } else {
+                throw new IllegalArgumentException('Row height must be a short or float')
             }
-            styleBuilder.setStyle(row, options, defaultOptions)
         }
+
         if (callable != null) {
             callable.resolveStrategy = Closure.DELEGATE_FIRST
             callable.delegate = new Row(workbook, sheet, row, defaultOptions, columnIndexes)

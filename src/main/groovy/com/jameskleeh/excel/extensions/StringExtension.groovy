@@ -1,7 +1,10 @@
 package com.jameskleeh.excel.extensions
 
 /**
- * Created by jameskleeh on 9/25/16.
+ * A class to create anchored column references
+ *
+ * @author James Kleeh
+ * @since 0.1.0
  */
 class StringExtension {
 

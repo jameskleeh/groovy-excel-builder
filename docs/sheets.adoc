@@ -1,0 +1,120 @@
+[[sheets]]
+== Sheets
+
+With the Groovy Excel Builder, you can create documents with as many sheets as you like. In addition, there are several options you have at the sheet level for configuring your document
+
+=== Sheet Name
+
+You can configure what name you would like to give each sheet by executing the `sheet` method with a `String` argument
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet("My Sheet") {
+    }
+}
+----
+
+=== Defaults
+
+You can configure defaults for column width and row height in a given sheet by passing a `Map` to the `sheet` method
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet("My Sheet") {
+    }
+    sheet("My Other Sheet", [width: 20, height: 14F]) {
+    }
+    sheet([width:20]) {
+    }
+}
+----
+
+The width must be an `Integer` and the height can be a `Float` if you want to set the height in points, or `Short` if you do not.
+
+=== Styling
+
+You can set default styles for a sheet by passing a map of options into the `defaultStyle` method. To see what options are available, visit the link:#styles[Styles] section of this document
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        defaultStyle([:])
+    }
+}
+----
+
+=== Header Row
+
+It is possible to define a header row and assign an identifier to each cell for later use
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        columns {
+            column("Foo", "foo")
+            column("Bar", "bar")
+        }
+    }
+}
+----
+
+In future rows, you can do things like skip to a given column or reference that column in a formula. The first argument is assigned to the cell value and the second argument is the unique identifier
+
+=== Creating Rows
+
+You can easily create rows with the following syntax
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        //Empty row
+        row {
+        }
+
+        //Values in cells A2, B2, C2
+        row(1,2,3)
+
+        //Empty row with height specified
+        //Height can be a Short if you want to set the height in "twips"
+        row([height: 10F] {
+        }
+
+        //Empty row
+        row()
+    }
+}
+----
+
+To reference everything you can do in a row, see the section in the documentation on link:#rows[Rows]
+
+=== Skipping Rows
+
+It is very easy to skip any number of rows. See the following example
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row("A", "B", "C")
+        skipRows(2)
+        row("A", "B", "C")
+    }
+}
+----
+
+The above example will produce a sheet that looks something like this
+
+[width="50%"]
+|=======
+|  |A |B |C
+
+|*1* |A |B |C
+|*2* |  |  |
+|*3* |  |  |
+|*4* |A |B |C
+|=======

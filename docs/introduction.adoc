@@ -1,0 +1,4 @@
+[[introduction]]
+== Introduction
+
+This module exposes a Groovy DSL to create real Excel documents using Apache POI under the hood. The goal of this module is to abstract away the most common uses of Apache POI to make creating Excel documents very easy, while providing a hook into the underlying API to allow users to do anything that is not provided automatically.

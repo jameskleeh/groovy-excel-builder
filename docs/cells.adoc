@@ -1,0 +1,54 @@
+[[cells]]
+== Cells
+
+=== Cell Values
+
+This module supports setting basic and custom types to cell values. The following types are supported out of the box:
+
+* String
+* Calendar
+* Date
+* Double
+* Boolean
+
+Support for additional types can be easily added without the need to convert your custom objects each time.
+
+=== Custom Renderers
+
+You can register a custom cell renderer to marshal your custom type into a type that is supported by Excel.
+
+[source,groovy]
+.MyCustomClass.groovy
+----
+class MyCustomClass {
+    String name
+}
+----
+
+[source,groovy]
+----
+import com.jameskleeh.excel.Excel
+
+//Register a renderer for your class
+Excel.registerCellRenderer(MyCustomClass) { MyCustomClass c ->
+    c.name
+}
+----
+
+Now when you are making calls to `cell()`, you can pass your entire `MyCustomClass` instance as the value and it will be converted to just use the name.
+
+[source,groovy]
+----
+def c = new MyCustomClass(name: "Sally")
+
+ExcelBuilder.build {
+    sheet {
+        row(c) //The value "Sally" will be put into cell A1
+    }
+}
+----
+
+
+
+
+

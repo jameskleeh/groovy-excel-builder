@@ -1,13 +1,14 @@
 package com.jameskleeh.excel
 
 import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
 
 class RowSpec extends Specification {
 
     void "test skipCells"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     cell()
@@ -27,7 +28,7 @@ class RowSpec extends Specification {
     }
 
     void "test skipTo"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 columns {
                     column("Foo", "foo")
@@ -49,8 +50,35 @@ class RowSpec extends Specification {
         !cells.hasNext()
     }
 
+    void "test skipTo overwrite previous cells"() {
+        XSSFWorkbook workbook = ExcelBuilder.build {
+            sheet {
+                columns {
+                    column("Foo", "foo")
+                    skipCells(2)
+                    column("Bar", "bar")
+                }
+                row {
+                    cell()
+                    cell()
+                    skipTo("foo")
+                    cell("A1")
+                    cell("A2")
+                }
+            }
+        }
+
+        when:
+        Iterator<Cell> cells = workbook.getSheetAt(0).getRow(1).cellIterator()
+
+        then:
+        cells.next().stringCellValue == 'A1'
+        cells.next().stringCellValue == 'A2'
+        !cells.hasNext()
+    }
+
     void "test formula(String)"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     formula("=SUM()")
@@ -80,7 +108,7 @@ class RowSpec extends Specification {
         Excel.registerCellRenderer(StringBuilder) {
             it.append('x').toString()
         }
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     cell()

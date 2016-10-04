@@ -7,7 +7,7 @@ import spock.lang.Specification
 class SheetSpec extends Specification {
 
     void "test skipRows"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row()
                 skipRows(2)
@@ -25,7 +25,7 @@ class SheetSpec extends Specification {
     }
 
     void "test row(Object...)"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row(1,2,3)
             }
@@ -42,9 +42,9 @@ class SheetSpec extends Specification {
     }
 
     void "test row(Map options)"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
-                row([height: 12]) {
+                row([height: 12F]) {
 
                 }
             }

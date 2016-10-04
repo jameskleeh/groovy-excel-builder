@@ -74,9 +74,11 @@ class Row {
     void formula(String formula) {
         this.formula(formula, null)
     }
+
     void formula(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
         formula(null, callable)
     }
+
     void formula(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
         XSSFCell cell = nextCell()
         callable.resolveStrategy = Closure.DELEGATE_FIRST
@@ -101,6 +103,7 @@ class Row {
         cell(value, null)
     }
     void cell(Object value, final Map style) {
+
         XSSFCell cell = nextCell()
         setStyle(value, cell, style)
         if (value instanceof String) {

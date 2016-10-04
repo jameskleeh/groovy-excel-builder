@@ -46,6 +46,7 @@ class Workbook {
                 throw new IllegalArgumentException('Sheet default column width must be an integer')
             }
         }
+
         if (options.containsKey(HEIGHT)) {
             Object height = options[HEIGHT]
             if (height instanceof Short) {
@@ -56,6 +57,7 @@ class Workbook {
                 throw new IllegalArgumentException('Sheet default row height must be a short or float')
             }
         }
+
         callable.delegate = new Sheet(wb, sheet)
         if (callable.maximumNumberOfParameters == 1) {
             callable.call(sheet)

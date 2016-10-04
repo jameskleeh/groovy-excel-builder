@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet
 class WorkbookSpec extends Specification {
 
     void "test sheet"() {
-        XSSFWorkbook workbook = new ExcelBuilder().build {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
 
             }

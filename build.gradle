@@ -3,6 +3,7 @@ plugins {
     id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
     id "nebula.provided-base" version "3.1.0"
     id 'org.ajoberstar.github-pages' version '1.1.0'
+    id "com.jfrog.artifactory" version "4.4.0"
 }
 
 apply plugin: 'groovy'
@@ -41,9 +42,9 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from 'build/docs/javadoc'
+task javadocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'groovydoc'
+    from 'build/docs/groovydoc'
 }
 
 bintray {
@@ -103,6 +104,20 @@ publishing {
     }
 }
 
+artifactory {
+    contextUrl = 'http://oss.jfrog.org'
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv("BINTRAY_USER")
+            password = project.hasProperty('bintrayKey') ? project.property('bintrayKey') : System.getenv('BINTRAY_KEY')
+        }
+        defaults {
+            publications('maven')
+        }
+    }
+}
+
 asciidoctor {
     sourceDir = file('docs')
 
@@ -112,14 +127,22 @@ asciidoctor {
         }
     }
 
-    attributes 'source-highlighter': 'prettify',
-            'docinfo1': ['version': project.version],
-            'imagesdir': 'images',
-            'stylesdir': 'css',
-            icons: 'font',
-            'toc': 'left',
-            version: project.version,
-            'projectUrl': project.githubUrl
+    attributes 'source-highlighter': 'coderay',
+               'docinfo1': ['version': project.version],
+               'imagesdir': './images',
+               'stylesdir': 'css',
+               'icons': 'font',
+               'toc': 'left',
+               'version': project.version,
+               'groupId': project.group,
+               'artifactId': project.name,
+               'sourcedir': "${projectDir}/src/main/groovy",
+               'projectUrl': project.githubUrl
+}
+
+task docs(type:Copy, dependsOn:[groovydoc, asciidoctor])  {
+    from "$buildDir/asciidoc/html5"
+    into "$buildDir/docs"
 }
 
 githubPages {
@@ -131,11 +154,11 @@ githubPages {
     }
 
     pages {
-        from file(asciidoctor.outputDir.path + '/html5')
+        from file("build/docs")
     }
 }
 
-publishGhPages.dependsOn asciidoctor
+publishGhPages.dependsOn docs
 
 codenarc {
     toolVersion = '0.25.2'

@@ -194,10 +194,9 @@ class CellStyleBuilder {
     private BorderStyle getBorderStyle(Object obj) {
         if (obj instanceof BorderStyle) {
             return (BorderStyle)obj
-        } else {
-            String className = BorderStyle.class.getCanonicalName()
-            throw new IllegalArgumentException("The border style must be an instance of ${className}")
         }
+
+        throw new IllegalArgumentException("The border style must be an instance of ${BorderStyle.getCanonicalName()}")
     }
 
     private void setBorder(Map border, String key, Closure borderCallable, Closure colorCallable) {
@@ -227,7 +226,7 @@ class CellStyleBuilder {
         if (hAlign != null) {
             cellStyle.setAlignment((short)hAlign.ordinal())
         } else {
-            throw new IllegalArgumentException("The horizontal alignment must be an instance of org.apache.poi.ss.usermodel.HorizontalAlignment")
+            throw new IllegalArgumentException("The horizontal alignment must be an instance of ${HorizontalAlignment.getCanonicalName()}")
         }
     }
 
@@ -242,7 +241,7 @@ class CellStyleBuilder {
         if (vAlign != null) {
             cellStyle.setVerticalAlignment((short)vAlign.ordinal())
         } else {
-            throw new IllegalArgumentException("The vertical alignment must be an instance of org.apache.poi.ss.usermodel.VerticalAlignment")
+            throw new IllegalArgumentException("The vertical alignment must be an instance of ${VerticalAlignment.getCanonicalName()}")
         }
     }
 

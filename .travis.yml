@@ -3,6 +3,13 @@ sudo: false
 jdk:
 - oraclejdk8
 script: ./travis-build.sh
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.m2/repositories/
 env:
   global:
   - GIT_NAME="James Kleeh"

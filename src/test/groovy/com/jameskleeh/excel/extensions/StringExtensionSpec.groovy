@@ -1,10 +1,9 @@
 package com.jameskleeh.excel.extensions
 
 import spock.lang.Specification
+import spock.lang.Subject
 
-/**
- * Created by jameskleeh on 9/25/16.
- */
+@Subject(StringExtension)
 class StringExtensionSpec extends Specification {
 
     void "test anchor column"() {
