@@ -409,104 +409,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{font-weight: normal}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#00}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#formuals">Formulas</a></li>
+<li><a href="#formuals">Formulas</a>
+<ul class="sectlevel2">
+<li><a href="#_simple_string">Simple String</a></li>
+<li><a href="#_closure_customization">Closure Customization</a></li>
+<li><a href="#_anchoring_cells">Anchoring Cells</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -514,13 +432,137 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect1">
 <h2 id="formuals">Formulas</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references</p>
+</div>
+<div class="sect2">
+<h3 id="_simple_string">Simple String</h3>
+<div class="paragraph">
+<p>You can specify the exact text of your formula using the example below</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+    sheet {
+        row {
+            formula("SUM(1,2)")
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_closure_customization">Closure Customization</h3>
+<div class="paragraph">
+<p>An additional way to create a formula is to supply a closure to the <code>formula</code> method. The provided closure will have access to a few methods to make referencing cells easier. Whatever gets returned from the closure will be set as the formula</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+    sheet {
+        row {
+            formula {
+                "SUM(1,2)"
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exact_cell_reference">Exact Cell Reference</h4>
+<div class="paragraph">
+<p>Inside of the forumla closure you can get a reference to an exact cell by providing the index of the row and column</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">...
+formula {
+    "SUM(${exactCell(0,1)},2)"
+}
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The call to <code>exactCell</code> will return the string "A2" because the <code>0</code> represents the column index ("A") and the <code>1</code> represents the row index ("2").</p>
+</div>
+<div class="paragraph">
+<p>If you have previously defined columns, you can reference exact cells based on the column id.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+    sheet {
+        columns {
+            column("Foo", "foo")
+        }
+        row {
+            formula {
+                "SUM(${exactCell("foo")}, ${exactCell("foo", 1)})"
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first call to exact cell will return "A1" because the <code>foo</code> column is in column "A" in the first row. The second call to exact cell is also specifying a row index and will return "A2" because <code>foo</code> is column "A" and the row index of <code>1</code> resolves to row "2".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_relative_cell_references">Relative Cell References</h4>
+<div class="paragraph">
+<p>In addition to retrieving exact cell references, you can also retrieve references relative to the formula</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+    sheet {
+        row()
+        row {
+            cell("A2")
+            formula {
+                "SUM(${relativeCell(-1)}, ${relativeCell(-1, -1)})"
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first call to <code>relativeCell</code> will reference the cell in the previous column in the same row. In that example that would be "A2". The second call to <code>relativeCell</code> will resolve to "A1" because the first argument indicates to go back 1 column and the second argument says to go back one row. The formula will be put in cell "B2", so minus one column and minus one row would be "A1".</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_anchoring_cells">Anchoring Cells</h3>
+<div class="paragraph">
+<p>Once you have a reference to any cell, you can anchor the column or row or both</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">...
 
+formula {
+    "SUM(${exactCell(0,1).anchorColumn()}, ${exactCell(0,2).anchorRow()}, ${exactCell(0,3).anchor()})"
+}
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting formula will be</p>
+</div>
+<div class="paragraph">
+<p><code>SUM($A2, A$3, $A$4)</code></p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-02 21:55:09 -04:00
+Last updated 2016-10-04 21:10:45 -04:00
 </div>
 </div>
 </body>

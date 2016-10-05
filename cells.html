@@ -409,97 +409,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{font-weight: normal}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#00}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -510,6 +422,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_cell_values">Cell Values</a></li>
 <li><a href="#_custom_renderers">Custom Renderers</a></li>
+<li><a href="#_cell_styling">Cell Styling</a></li>
 </ul>
 </li>
 </ul>
@@ -555,16 +468,16 @@ table.CodeRay td.code>pre{padding:0}
 <div class="listingblock">
 <div class="title">MyCustomClass.groovy</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">MyCustomClass</span> {
-    <span class="predefined-type">String</span> name
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyCustomClass {
+    String name
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Excel</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import com.jameskleeh.excel.Excel
 
-<span class="comment">//Register a renderer for your class</span>
+//Register a renderer for your class
 Excel.registerCellRenderer(MyCustomClass) { MyCustomClass c -&gt;
     c.name
 }</code></pre>
@@ -575,14 +488,36 @@ Excel.registerCellRenderer(MyCustomClass) { MyCustomClass c -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> c = <span class="keyword">new</span> MyCustomClass(<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Sally</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def c = new MyCustomClass(name: "Sally")
 
 ExcelBuilder.build {
     sheet {
-        row(c) <span class="comment">//The value &quot;Sally&quot; will be put into cell A1</span>
+        row(c) //The value "Sally" will be put into cell A1
     }
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cell_styling">Cell Styling</h3>
+<div class="paragraph">
+<p>All calls to <code>cell</code> can be accompanied with a map of arguments to style the cell. The arguments passed will be merged with the default styles of the row and sheet, if provided</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def c = new MyCustomClass(name: "Sally")
+
+ExcelBuilder.build {
+    sheet {
+        row {
+            cell("Test", [:])
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the section in this guide on <a href="#styles">styling cells</a> to learn what options are available.</p>
 </div>
 </div>
 </div>
@@ -590,7 +525,7 @@ ExcelBuilder.build {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-03 08:55:07 -04:00
+Last updated 2016-10-03 22:02:10 -04:00
 </div>
 </div>
 </body>
