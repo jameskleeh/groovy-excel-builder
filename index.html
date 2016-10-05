@@ -410,9 +410,97 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{font-weight: normal}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#00}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -451,6 +539,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_cell_values">Cell Values</a></li>
 <li><a href="#_custom_renderers">Custom Renderers</a></li>
 <li><a href="#_cell_styling">Cell Styling</a></li>
+<li><a href="#_cell_formatting">Cell Formatting</a></li>
 </ul>
 </li>
 <li><a href="#formuals">Formulas</a>
@@ -484,17 +573,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">Maven</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
-    &lt;groupId&gt;com.jameskleeh&lt;/groupId&gt;
-    &lt;artifactId&gt;excel-builder&lt;/artifactId&gt;
-    &lt;version&gt;0.1.1.BUILD-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>com.jameskleeh<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>excel-builder<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.1.1.BUILD-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">compile 'com.jameskleeh:excel-builder:0.1.1.BUILD-SNAPSHOT'</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">com.jameskleeh:excel-builder:0.1.1.BUILD-SNAPSHOT</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -513,19 +602,19 @@ If you want to use a snapshot version, add the jfrog snapshot repository to your
 <div class="sect2">
 <h3 id="_creating_your_first_excel_document">Creating your first Excel document</h3>
 <div class="paragraph">
-<p>Here is the simplest example to create an Excel document</p>
+<p>Here is the simplest example to create an Excel document:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">package demo
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">package</span> demo
 
-import com.jameskleeh.excel.ExcelBuilder
+<span class="keyword">import</span> <span class="include">com.jameskleeh.excel.ExcelBuilder</span>
 
-File file = new File('test.xlsx')
+<span class="predefined-type">File</span> file = <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">'</span><span class="content">test.xlsx</span><span class="delimiter">'</span></span>)
 
-ExcelBuilder.output(new FileOutputStream(file)) {
+ExcelBuilder.output(<span class="keyword">new</span> <span class="predefined-type">FileOutputStream</span>(file)) {
     sheet {
-        row("test")
+        row(<span class="string"><span class="delimiter">&quot;</span><span class="content">test</span><span class="delimiter">&quot;</span></span>)
     }
 }</code></pre>
 </div>
@@ -550,21 +639,21 @@ Groovy Excel Builder only supports XLSX documents, not the old XLS format.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">package demo
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">package</span> demo
 
-import com.jameskleeh.excel.ExcelBuilder
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+<span class="keyword">import</span> <span class="include">com.jameskleeh.excel.ExcelBuilder</span>
+<span class="keyword">import</span> <span class="include">org.apache.poi.xssf.usermodel.XSSFWorkbook</span>
 
 XSSFWorkbook workbook = ExcelBuilder.build {
     sheet {
         row {
-            cell("Test 1")
-            cell("Test 2")
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Test 1</span><span class="delimiter">&quot;</span></span>)
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Test 2</span><span class="delimiter">&quot;</span></span>)
         }
     }
 }
 
-//Modify the workbook further
+<span class="comment">//Modify the workbook further</span>
 
 workbook.write(someOutputStream)</code></pre>
 </div>
@@ -579,17 +668,17 @@ workbook.write(someOutputStream)</code></pre>
 <h2 id="sheets">Sheets</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With the Groovy Excel Builder, you can create documents with as many sheets as you like. In addition, there are several options you have at the sheet level for configuring your document</p>
+<p>With the Groovy Excel Builder, you can create documents with as many sheets as you like. In addition, there are several options you have at the sheet level for configuring your document.</p>
 </div>
 <div class="sect2">
 <h3 id="_sheet_name">Sheet Name</h3>
 <div class="paragraph">
-<p>You can configure what name you would like to give each sheet by executing the <code>sheet</code> method with a <code>String</code> argument</p>
+<p>You can configure what name you would like to give each sheet by executing the <code>sheet</code> method with a <code>String</code> argument.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
-    sheet("My Sheet") {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
+    sheet(<span class="string"><span class="delimiter">&quot;</span><span class="content">My Sheet</span><span class="delimiter">&quot;</span></span>) {
     }
 }</code></pre>
 </div>
@@ -598,16 +687,16 @@ workbook.write(someOutputStream)</code></pre>
 <div class="sect2">
 <h3 id="_defaults">Defaults</h3>
 <div class="paragraph">
-<p>You can configure defaults for column width and row height in a given sheet by passing a <code>Map</code> to the <code>sheet</code> method</p>
+<p>You can configure defaults for column width and row height in a given sheet by passing a <code>Map</code> to the <code>sheet</code> method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
-    sheet("My Sheet") {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
+    sheet(<span class="string"><span class="delimiter">&quot;</span><span class="content">My Sheet</span><span class="delimiter">&quot;</span></span>) {
     }
-    sheet("My Other Sheet", [width: 20, height: 14F]) {
+    sheet(<span class="string"><span class="delimiter">&quot;</span><span class="content">My Other Sheet</span><span class="delimiter">&quot;</span></span>, [<span class="key">width</span>: <span class="integer">20</span>, <span class="key">height</span>: <span class="float">14F</span>]) {
     }
-    sheet([width:20]) {
+    sheet([<span class="key">width</span>:<span class="integer">20</span>]) {
     }
 }</code></pre>
 </div>
@@ -619,11 +708,11 @@ workbook.write(someOutputStream)</code></pre>
 <div class="sect2">
 <h3 id="_styling">Styling</h3>
 <div class="paragraph">
-<p>You can set default styles for a sheet by passing a map of options into the <code>defaultStyle</code> method. To see what options are available, visit the <a href="#styles">Styles</a> section of this document</p>
+<p>You can set default styles for a sheet by passing a map of options into the <code>defaultStyle</code> method. To see what options are available, visit the <a href="#styles">Styles</a> section of this document.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         defaultStyle([:])
     }
@@ -634,73 +723,73 @@ workbook.write(someOutputStream)</code></pre>
 <div class="sect2">
 <h3 id="_header_row">Header Row</h3>
 <div class="paragraph">
-<p>It is possible to define a header row and assign an identifier to each cell for later use</p>
+<p>It is possible to define a header row and assign an identifier to each cell for later use.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         columns {
-            column("Foo", "foo")
-            column("Bar", "bar")
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
         }
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In future rows, you can do things like skip to a given column or reference that column in a formula. The first argument is assigned to the cell value and the second argument is the unique identifier</p>
+<p>In future rows, you can do things like skip to a given column or reference that column in a formula. The first argument is assigned to the cell value and the second argument is the unique identifier.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_creating_rows">Creating Rows</h3>
 <div class="paragraph">
-<p>You can easily create rows with the following syntax</p>
+<p>You can easily create rows with the following syntax:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
-        //Empty row
+        <span class="comment">//Empty row</span>
         row {
         }
 
-        //Values in cells A2, B2, C2
-        row(1,2,3)
+        <span class="comment">//Values in cells A2, B2, C2</span>
+        row(<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>)
 
-        //Empty row with height specified
-        //Height can be a Short if you want to set the height in "twips"
-        row([height: 10F] {
+        <span class="comment">//Empty row with height specified</span>
+        <span class="comment">//Height can be a Short if you want to set the height in &quot;twips&quot;</span>
+        row([<span class="key">height</span>: <span class="float">10F</span>] {
         }
 
-        //Empty row
+        <span class="comment">//Empty row</span>
         row()
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To reference everything you can do in a row, see the section in the documentation on <a href="#rows">Rows</a></p>
+<p>To reference everything you can do in a row, see the section in the documentation on <a href="#rows">Rows</a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_skipping_rows">Skipping Rows</h3>
 <div class="paragraph">
-<p>It is very easy to skip any number of rows. See the following example</p>
+<p>It is very easy to skip any number of rows. See the following example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
-        row("A", "B", "C")
-        skipRows(2)
-        row("A", "B", "C")
+        row(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>)
+        skipRows(<span class="integer">2</span>)
+        row(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>)
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The above example will produce a sheet that looks something like this</p>
+<p>The above example will produce a sheet that looks something like this:</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 50%;">
 <colgroup>
@@ -751,7 +840,7 @@ workbook.write(someOutputStream)</code></pre>
 <h2 id="rows">Rows</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In addition to creating cells, there are also a few other methods available to you to make documents easier</p>
+<p>In addition to creating cells, there are also a few other methods available to you to make documents easier.</p>
 </div>
 <div class="sect2">
 <h3 id="_defaults_2">Defaults</h3>
@@ -760,7 +849,7 @@ workbook.write(someOutputStream)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         defaultStyle [:]
         row {
@@ -775,34 +864,34 @@ workbook.write(someOutputStream)</code></pre>
 <h3 id="_skipping_cells">Skipping Cells</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         row {
-            cell("foo")
-            skipCells(2)
-            cell("bar")
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+            skipCells(<span class="integer">2</span>)
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
         }
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The previous example will produce a document with "foo" in cell A1 and "bar" in D1</p>
+<p>The previous example will produce a document with "foo" in cell A1 and "bar" in D1.</p>
 </div>
 <div class="sect3">
 <h4 id="_skipping_to_a_column">Skipping to a column</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         columns {
-            column("Foo", "foo")
-            skipCells(1)
-            column("Bar", "bar")
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+            skipCells(<span class="integer">1</span>)
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
         }
         row {
-            skipTo("bar")
-            cell("C2")
+            skipTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">C2</span><span class="delimiter">&quot;</span></span>)
         }
     }
 }</code></pre>
@@ -818,25 +907,25 @@ workbook.write(someOutputStream)</code></pre>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-The <code>skipTo</code> method will set the cell index so the next cell call will output data into the desired cell. Subsequent cells will start from that index. View the example below
+The <code>skipTo</code> method will set the cell index so the next cell call will output data into the desired cell. Subsequent cells will start from that index. View the example below:
 </td>
 </tr>
 </table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         columns {
-            column("Foo", "foo")
-            skipCells(1)
-            column("Bar", "bar")
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+            skipCells(<span class="integer">1</span>)
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>)
         }
         row {
-            cell("A2")
-            cell("B2")
-            skipTo("foo")
-            cell("replaces A2")
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A2</span><span class="delimiter">&quot;</span></span>)
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">B2</span><span class="delimiter">&quot;</span></span>)
+            skipTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">replaces A2</span><span class="delimiter">&quot;</span></span>)
         }
     }
 }</code></pre>
@@ -899,7 +988,7 @@ The <code>skipTo</code> method will set the cell index so the next cell call wil
 <p>Date</p>
 </li>
 <li>
-<p>Double</p>
+<p>Number</p>
 </li>
 <li>
 <p>Boolean</p>
@@ -918,16 +1007,16 @@ The <code>skipTo</code> method will set the cell index so the next cell call wil
 <div class="listingblock">
 <div class="title">MyCustomClass.groovy</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyCustomClass {
-    String name
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">MyCustomClass</span> {
+    <span class="predefined-type">String</span> name
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import com.jameskleeh.excel.Excel
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Excel</span>
 
-//Register a renderer for your class
+<span class="comment">//Register a renderer for your class</span>
 Excel.registerCellRenderer(MyCustomClass) { MyCustomClass c -&gt;
     c.name
 }</code></pre>
@@ -938,29 +1027,57 @@ Excel.registerCellRenderer(MyCustomClass) { MyCustomClass c -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def c = new MyCustomClass(name: "Sally")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> c = <span class="keyword">new</span> MyCustomClass(<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Sally</span><span class="delimiter">&quot;</span></span>)
 
 ExcelBuilder.build {
     sheet {
-        row(c) //The value "Sally" will be put into cell A1
+        row(c) <span class="comment">//The value &quot;Sally&quot; will be put into cell A1</span>
     }
 }</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If a renderer is registered for a superclass, it will resolve for subclasses. If you wish to provide customized functionality for a subclass you can register a renderer for that class with a higher priority. The default is <code>-1</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Foo</span> {
+    <span class="predefined-type">String</span> name
+}
+<span class="type">class</span> <span class="class">Bar</span> <span class="directive">extends</span> Foo {
+    <span class="predefined-type">String</span> title
+}
+
+Excel.registerCellRenderer(Foo) { <span class="local-variable">it</span>.name }
+
+<span class="comment">// With the current behavior, all values of type &quot;Foo&quot; or any subclass of &quot;Foo&quot; will be rendered with the &quot;name&quot; property. If you wish to override the rendering for a given type, you can specify another renderer with a higher priority.</span>
+
+Excel.registerCellRenderer(Bar, <span class="integer">0</span>) { <span class="local-variable">it</span>.title }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_cell_styling">Cell Styling</h3>
 <div class="paragraph">
-<p>All calls to <code>cell</code> can be accompanied with a map of arguments to style the cell. The arguments passed will be merged with the default styles of the row and sheet, if provided</p>
+<p>All calls to <code>cell</code> can be accompanied with a map of arguments to style the cell. The arguments passed will be merged with the default styles of the row and sheet, if provided.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def c = new MyCustomClass(name: "Sally")
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> c = <span class="keyword">new</span> MyCustomClass(<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Sally</span><span class="delimiter">&quot;</span></span>)
 
 ExcelBuilder.build {
     sheet {
         row {
-            cell("Test", [:])
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Test</span><span class="delimiter">&quot;</span></span>, [:])
         }
     }
 }</code></pre>
@@ -970,25 +1087,167 @@ ExcelBuilder.build {
 <p>See the section in this guide on <a href="#styles">styling cells</a> to learn what options are available.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_cell_formatting">Cell Formatting</h3>
+<div class="paragraph">
+<p>It is not necessary for you to pre format your data before creating cells. You can apply a format to any given class and that format will be used when data of that type is written to a cell. There are several data types that are already configured. You can override that configuration and add your own.</p>
+</div>
+<div class="paragraph">
+<p>The following classes to format mappings are created by default.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 75%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.math.BigDecimal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$#,##0.00_);[Red]($#,##0.00)</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#,##0.00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Float</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#,##0.00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#,##0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#,##0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Short</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#,##0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.math.BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#,##0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.util.Date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>m/d/yyyy</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To override or add additional format mappings, register them with the <a href="./groovydoc/com/jameskleeh/excel/Excel.html">Excel</a> class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Excel</span>
+<span class="keyword">import</span> <span class="include">java.time.OffsetDateTime</span>
+
+<span class="comment">//Override the existing format for BigDecimal</span>
+Excel.registerCellFormat(<span class="predefined-type">BigDecimal</span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="content">$</span><span class="char">\&quot;</span><span class="content">#,##0.00_);(</span><span class="char">\&quot;</span><span class="content">$</span><span class="char">\&quot;</span><span class="content">#,##0.00)</span><span class="delimiter">&quot;</span></span>)
+
+<span class="comment">//Create a new format mapping</span>
+Excel.registerCellFormat(OffsetDateTime, <span class="string"><span class="delimiter">&quot;</span><span class="content">m/d/yy h:mm</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are a list of built in formats you can reference by their index. The list is documented in a comment in the Apache POI <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html">BuiltinFormats</a> class.</p>
+</div>
+<div class="paragraph">
+<p>To register one of the built in formats, simply use the <code>Integer</code> representation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Excel</span>
+
+Excel.registerCellFormat(<span class="predefined-type">Float</span>, <span class="integer">10</span>) <span class="comment">// &quot;0.00%&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to providing global formats by class, you can also override the format for any given cell.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
+    sheet {
+        row {
+            cell(<span class="float">0.105F</span>, [<span class="key">format</span>: <span class="integer">10</span>])
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following result will be produced.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 15%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.50%</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If a format is registered for a superclass, it will resolve for subclasses. If you wish to provide customized functionality for a subclass you can register a format for that class with a higher priority. The default is <code>-1</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.time.temporal.TemporalAccessor</span>
+<span class="keyword">import</span> <span class="include">java.time.LocalTime</span>
+
+Excel.registerCellFormat(TemporalAccessor, <span class="string"><span class="delimiter">&quot;</span><span class="content">m/d/yy h:mm</span><span class="delimiter">&quot;</span></span>)
+
+<span class="comment">// With the current behavior, all Java 8 date types will be rendered with the supplied format. If you wish to override the format for a given type, you can specify another format with a higher priority.</span>
+
+Excel.registerCellFormat(LocalTime, <span class="integer">0</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">h:mm:ss</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="formuals">Formulas</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references</p>
+<p>The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references.</p>
 </div>
 <div class="sect2">
 <h3 id="_simple_string">Simple String</h3>
 <div class="paragraph">
-<p>You can specify the exact text of your formula using the example below</p>
+<p>You can specify the exact text of your formula using the example below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         row {
-            formula("SUM(1,2)")
+            formula(<span class="string"><span class="delimiter">&quot;</span><span class="content">SUM(1,2)</span><span class="delimiter">&quot;</span></span>)
         }
     }
 }</code></pre>
@@ -998,15 +1257,15 @@ ExcelBuilder.build {
 <div class="sect2">
 <h3 id="_closure_customization">Closure Customization</h3>
 <div class="paragraph">
-<p>An additional way to create a formula is to supply a closure to the <code>formula</code> method. The provided closure will have access to a few methods to make referencing cells easier. Whatever gets returned from the closure will be set as the formula</p>
+<p>An additional way to create a formula is to supply a closure to the <code>formula</code> method. The provided closure will have access to a few methods to make referencing cells easier. Whatever gets returned from the closure will be set as the formula.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         row {
             formula {
-                "SUM(1,2)"
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">SUM(1,2)</span><span class="delimiter">&quot;</span></span>
             }
         }
     }
@@ -1016,13 +1275,13 @@ ExcelBuilder.build {
 <div class="sect3">
 <h4 id="_exact_cell_reference">Exact Cell Reference</h4>
 <div class="paragraph">
-<p>Inside of the forumla closure you can get a reference to an exact cell by providing the index of the row and column</p>
+<p>Inside of the formula closure you can get a reference to an exact cell by providing the index of the row and column.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">...
+<pre class="CodeRay highlight"><code data-lang="groovy">...
 formula {
-    "SUM(${exactCell(0,1)},2)"
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">SUM(</span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="integer">0</span>,<span class="integer">1</span>)<span class="inline-delimiter">}</span></span><span class="content">,2)</span><span class="delimiter">&quot;</span></span>
 }
 ...</code></pre>
 </div>
@@ -1035,14 +1294,14 @@ formula {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         columns {
-            column("Foo", "foo")
+            column(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)
         }
         row {
             formula {
-                "SUM(${exactCell("foo")}, ${exactCell("foo", 1)})"
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">SUM(</span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>)<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>, <span class="integer">1</span>)<span class="inline-delimiter">}</span></span><span class="content">)</span><span class="delimiter">&quot;</span></span>
             }
         }
     }
@@ -1056,17 +1315,17 @@ formula {
 <div class="sect3">
 <h4 id="_relative_cell_references">Relative Cell References</h4>
 <div class="paragraph">
-<p>In addition to retrieving exact cell references, you can also retrieve references relative to the formula</p>
+<p>In addition to retrieving exact cell references, you can also retrieve references relative to the formula.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ExcelBuilder.build {
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
     sheet {
         row()
         row {
-            cell("A2")
+            cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A2</span><span class="delimiter">&quot;</span></span>)
             formula {
-                "SUM(${relativeCell(-1)}, ${relativeCell(-1, -1)})"
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">SUM(</span><span class="inline"><span class="inline-delimiter">${</span>relativeCell(-<span class="integer">1</span>)<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>relativeCell(-<span class="integer">1</span>, -<span class="integer">1</span>)<span class="inline-delimiter">}</span></span><span class="content">)</span><span class="delimiter">&quot;</span></span>
             }
         }
     }
@@ -1081,20 +1340,20 @@ formula {
 <div class="sect2">
 <h3 id="_anchoring_cells">Anchoring Cells</h3>
 <div class="paragraph">
-<p>Once you have a reference to any cell, you can anchor the column or row or both</p>
+<p>Once you have a reference to any cell, you can anchor the column or row or both.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">...
+<pre class="CodeRay highlight"><code data-lang="groovy">...
 
 formula {
-    "SUM(${exactCell(0,1).anchorColumn()}, ${exactCell(0,2).anchorRow()}, ${exactCell(0,3).anchor()})"
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">SUM(</span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="integer">0</span>,<span class="integer">1</span>).anchorColumn()<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="integer">0</span>,<span class="integer">2</span>).anchorRow()<span class="inline-delimiter">}</span></span><span class="content">, </span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="integer">0</span>,<span class="integer">3</span>).anchor()<span class="inline-delimiter">}</span></span><span class="content">)</span><span class="delimiter">&quot;</span></span>
 }
 ...</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The resulting formula will be</p>
+<p>The resulting formula will be:</p>
 </div>
 <div class="paragraph">
 <p><code>SUM($A2, A$3, $A$4)</code></p>
