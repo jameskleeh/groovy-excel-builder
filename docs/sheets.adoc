@@ -5,7 +5,7 @@ With the Groovy Excel Builder, you can create documents with as many sheets as y
 
 === Underlying API
 
-To get access to the Apache POI API for a given sheet, simply receive an argument to the `sheet` closure:
+To get access to the {apachePoi}[Apache POI] API for a given sheet, simply receive an argument to the `sheet` closure:
 
 [source,groovy]
 ----

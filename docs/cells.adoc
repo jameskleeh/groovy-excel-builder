@@ -15,7 +15,7 @@ Support for additional types can be easily added without the need to convert you
 
 === Underlying API
 
-To get access to the Apache POI API for a given cell, simply store the return value of the `cell` method:
+To get access to the {apachePoi}[Apache POI] API for a given cell, simply store the return value of the `cell` method:
 
 [source,groovy]
 ----
@@ -137,7 +137,7 @@ Excel.registerCellFormat(BigDecimal, "\"$\"#,##0.00_);(\"$\"#,##0.00)")
 Excel.registerCellFormat(OffsetDateTime, "m/d/yy h:mm")
 ----
 
-There are a list of built in formats you can reference by their index. The list is documented in a comment in the Apache POI {poiApiUrl}org/apache/poi/ss/usermodel/BuiltinFormats.html[BuiltinFormats] class.
+There are a list of built in formats you can reference by their index. The list is documented in a comment in the {apachePoi}[Apache POI] {poiApiUrl}org/apache/poi/ss/usermodel/BuiltinFormats.html[BuiltinFormats] class.
 
 To register one of the built in formats, simply use the `Integer` representation.
 

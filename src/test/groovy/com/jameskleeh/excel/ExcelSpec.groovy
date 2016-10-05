@@ -125,18 +125,4 @@ class ExcelSpec extends Specification {
         format == 18
     }
 
-    void "test temp"() {
-
-        ExcelBuilder.output(new FileOutputStream(new File('/Users/jameskleeh/temp.xlsx'))) {
-            sheet {
-                row {
-                    cell(0.105F, [format: 10])
-                }
-            }
-        }
-
-        expect:
-        true
-
-    }
 }

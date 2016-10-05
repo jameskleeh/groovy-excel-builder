@@ -5,7 +5,7 @@ In addition to creating cells, there are also a few other methods available to y
 
 === Underlying API
 
-To get access to the Apache POI API for a given row, simply receive an argument to the `row` closure:
+To get access to the {apachePoi}[Apache POI] API for a given row, simply receive an argument to the `row` closure:
 
 [source,groovy]
 ----

@@ -1,4 +1,6 @@
 [[introduction]]
 == Introduction
 
-This module exposes a Groovy DSL to create real Excel documents using Apache POI under the hood. The goal of this module is to abstract away the most common uses of Apache POI to make creating Excel documents very easy, while providing a hook into the underlying API to allow users to do anything that is not provided automatically.
+This module exposes a Groovy DSL to create real Excel documents using {apachePoi}[Apache POI] under the hood. The goal of this module is to abstract away the most common uses of {apachePoi}[Apache POI] to make creating Excel documents very easy, while providing a hook into the underlying API to allow users to do anything that is not provided automatically.
+
+If you encounter any issues or inconsistencies while using this library, or if you have a great idea for improving this library, please https://github.com/jameskleeh/groovy-excel-builder/issues[create an issue]!
