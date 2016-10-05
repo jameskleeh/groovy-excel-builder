@@ -509,6 +509,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#cells">Cells</a>
 <ul class="sectlevel2">
 <li><a href="#_cell_values">Cell Values</a></li>
+<li><a href="#_underlying_api">Underlying API</a></li>
 <li><a href="#_custom_renderers">Custom Renderers</a></li>
 <li><a href="#_cell_styling">Cell Styling</a></li>
 <li><a href="#_cell_formatting">Cell Formatting</a></li>
@@ -547,6 +548,26 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="paragraph">
 <p>Support for additional types can be easily added without the need to convert your custom objects each time.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_underlying_api">Underlying API</h3>
+<div class="paragraph">
+<p>To get access to the <a href="https://poi.apache.org/">Apache POI</a> API for a given cell, simply store the return value of the <code>cell</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.xssf.usermodel.XSSFCell</span>
+
+ExcelBuilder.build {
+    sheet {
+        row {
+            XSSFCell customCell = cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)
+            <span class="comment">//Modify customCell as needed</span>
+        }
+    }
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -707,7 +728,7 @@ Excel.registerCellFormat(OffsetDateTime, <span class="string"><span class="delim
 </div>
 </div>
 <div class="paragraph">
-<p>There are a list of built in formats you can reference by their index. The list is documented in a comment in the Apache POI <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html">BuiltinFormats</a> class.</p>
+<p>There are a list of built in formats you can reference by their index. The list is documented in a comment in the <a href="https://poi.apache.org/">Apache POI</a> <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html">BuiltinFormats</a> class.</p>
 </div>
 <div class="paragraph">
 <p>To register one of the built in formats, simply use the <code>Integer</code> representation.</p>
@@ -784,7 +805,7 @@ Excel.registerCellFormat(LocalTime, <span class="integer">0</span>, <span class=
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-04 22:49:15 -04:00
+Last updated 2016-10-05 04:56:42 UTC
 </div>
 </div>
 </body>

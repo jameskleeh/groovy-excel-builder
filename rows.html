@@ -508,6 +508,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel1">
 <li><a href="#rows">Rows</a>
 <ul class="sectlevel2">
+<li><a href="#_underlying_api">Underlying API</a></li>
 <li><a href="#_defaults">Defaults</a></li>
 <li><a href="#_skipping_cells">Skipping Cells</a></li>
 </ul>
@@ -521,6 +522,25 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sectionbody">
 <div class="paragraph">
 <p>In addition to creating cells, there are also a few other methods available to you to make documents easier.</p>
+</div>
+<div class="sect2">
+<h3 id="_underlying_api">Underlying API</h3>
+<div class="paragraph">
+<p>To get access to the <a href="https://poi.apache.org/">Apache POI</a> API for a given row, simply receive an argument to the <code>row</code> closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.xssf.usermodel.XSSFRow</span>
+
+ExcelBuilder.build {
+    sheet {
+        row { XSSFRow myRow -&gt;
+            <span class="comment">//Modify myRow as needed</span>
+        }
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_defaults">Defaults</h3>
@@ -651,7 +671,7 @@ The <code>skipTo</code> method will set the cell index so the next cell call wil
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-04 22:49:15 -04:00
+Last updated 2016-10-05 04:56:42 UTC
 </div>
 </div>
 </body>

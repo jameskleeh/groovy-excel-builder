@@ -508,6 +508,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel1">
 <li><a href="#sheets">Sheets</a>
 <ul class="sectlevel2">
+<li><a href="#_underlying_api">Underlying API</a></li>
 <li><a href="#_sheet_name">Sheet Name</a></li>
 <li><a href="#_defaults">Defaults</a></li>
 <li><a href="#_styling">Styling</a></li>
@@ -525,6 +526,23 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sectionbody">
 <div class="paragraph">
 <p>With the Groovy Excel Builder, you can create documents with as many sheets as you like. In addition, there are several options you have at the sheet level for configuring your document.</p>
+</div>
+<div class="sect2">
+<h3 id="_underlying_api">Underlying API</h3>
+<div class="paragraph">
+<p>To get access to the <a href="https://poi.apache.org/">Apache POI</a> API for a given sheet, simply receive an argument to the <code>sheet</code> closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.xssf.usermodel.XSSFSheet</span>
+
+ExcelBuilder.build {
+    sheet { XSSFSheet mySheet -&gt;
+        <span class="comment">//Modify mySheet as needed</span>
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_sheet_name">Sheet Name</h3>
@@ -695,7 +713,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-04 22:49:15 -04:00
+Last updated 2016-10-05 04:56:42 UTC
 </div>
 </div>
 </body>

@@ -506,7 +506,22 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#styles">Styling Cells</a></li>
+<li><a href="#styles">Styling Cells</a>
+<ul class="sectlevel2">
+<li><a href="#_font">Font</a></li>
+<li><a href="#_hidden">Hidden</a></li>
+<li><a href="#_locked">Locked</a></li>
+<li><a href="#_wrap_text">Wrap Text</a></li>
+<li><a href="#_horizontal_alignment">Horizontal Alignment</a></li>
+<li><a href="#_vertical_alignment">Vertical Alignment</a></li>
+<li><a href="#_rotation">Rotation</a></li>
+<li><a href="#_indention">Indention</a></li>
+<li><a href="#_border">Border</a></li>
+<li><a href="#_fill">Fill</a></li>
+<li><a href="#_foreground_color">Foreground Color</a></li>
+<li><a href="#_background_color">Background Color</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -514,13 +529,340 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect1">
 <h2 id="styles">Styling Cells</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>There are many options available for styling cells to meet your requirements.</p>
+</div>
+<div class="sect2">
+<h3 id="_font">Font</h3>
+<div class="paragraph">
+<p>You can set the font decoration and color by passing a few simple options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Font</span>
 
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD]) <span class="comment">// View the <a href="./groovydoc/com/jameskleeh/excel/Font.html">Font</a> class for options</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are also several types of underline that can be set:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">underline</span>: <span class="string"><span class="delimiter">'</span><span class="content">single</span><span class="delimiter">'</span></span>]) <span class="comment">//One of ['single', 'singleAccounting', 'double', 'doubleAccounting']</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also specify the font color:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Font</span>
+<span class="keyword">import</span> <span class="include">java.awt.Color</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">bold</span>: <span class="predefined-constant">true</span>, <span class="key">color</span>: <span class="predefined-type">Color</span>.RED])
+...</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Any option that expects a color supports colors specified by an instance of java.awt.Color or the string hex value ("#FFFFFF")
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hidden">Hidden</h3>
+<div class="paragraph">
+<p>Cells can be hidden by passing the <code>hidden</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">hidden</span>: <span class="predefined-constant">true</span>])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_locked">Locked</h3>
+<div class="paragraph">
+<p>Cells can be locked by passing the <code>locked</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">locked</span>: <span class="predefined-constant">true</span>])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_wrap_text">Wrap Text</h3>
+<div class="paragraph">
+<p>Cells can have their text wrapped by passing the <code>wrapped</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Some really long string</span><span class="delimiter">&quot;</span></span>, [<span class="key">wrapped</span>: <span class="predefined-constant">true</span>])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_horizontal_alignment">Horizontal Alignment</h3>
+<div class="paragraph">
+<p>You can set the horizontal alignment of a cell by passing the <code>alignment</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.HorizontalAlignment</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">alignment</span>: HorizontalAlignment.CENTER]) <span class="comment">// View the <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/HorizontalAlignment.html">HorizontalAlignment</a> class for options</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Any horizontal alignment can also be passed as a string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">alignment</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_vertical_alignment">Vertical Alignment</h3>
+<div class="paragraph">
+<p>You can set the vertical alignment of a cell by passing the <code>verticalAlignment</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.VerticalAlignment</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">verticalAlignment</span>: VerticalAlignment.TOP]) <span class="comment">// View the <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/VerticalAlignment.html">VerticalAlignment</a> class for options</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Any vertical alignment can also be passed as a string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">verticalAlignment</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rotation">Rotation</h3>
+<div class="paragraph">
+<p>To set the rotation of a cell, pass a value that can be cast to a <code>Short</code> as the <code>rotation</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">rotation</span>: <span class="integer">90</span>]) <span class="comment">//Any value between 0 and 180</span>
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_indention">Indention</h3>
+<div class="paragraph">
+<p>To indent a cell, pass the number of spaces you would like to indent to the <code>indent</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">indent</span>: <span class="integer">4</span>])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_border">Border</h3>
+<div class="paragraph">
+<p>Border style and color can be set for any given cell.</p>
+</div>
+<div class="paragraph">
+<p>To set the style for all borders (left, top, bottom, right):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.BorderStyle</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">border</span>: BorderStyle.THIN]) <span class="comment">// View the <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BorderStyle.html">BorderStyle</a> class for options</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To set the style for only the specified edge:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.BorderStyle</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">border</span>: [<span class="key">left</span>: BorderStyle.THIN]])
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To override the border for any given edge:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.BorderStyle</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">border</span>: [<span class="key">style</span>: BorderStyle.THIN, <span class="key">left</span>: BorderStyle.THICK]])
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To also specify a border color:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.BorderStyle</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">border</span>: [<span class="key">style</span>: BorderStyle.THIN, <span class="key">color</span>: <span class="predefined-type">Color</span>.RED]])
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To override the border color for any given edge:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.BorderStyle</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">border</span>: [<span class="key">style</span>: BorderStyle.THIN, <span class="key">color</span>: <span class="predefined-type">Color</span>.RED, <span class="key">left</span>: [<span class="key">color</span>: <span class="predefined-type">Color</span>.BLUE]]])
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is a summary of the long form of the possible keys supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">border</span>:
+    <span class="key">style</span>:
+    <span class="key">color</span>:
+    <span class="key">left</span>:
+        <span class="key">style</span>:
+        <span class="key">color</span>:
+    <span class="key">right</span>:
+        <span class="key">style</span>:
+        <span class="key">color</span>:
+    <span class="key">bottom</span>:
+        <span class="key">style</span>:
+        <span class="key">color</span>:
+    <span class="key">top</span>:
+        <span class="key">style</span>:
+        <span class="key">color</span>:</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fill">Fill</h3>
+<div class="paragraph">
+<p>You can set the fill pattern of a cell using the 'fill' argument:</p>
+</div>
+<div class="paragraph">
+<p>To set the style for all borders (left, top, bottom, right):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.ss.usermodel.FillPatternType</span>
+
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">fill</span>: FillPatternType.DIAMONDS]) <span class="comment">// View the <a href="https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/FillPatternType.html">FillPatternType</a> class for options</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Any fill pattern can also be passed as a string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">fill</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">diamonds</span><span class="delimiter">&quot;</span></span>])
+...</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You must set a foreground or background color in order to see any result from this style attribute
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_foreground_color">Foreground Color</h3>
+<div class="paragraph">
+<p>If you have a fill pattern set, the <code>foregroundColor</code> attribute will set the foreground color. If you don&#8217;t have a fill pattern specified this does the same thing as if you specified a background color.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">foregroundColor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#000000</span><span class="delimiter">&quot;</span></span>])
+
+<span class="comment">// or as a java.awt.Color</span>
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, [<span class="key">foregroundColor</span>: <span class="predefined-type">Color</span>.BLACK])
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_background_color">Background Color</h3>
+<div class="paragraph">
+<p>To set the background color of a cell, use the <code>backgroundColor</code> argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">backgroundColor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#000000</span><span class="delimiter">&quot;</span></span>])
+
+<span class="comment">// or as a java.awt.Color</span>
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, [<span class="key">backgroundColor</span>: <span class="predefined-type">Color</span>.BLACK])
+...</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-02 21:31:35 -04:00
+Last updated 2016-10-05 04:56:42 UTC
 </div>
 </div>
 </body>
