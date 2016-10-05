@@ -1,7 +1,24 @@
 [[rows]]
 == Rows
 
-In addition to creating cells, there are also a few other methods available to you to make documents easier
+In addition to creating cells, there are also a few other methods available to you to make documents easier.
+
+=== Underlying API
+
+To get access to the Apache POI API for a given row, simply receive an argument to the `row` closure:
+
+[source,groovy]
+----
+import org.apache.poi.xssf.usermodel.XSSFRow
+
+ExcelBuilder.build {
+    sheet {
+        row { XSSFRow myRow ->
+            //Modify myRow as needed
+        }
+    }
+}
+----
 
 === Defaults
 
@@ -34,7 +51,7 @@ ExcelBuilder.build {
 }
 ----
 
-The previous example will produce a document with "foo" in cell A1 and "bar" in D1
+The previous example will produce a document with "foo" in cell A1 and "bar" in D1.
 
 ==== Skipping to a column
 
@@ -58,7 +75,7 @@ ExcelBuilder.build {
 
 The example above will put the text "C2" in cell C2.
 
-WARNING: The `skipTo` method will set the cell index so the next cell call will output data into the desired cell. Subsequent cells will start from that index. View the example below
+WARNING: The `skipTo` method will set the cell index so the next cell call will output data into the desired cell. Subsequent cells will start from that index. View the example below:
 
 [source,groovy]
 ----

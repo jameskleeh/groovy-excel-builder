@@ -134,6 +134,6 @@ class RowSpec extends Specification {
         cells.next().numericCellValue == new Double(2.2)
         cells.next().booleanCellValue == false
         cells.next().stringCellValue == 'foox'
-        cells.next().stringCellValue == "1"
+        cells.next().numericCellValue == new Double(1)
     }
 }

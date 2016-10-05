@@ -1,11 +1,11 @@
 [[formuals]]
 == Formulas
 
-The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references
+The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references.
 
 === Simple String
 
-You can specify the exact text of your formula using the example below
+You can specify the exact text of your formula using the example below.
 
 [source,groovy]
 ----
@@ -20,7 +20,7 @@ ExcelBuilder.build {
 
 === Closure Customization
 
-An additional way to create a formula is to supply a closure to the `formula` method. The provided closure will have access to a few methods to make referencing cells easier. Whatever gets returned from the closure will be set as the formula
+An additional way to create a formula is to supply a closure to the `formula` method. The provided closure will have access to a few methods to make referencing cells easier. Whatever gets returned from the closure will be set as the formula.
 
 [source,groovy]
 ----
@@ -37,7 +37,7 @@ ExcelBuilder.build {
 
 ==== Exact Cell Reference
 
-Inside of the forumla closure you can get a reference to an exact cell by providing the index of the row and column
+Inside of the formula closure you can get a reference to an exact cell by providing the index of the row and column.
 
 [source,groovy]
 ----
@@ -72,7 +72,7 @@ The first call to exact cell will return "A1" because the `foo` column is in col
 
 ==== Relative Cell References
 
-In addition to retrieving exact cell references, you can also retrieve references relative to the formula
+In addition to retrieving exact cell references, you can also retrieve references relative to the formula.
 
 [source,groovy]
 ----
@@ -91,9 +91,9 @@ ExcelBuilder.build {
 
 The first call to `relativeCell` will reference the cell in the previous column in the same row. In that example that would be "A2". The second call to `relativeCell` will resolve to "A1" because the first argument indicates to go back 1 column and the second argument says to go back one row. The formula will be put in cell "B2", so minus one column and minus one row would be "A1".
 
-==== Anchoring Cells
+=== Anchoring Cells
 
-Once you have a reference to any cell, you can anchor the column or row or both
+Once you have a reference to any cell, you can anchor the column or row or both.
 
 [source,groovy]
 ----
@@ -105,6 +105,6 @@ formula {
 ...
 ----
 
-The resulting formula will be
+The resulting formula will be:
 
 `SUM($A2, A$3, $A$4)`

@@ -20,23 +20,23 @@ class Workbook {
         this.wb = wb
     }
 
-    void sheet(String name, Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    XSSFSheet sheet(String name, Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         handleSheet(wb.createSheet(WorkbookUtil.createSafeSheetName(name)), options, callable)
     }
 
-    void sheet(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    XSSFSheet sheet(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         sheet(name, [:], callable)
     }
 
-    void sheet(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    XSSFSheet sheet(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         sheet([:], callable)
     }
 
-    void sheet(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    XSSFSheet sheet(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         handleSheet(wb.createSheet(), options, callable)
     }
 
-    private handleSheet(XSSFSheet sheet, Map options, Closure callable) {
+    private XSSFSheet handleSheet(XSSFSheet sheet, Map options, Closure callable) {
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         if (options.containsKey(WIDTH)) {
             Object width = options[WIDTH]
@@ -64,5 +64,6 @@ class Workbook {
         } else {
             callable.call()
         }
+        sheet
     }
 }

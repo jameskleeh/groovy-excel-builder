@@ -8,10 +8,28 @@ This module supports setting basic and custom types to cell values. The followin
 * String
 * Calendar
 * Date
-* Double
+* Number
 * Boolean
 
 Support for additional types can be easily added without the need to convert your custom objects each time.
+
+=== Underlying API
+
+To get access to the Apache POI API for a given cell, simply store the return value of the `cell` method:
+
+[source,groovy]
+----
+import org.apache.poi.xssf.usermodel.XSSFCell
+
+ExcelBuilder.build {
+    sheet {
+        row {
+            XSSFCell customCell = cell("Foo")
+            //Modify customCell as needed
+        }
+    }
+}
+----
 
 === Custom Renderers
 
@@ -48,9 +66,27 @@ ExcelBuilder.build {
 }
 ----
 
+IMPORTANT: If a renderer is registered for a superclass, it will resolve for subclasses. If you wish to provide customized functionality for a subclass you can register a renderer for that class with a higher priority. The default is `-1`.
+
+[source,groovy]
+----
+class Foo {
+    String name
+}
+class Bar extends Foo {
+    String title
+}
+
+Excel.registerCellRenderer(Foo) { it.name }
+
+// With the current behavior, all values of type "Foo" or any subclass of "Foo" will be rendered with the "name" property. If you wish to override the rendering for a given type, you can specify another renderer with a higher priority.
+
+Excel.registerCellRenderer(Bar, 0) { it.title }
+----
+
 === Cell Styling
 
-All calls to `cell` can be accompanied with a map of arguments to style the cell. The arguments passed will be merged with the default styles of the row and sheet, if provided
+All calls to `cell` can be accompanied with a map of arguments to style the cell. The arguments passed will be merged with the default styles of the row and sheet, if provided.
 
 [source,groovy]
 ----
@@ -67,4 +103,83 @@ ExcelBuilder.build {
 
 See the section in this guide on link:#styles[styling cells] to learn what options are available.
 
+=== Cell Formatting
 
+It is not necessary for you to pre format your data before creating cells. You can apply a format to any given class and that format will be used when data of that type is written to a cell. There are several data types that are already configured. You can override that configuration and add your own.
+
+The following classes to format mappings are created by default.
+
+[width="75%"]
+|=======
+|Class |Format
+
+|java.math.BigDecimal |`$\#,\##0.00_);[Red]($\#,##0.00)`
+|java.lang.Double |`\#,##0.00`
+|java.lang.Float |`\#,##0.00`
+|java.lang.Integer |`\#,##0`
+|java.lang.Long |`\#,##0`
+|java.lang.Short |`\#,##0`
+|java.math.BigInteger |`\#,##0`
+|java.util.Date |`m/d/yyyy`
+|=======
+
+To override or add additional format mappings, register them with the link:./groovydoc/com/jameskleeh/excel/Excel.html[Excel] class.
+
+[source,groovy]
+----
+import com.jameskleeh.excel.Excel
+import java.time.OffsetDateTime
+
+//Override the existing format for BigDecimal
+Excel.registerCellFormat(BigDecimal, "\"$\"#,##0.00_);(\"$\"#,##0.00)")
+
+//Create a new format mapping
+Excel.registerCellFormat(OffsetDateTime, "m/d/yy h:mm")
+----
+
+There are a list of built in formats you can reference by their index. The list is documented in a comment in the Apache POI {poiApiUrl}org/apache/poi/ss/usermodel/BuiltinFormats.html[BuiltinFormats] class.
+
+To register one of the built in formats, simply use the `Integer` representation.
+
+[source,groovy]
+----
+import com.jameskleeh.excel.Excel
+
+Excel.registerCellFormat(Float, 10) // "0.00%"
+----
+
+In addition to providing global formats by class, you can also override the format for any given cell.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row {
+            cell(0.105F, [format: 10])
+        }
+    }
+}
+----
+
+The following result will be produced.
+
+[width="15%"]
+|=======
+| |A
+
+|*1* |10.50%
+|=======
+
+IMPORTANT: If a format is registered for a superclass, it will resolve for subclasses. If you wish to provide customized functionality for a subclass you can register a format for that class with a higher priority. The default is `-1`.
+
+[source,groovy]
+----
+import java.time.temporal.TemporalAccessor
+import java.time.LocalTime
+
+Excel.registerCellFormat(TemporalAccessor, "m/d/yy h:mm")
+
+// With the current behavior, all Java 8 date types will be rendered with the supplied format. If you wish to override the format for a given type, you can specify another format with a higher priority.
+
+Excel.registerCellFormat(LocalTime, 0, "h:mm:ss")
+----

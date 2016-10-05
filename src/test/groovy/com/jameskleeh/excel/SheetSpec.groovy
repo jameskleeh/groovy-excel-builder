@@ -36,9 +36,9 @@ class SheetSpec extends Specification {
 
         then:
         row.getPhysicalNumberOfCells() == 3
-        row.getCell(0).stringCellValue == '1'
-        row.getCell(1).stringCellValue == '2'
-        row.getCell(2).stringCellValue == '3'
+        row.getCell(0).numericCellValue == 1
+        row.getCell(1).numericCellValue == 2
+        row.getCell(2).numericCellValue == 3
     }
 
     void "test row(Map options)"() {

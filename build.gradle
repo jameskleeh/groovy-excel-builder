@@ -137,6 +137,7 @@ asciidoctor {
                'groupId': project.group,
                'artifactId': project.name,
                'sourcedir': "${projectDir}/src/main/groovy",
+               'poiApiUrl': 'https://poi.apache.org/apidocs/',
                'projectUrl': project.githubUrl
 }
 

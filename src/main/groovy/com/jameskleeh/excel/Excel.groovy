@@ -1,6 +1,7 @@
 package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
+import org.apache.poi.ss.usermodel.BuiltinFormats
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -37,7 +38,12 @@ class Excel {
     }
 
     static void registerCellFormat(Class clazz, Integer priority, String format) {
-        formatEntries.add(new FormatEntry(clazz, format, priority))
+        int builtInFormat = BuiltinFormats.getBuiltinFormat(format)
+        if (builtInFormat > -1) {
+            registerCellFormat(clazz, priority, builtInFormat)
+        } else {
+            formatEntries.add(new FormatEntry(clazz, format, priority))
+        }
     }
 
     static void registerCellFormat(Class clazz, String format) {

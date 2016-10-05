@@ -43,11 +43,11 @@ class Sheet {
         row(options, callable)
     }
 
-    void row() {
+    XSSFRow row() {
         row([:], null)
     }
 
-    void row(Object...cells) {
+    XSSFRow row(Object...cells) {
         row {
             cells.each { val ->
                 cell(val)
@@ -55,11 +55,11 @@ class Sheet {
         }
     }
 
-    void row(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+    XSSFRow row(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         row([:], callable)
     }
 
-    void row(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+    XSSFRow row(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         XSSFRow row = sheet.createRow(rowIdx)
         if (options?.containsKey(HEIGHT)) {
             Object height = options[HEIGHT]
@@ -82,5 +82,6 @@ class Sheet {
             }
         }
         rowIdx++
+        row
     }
 }

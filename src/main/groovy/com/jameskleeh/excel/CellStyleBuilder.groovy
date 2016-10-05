@@ -109,7 +109,7 @@ class CellStyleBuilder {
         } else if (format instanceof String) {
             cellStyle.setDataFormat(workbook.creationHelper.createDataFormat().getFormat(format))
         } else {
-            throw new IllegalArgumentException('The cell format must be a short or String')
+            throw new IllegalArgumentException('The cell format must be an Integer or String')
         }
     }
 
@@ -306,15 +306,17 @@ class CellStyleBuilder {
     }
 
     private void setForegroundColor(XSSFCellStyle cellStyle, Object foregroundColor) {
+        if (cellStyle.fillPatternEnum == FillPatternType.NO_FILL) {
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
+        }
         cellStyle.setFillForegroundColor(getColor(foregroundColor))
     }
 
     private void setBackgroundColor(XSSFCellStyle cellStyle, Object backgroundColor) {
-        XSSFColor color = getColor(backgroundColor)
-        if (cellStyle.fillForegroundColor == IndexedColors.AUTOMATIC.index) {
-            cellStyle.setFillForegroundColor(color)
+        if (cellStyle.fillPatternEnum == FillPatternType.NO_FILL) {
+            setForegroundColor(cellStyle, backgroundColor)
         } else {
-            cellStyle.setFillBackgroundColor(color)
+            cellStyle.setFillBackgroundColor(getColor(backgroundColor))
         }
     }
 
@@ -364,8 +366,6 @@ class CellStyleBuilder {
         }
         if (options.containsKey(FILL)) {
             setFill(cellStyle, options[FILL])
-        } else {
-            setFill(cellStyle, FillPatternType.SOLID_FOREGROUND)
         }
         if (options.containsKey(FOREGROUND_COLOR)) {
             setForegroundColor(cellStyle, options[FOREGROUND_COLOR])

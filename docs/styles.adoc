@@ -1,2 +1,273 @@
 [[styles]]
 == Styling Cells
+
+There are many options available for styling cells to meet your requirements.
+
+=== Font
+
+You can set the font decoration and color by passing a few simple options:
+
+[source,groovy,subs="+macros"]
+----
+import com.jameskleeh.excel.Font
+
+...
+cell("A", [font: Font.BOLD]) // View the link:./groovydoc/com/jameskleeh/excel/Font.html[Font] class for options
+...
+----
+
+There are also several types of underline that can be set:
+
+[source,groovy]
+----
+...
+cell("A", [font: [underline: 'single']) //One of ['single', 'singleAccounting', 'double', 'doubleAccounting']
+...
+----
+
+You can also specify the font color:
+
+[source,groovy]
+----
+import com.jameskleeh.excel.Font
+import java.awt.Color
+
+...
+cell("A", [font: [bold: true, color: Color.RED])
+...
+----
+
+TIP: Any option that expects a color supports colors specified by an instance of java.awt.Color or the string hex value ("#FFFFFF")
+
+=== Hidden
+
+Cells can be hidden by passing the `hidden` argument:
+
+[source,groovy]
+----
+...
+cell("A", [hidden: true])
+...
+----
+
+=== Locked
+
+Cells can be locked by passing the `locked` argument:
+
+[source,groovy]
+----
+...
+cell("A", [locked: true])
+...
+----
+
+=== Wrap Text
+
+Cells can have their text wrapped by passing the `wrapped` argument:
+
+[source,groovy]
+----
+...
+cell("Some really long string", [wrapped: true])
+...
+----
+
+=== Horizontal Alignment
+
+You can set the horizontal alignment of a cell by passing the `alignment` argument:
+
+[source,groovy,subs="+attributes,macros"]
+----
+import org.apache.poi.ss.usermodel.HorizontalAlignment
+
+...
+cell("A", [alignment: HorizontalAlignment.CENTER]) // View the {poiApiUrl}org/apache/poi/ss/usermodel/HorizontalAlignment.html[HorizontalAlignment] class for options
+...
+----
+
+Any horizontal alignment can also be passed as a string:
+
+[source,groovy]
+----
+...
+cell("A", [alignment: "center"])
+...
+----
+
+=== Vertical Alignment
+
+You can set the vertical alignment of a cell by passing the `verticalAlignment` argument:
+
+[source,groovy,subs="+attributes,macros"]
+----
+import org.apache.poi.ss.usermodel.VerticalAlignment
+
+...
+cell("A", [verticalAlignment: VerticalAlignment.TOP]) // View the {poiApiUrl}org/apache/poi/ss/usermodel/VerticalAlignment.html[VerticalAlignment] class for options
+...
+----
+
+Any vertical alignment can also be passed as a string:
+
+[source,groovy]
+----
+...
+cell("A", [verticalAlignment: "top"])
+...
+----
+
+=== Rotation
+
+To set the rotation of a cell, pass a value that can be cast to a `Short` as the `rotation` argument:
+
+[source,groovy]
+----
+...
+cell("A", [rotation: 90]) //Any value between 0 and 180
+...
+----
+
+=== Indention
+
+To indent a cell, pass the number of spaces you would like to indent to the `indent` argument:
+
+[source,groovy]
+----
+...
+cell("A", [indent: 4])
+...
+----
+
+=== Border
+
+Border style and color can be set for any given cell.
+
+To set the style for all borders (left, top, bottom, right):
+
+[source,groovy,subs="+attributes,macros"]
+----
+import org.apache.poi.ss.usermodel.BorderStyle
+
+...
+cell("A", [border: BorderStyle.THIN]) // View the {poiApiUrl}org/apache/poi/ss/usermodel/BorderStyle.html[BorderStyle] class for options
+...
+----
+
+To set the style for only the specified edge:
+
+[source,groovy]
+----
+import org.apache.poi.ss.usermodel.BorderStyle
+
+...
+cell("A", [border: [left: BorderStyle.THIN]])
+...
+----
+
+To override the border for any given edge:
+
+[source,groovy]
+----
+import org.apache.poi.ss.usermodel.BorderStyle
+
+...
+cell("A", [border: [style: BorderStyle.THIN, left: BorderStyle.THICK]])
+...
+----
+
+To also specify a border color:
+
+[source,groovy]
+----
+import org.apache.poi.ss.usermodel.BorderStyle
+
+...
+cell("A", [border: [style: BorderStyle.THIN, color: Color.RED]])
+...
+----
+
+To override the border color for any given edge:
+
+[source,groovy]
+----
+import org.apache.poi.ss.usermodel.BorderStyle
+
+...
+cell("A", [border: [style: BorderStyle.THIN, color: Color.RED, left: [color: Color.BLUE]]])
+...
+----
+
+Here is a summary of the long form of the possible keys supported:
+
+[source,yaml]
+----
+border:
+    style:
+    color:
+    left:
+        style:
+        color:
+    right:
+        style:
+        color:
+    bottom:
+        style:
+        color:
+    top:
+        style:
+        color:
+----
+
+=== Fill
+
+You can set the fill pattern of a cell using the 'fill' argument:
+
+To set the style for all borders (left, top, bottom, right):
+
+[source,groovy,subs="+attributes,macros"]
+----
+import org.apache.poi.ss.usermodel.FillPatternType
+
+...
+cell("A", [fill: FillPatternType.DIAMONDS]) // View the {poiApiUrl}org/apache/poi/ss/usermodel/FillPatternType.html[FillPatternType] class for options
+...
+----
+
+Any fill pattern can also be passed as a string:
+
+[source,groovy]
+----
+...
+cell("A", [fill: "diamonds"])
+...
+----
+
+NOTE: You must set a foreground or background color in order to see any result from this style attribute
+
+=== Foreground Color
+
+If you have a fill pattern set, the `foregroundColor` attribute will set the foreground color. If you don't have a fill pattern specified this does the same thing as if you specified a background color.
+
+[source,groovy]
+----
+...
+cell("A", [foregroundColor: "#000000"])
+
+// or as a java.awt.Color
+cell("B", [foregroundColor: Color.BLACK])
+...
+----
+
+=== Background Color
+
+To set the background color of a cell, use the `backgroundColor` argument:
+
+[source,groovy]
+----
+...
+cell("A", [backgroundColor: "#000000"])
+
+// or as a java.awt.Color
+cell("B", [backgroundColor: Color.BLACK])
+...
+----

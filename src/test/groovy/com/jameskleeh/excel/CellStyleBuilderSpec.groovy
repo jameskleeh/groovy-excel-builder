@@ -414,6 +414,18 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle.bottomBorderXSSFColor.getRGB() == [255, 255, 255] as byte[]
         cellStyle.borderTopEnum == BorderStyle.DOTTED
         cellStyle.topBorderXSSFColor.getRGB() == [0, 0, 0] as byte[]
+
+
+        when:
+        Map options = [border: [style: BorderStyle.DOTTED, left: BorderStyle.THIN]]
+        cellStyleBuilder.convertSimpleOptions(options)
+        cellStyle = cellStyleBuilder.buildStyle('', options)
+
+        then:
+        cellStyle.borderLeftEnum == BorderStyle.THIN
+        cellStyle.borderRightEnum == BorderStyle.DOTTED
+        cellStyle.borderBottomEnum == BorderStyle.DOTTED
+        cellStyle.borderTopEnum == BorderStyle.DOTTED
     }
 
     void "test buildStyle fill"() {
@@ -425,7 +437,7 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle = cellStyleBuilder.buildStyle('', [:])
 
         then:
-        cellStyle.fillPatternEnum == FillPatternType.SOLID_FOREGROUND
+        cellStyle.fillPatternEnum == FillPatternType.NO_FILL
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [fill: FillPatternType.DIAMONDS])
@@ -490,9 +502,10 @@ class CellStyleBuilderSpec extends Specification {
         when: "Only the background color is specified"
         cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: Color.RED])
 
-        then: "The foreground color is set instead of the background"
+        then: "The foreground color is set instead of the background and the fill pattern is set to solid"
         cellStyle.fillForegroundXSSFColor.getRGB() == [255, 0, 0] as byte[]
         cellStyle.fillBackgroundXSSFColor == null
+        cellStyle.fillPatternEnum == FillPatternType.SOLID_FOREGROUND
 
         when: "Both the foreground and background colors are specified"
         cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: Color.BLUE, backgroundColor: Color.RED])

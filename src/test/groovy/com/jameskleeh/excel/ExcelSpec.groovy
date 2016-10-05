@@ -1,6 +1,9 @@
 package com.jameskleeh.excel
 
+import org.apache.poi.ss.usermodel.FillPatternType
 import spock.lang.Specification
+
+import java.awt.Color
 
 /**
  * Created by jameskleeh on 9/25/16.
@@ -110,5 +113,30 @@ class ExcelSpec extends Specification {
 
         then:
         format == null
+    }
+
+    void "test getFormat(String) returns a built in format if it exists"() {
+        Excel.registerCellFormat(Foo, "h:mm AM/PM")
+
+        when:
+        Object format = Excel.getFormat(Foo)
+
+        then:
+        format == 18
+    }
+
+    void "test temp"() {
+
+        ExcelBuilder.output(new FileOutputStream(new File('/Users/jameskleeh/temp.xlsx'))) {
+            sheet {
+                row {
+                    cell(0.105F, [format: 10])
+                }
+            }
+        }
+
+        expect:
+        true
+
     }
 }

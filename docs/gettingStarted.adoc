@@ -21,9 +21,11 @@ To get started using this great module, include it into your build:
 compile '{groupId}:{artifactId}:{version}'
 ----
 
+TIP: If you want to use a snapshot version, add the jfrog snapshot repository to your build: http://oss.jfrog.org/oss-snapshot-local. Normal releases are available in maven central and jcenter.
+
 === Creating your first Excel document
 
-Here is the simplest example to create an Excel document
+Here is the simplest example to create an Excel document:
 
 [source,groovy]
 ----
