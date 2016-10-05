@@ -43,7 +43,7 @@ task sourcesJar(type: Jar) {
 }
 
 task javadocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'groovydoc'
+    classifier = 'javadoc'
     from 'build/docs/groovydoc'
 }
 
