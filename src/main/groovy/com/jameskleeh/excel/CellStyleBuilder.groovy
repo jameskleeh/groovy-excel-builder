@@ -5,7 +5,6 @@ import groovy.transform.TypeCheckingMode
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.Font as FontType
-import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.xssf.usermodel.XSSFCell
@@ -424,7 +423,7 @@ class CellStyleBuilder {
     }
 
     @CompileStatic(TypeCheckingMode.SKIP)
-    private Map merge(Map[] sources) {
+    Map merge(Map[] sources) {
         if (sources.length == 0) {
             return [:]
         }

@@ -14,7 +14,7 @@ apply plugin: "jacoco"
 
 
 group 'com.jameskleeh'
-version '0.1.1'
+version '0.1.2.BUILD-SNAPSHOT'
 
 targetCompatibility = 1.7
 

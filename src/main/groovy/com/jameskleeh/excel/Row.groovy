@@ -1,6 +1,7 @@
 package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -53,7 +54,13 @@ class Row {
     }
 
     void defaultStyle(Map options) {
-        this.defaultOptions = options
+        options = new LinkedHashMap(options)
+        styleBuilder.convertSimpleOptions(options)
+        if (defaultOptions == null) {
+            defaultOptions = options
+        } else {
+            defaultOptions = styleBuilder.merge(defaultOptions, options)
+        }
     }
 
     XSSFCell column(String value, Object id, final Map options = [:]) {
@@ -101,9 +108,7 @@ class Row {
     }
 
     XSSFCell cell() {
-        XSSFCell cell = nextCell()
-        cell.setCellValue('')
-        cell
+        cell('')
     }
     XSSFCell cell(Object value) {
         cell(value, null)
@@ -131,6 +136,40 @@ class Row {
             }
         }
         cell
+    }
+
+    void merge(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+        Map existingDefaultOptions = defaultOptions
+
+        if (style != null && !style.isEmpty()) {
+            Map newDefaultOptions = new LinkedHashMap(style)
+            styleBuilder.convertSimpleOptions(newDefaultOptions)
+            newDefaultOptions = styleBuilder.merge(defaultOptions, newDefaultOptions)
+            defaultOptions = newDefaultOptions
+        }
+
+        callable.resolveStrategy = Closure.DELEGATE_FIRST
+        callable.delegate = this
+        int startingCellIndex = cellIdx
+        callable.call()
+        int endingCellIndex = cellIdx - 1
+        if (endingCellIndex > startingCellIndex) {
+            CellRangeAddress range = new CellRangeAddress(row.rowNum, row.rowNum, startingCellIndex, endingCellIndex)
+            sheet.addMergedRegion(range)
+        }
+
+        defaultOptions = existingDefaultOptions
+    }
+
+    void merge(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+        merge(null, callable)
+    }
+
+    void merge(Object value, Integer count, final Map style = null) {
+        merge(style) {
+            cell(value)
+            skipCells(count)
+        }
     }
 
 }

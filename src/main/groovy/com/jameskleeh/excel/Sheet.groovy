@@ -28,6 +28,8 @@ class Sheet {
     }
 
     void defaultStyle(Map options) {
+        options = new LinkedHashMap(options)
+        styleBuilder.convertSimpleOptions(options)
         defaultOptions = options
     }
 

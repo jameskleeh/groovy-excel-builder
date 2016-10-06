@@ -595,5 +595,62 @@ class CellStyleBuilderSpec extends Specification {
         style.borderBottomEnum == BorderStyle.DASH_DOT
     }
 
+    void "test merging of options"() {
+        given:
+        XSSFCell testCell1
+        XSSFCell testCell2
+        XSSFCell testCell3
+        XSSFCell testCell4
+        ExcelBuilder.output(new FileOutputStream('/Users/jameskleeh/test.xlsx')) {
+            sheet {
+                defaultStyle([border: BorderStyle.MEDIUM])
+                row {
+                    defaultStyle([border: [left: BorderStyle.HAIR]])
+                    merge([border: [right: BorderStyle.THICK], alignment: 'center']) {
+                        testCell1 = cell('Foo')
+                        cell('')
+                        cell('')
+                        cell('')
+                        cell('')
+                        cell('')
+                    }
+                    testCell2 = cell('')
+                }
+                row {
+                    testCell3 = cell('')
+                }
+            }
+            sheet {
+                row {
+                    testCell4 = cell('')
+                }
+            }
+        }
+
+        when:
+        XSSFCellStyle style1 = testCell1.cellStyle //sheet, row, merge
+        XSSFCellStyle style2 = testCell2.cellStyle //sheet, row
+        XSSFCellStyle style3 = testCell3.cellStyle //sheet
+        XSSFCellStyle style4 = testCell4.cellStyle //none
+
+        then:
+        style1.borderLeftEnum == BorderStyle.HAIR
+        style1.borderTopEnum == BorderStyle.MEDIUM
+        style1.borderRightEnum == BorderStyle.THICK
+        style1.borderBottomEnum == BorderStyle.MEDIUM
+        style2.borderLeftEnum == BorderStyle.HAIR
+        style2.borderTopEnum == BorderStyle.MEDIUM
+        style2.borderRightEnum == BorderStyle.MEDIUM
+        style2.borderBottomEnum == BorderStyle.MEDIUM
+        style3.borderLeftEnum == BorderStyle.MEDIUM
+        style3.borderTopEnum == BorderStyle.MEDIUM
+        style3.borderRightEnum == BorderStyle.MEDIUM
+        style3.borderBottomEnum == BorderStyle.MEDIUM
+        style4.borderLeftEnum == BorderStyle.NONE
+        style4.borderTopEnum == BorderStyle.NONE
+        style4.borderRightEnum == BorderStyle.NONE
+        style4.borderBottomEnum == BorderStyle.NONE
+    }
+
 
 }
