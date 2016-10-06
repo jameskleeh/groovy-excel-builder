@@ -601,7 +601,7 @@ class CellStyleBuilderSpec extends Specification {
         XSSFCell testCell2
         XSSFCell testCell3
         XSSFCell testCell4
-        ExcelBuilder.output(new FileOutputStream('/Users/jameskleeh/test.xlsx')) {
+        ExcelBuilder.build {
             sheet {
                 defaultStyle([border: BorderStyle.MEDIUM])
                 row {
