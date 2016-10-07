@@ -25,45 +25,37 @@ import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy
 
-/**
- * A class used to create a row in an excel document
- */
 @CompileStatic
-class Row extends CreatesCells {
+class Column extends CreatesCells {
 
-    private final XSSFRow row
+    private int columnIdx
+    private int rowIdx
 
-    private int cellIdx
-
-    Row(XSSFWorkbook workbook, XSSFSheet sheet, XSSFRow row, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
+    Column(XSSFWorkbook workbook, XSSFSheet sheet, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder, int columnIdx, int rowIdx) {
         super(workbook, sheet, defaultOptions, columnIndexes, styleBuilder)
-        this.row = row
-        this.cellIdx = 0
+        this.columnIdx = columnIdx
+        this.rowIdx = rowIdx
     }
 
     @Override
     protected XSSFCell nextCell() {
-        XSSFCell cell = row.createCell(cellIdx)
-        cellIdx++
+        XSSFRow row = sheet.getRow(rowIdx)
+        if (row == null) {
+            row = sheet.createRow(rowIdx)
+        }
+        XSSFCell cell = row.getCell(columnIdx, MissingCellPolicy.CREATE_NULL_AS_BLANK)
+        rowIdx++
         cell
     }
 
-    @Override
     void skipCells(int num) {
-        cellIdx += num
-    }
-
-    void skipTo(Object id) {
-        if (columnIndexes && columnIndexes.containsKey(id)) {
-            cellIdx = columnIndexes[id]
-        } else {
-            throw new IllegalArgumentException("Column index not specified for $id")
-        }
+        rowIdx += num
     }
 
     @Override
-    void merge(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+    void merge(Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
         Map existingDefaultOptions = defaultOptions
 
         if (style != null && !style.isEmpty()) {
@@ -75,11 +67,11 @@ class Row extends CreatesCells {
 
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.delegate = this
-        int startingCellIndex = cellIdx
+        int startingRowIndex = rowIdx
         callable.call()
-        int endingCellIndex = cellIdx - 1
-        if (endingCellIndex > startingCellIndex) {
-            CellRangeAddress range = new CellRangeAddress(row.rowNum, row.rowNum, startingCellIndex, endingCellIndex)
+        int endingRowIndex = rowIdx - 1
+        if (endingRowIndex > startingRowIndex) {
+            CellRangeAddress range = new CellRangeAddress(startingRowIndex, endingRowIndex, columnIdx, columnIdx)
             sheet.addMergedRegion(range)
         }
 
@@ -87,16 +79,7 @@ class Row extends CreatesCells {
     }
 
     @Override
-    void merge(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+    void merge(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
         merge(null, callable)
     }
-
-    @Override
-    void merge(Object value, Integer count, final Map style = null) {
-        merge(style) {
-            cell(value)
-            skipCells(count)
-        }
-    }
-
 }
