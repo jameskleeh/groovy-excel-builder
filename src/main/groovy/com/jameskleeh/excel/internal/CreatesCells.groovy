@@ -27,6 +27,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A base class used to create cells
+ *
+ * @author James Kleeh
  */
 abstract class CreatesCells {
 
@@ -44,7 +46,11 @@ abstract class CreatesCells {
         this.styleBuilder = styleBuilder
     }
 
-
+    /**
+     * Sets the default styles to use for the given row or column
+     *
+     * @param options The style options
+     */
     void defaultStyle(Map options) {
         options = new LinkedHashMap(options)
         styleBuilder.convertSimpleOptions(options)
@@ -57,18 +63,38 @@ abstract class CreatesCells {
 
     protected abstract XSSFCell nextCell()
 
+    /**
+     * Skips cells
+     *
+     * @param num The number of cells to skip
+     */
     abstract void skipCells(int num)
 
     protected void setStyle(Object value, XSSFCell cell, Map options) {
         styleBuilder.setStyle(value, cell, options, defaultOptions)
     }
 
+    /**
+     * Creates a header cell
+     *
+     * @param value The cell value
+     * @param id The cell identifer
+     * @param style The cell style
+     * @return The native cell
+     */
     XSSFCell column(String value, Object id, final Map style = null) {
         XSSFCell col = cell(value, style)
         columnIndexes[id] = col.columnIndex
         col
     }
 
+    /**
+     * Assigns a formula to a new cell
+     *
+     * @param formulaString The formula
+     * @param style The cell style
+     * @return The native cell
+     */
     XSSFCell formula(String formulaString, final Map style) {
         XSSFCell cell = nextCell()
         if (formulaString.startsWith('=')) {
@@ -79,14 +105,33 @@ abstract class CreatesCells {
         cell
     }
 
+    /**
+     * Assigns a formula to a new cell
+     *
+     * @param formulaString The formula
+     * @return The native cell
+     */
     XSSFCell formula(String formulaString) {
         formula(formulaString, null)
     }
 
+    /**
+     * Assigns a formula to a new cell
+     *
+     * @param callable The return value will be assigned to the cell formula. The closure delegate contains helper methods to get references to other cells.
+     * @return The native cell
+     */
     XSSFCell formula(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
         formula(null, callable)
     }
 
+    /**
+     * Assigns a formula to a new cell
+     *
+     * @param style The cell style
+     * @param callable The return value will be assigned to the cell formula. The closure delegate contains helper methods to get references to other cells.
+     * @return The native cell
+     */
     XSSFCell formula(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
         XSSFCell cell = nextCell()
         callable.resolveStrategy = Closure.DELEGATE_FIRST
@@ -105,12 +150,32 @@ abstract class CreatesCells {
         cell
     }
 
+    /**
+     * Creates a new blank cell
+     *
+     * @return The native cell
+     */
     XSSFCell cell() {
         cell('')
     }
+
+    /**
+     * Creates a new cell and assigns a value
+     *
+     * @param value The value to assign
+     * @return The native cell
+     */
     XSSFCell cell(Object value) {
         cell(value, null)
     }
+
+    /**
+     * Creates a new cell with a value and style
+     *
+     * @param value The value to assign
+     * @param style The cell style options
+     * @return The native cell
+     */
     XSSFCell cell(Object value, final Map style) {
 
         XSSFCell cell = nextCell()
@@ -136,10 +201,28 @@ abstract class CreatesCells {
         cell
     }
 
+    /**
+     * Merges cells
+     *
+     * @param style Default styles for merged cells
+     * @param callable To build cell data
+     */
     abstract void merge(final Map style, Closure callable)
 
+    /**
+     * Merges cells
+     *
+     * @param callable To build cell data
+     */
     abstract void merge(Closure callable)
 
+    /**
+     * Merges cells
+     *
+     * @param value The cell content
+     * @param count How many cells to merge
+     * @param style Styling for the merged cell
+     */
     void merge(Object value, Integer count, final Map style = null) {
         merge(style) {
             cell(value)

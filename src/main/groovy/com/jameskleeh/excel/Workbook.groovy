@@ -25,6 +25,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A class used to create a workbook in an excel document
+ *
+ * @author James Kleeh
+ * @since 0.1.0
  */
 @CompileStatic
 class Workbook {
@@ -41,18 +44,46 @@ class Workbook {
         this.styleBuilder = new CellStyleBuilder(wb)
     }
 
+    /**
+     * Creates a sheet
+     *
+     * @param name The sheet name
+     * @param options Default sheet options
+     * @param callable To build data
+     * @return The native sheet object
+     */
     XSSFSheet sheet(String name, Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         handleSheet(wb.createSheet(WorkbookUtil.createSafeSheetName(name)), options, callable)
     }
 
+    /**
+     * Creates a sheet
+     *
+     * @param name The sheet name
+     * @param callable To build data
+     * @return The native sheet object
+     */
     XSSFSheet sheet(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         sheet(name, [:], callable)
     }
 
+    /**
+     * Creates a sheet
+     *
+     * @param callable To build data
+     * @return The native sheet object
+     */
     XSSFSheet sheet(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         sheet([:], callable)
     }
 
+    /**
+     * Creates a sheet
+     *
+     * @param options Default sheet options
+     * @param callable To build data
+     * @return The native sheet object
+     */
     XSSFSheet sheet(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         handleSheet(wb.createSheet(), options, callable)
     }

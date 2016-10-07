@@ -26,7 +26,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell
  * A class to get references to cells for use in formulas
  *
  * @author James Kleeh
- * @since 1.0.0
+ * @since 0.1.0
  */
 @CompileStatic
 class Formula {
@@ -39,10 +39,16 @@ class Formula {
         this.columnIndexes = columnIndexes
     }
 
+    /**
+     * @return The current row number (1 based)
+     */
     int getRow() {
         cell.rowIndex + 1
     }
 
+    /**
+     * @return The current column (A..Z)
+     */
     String getColumn() {
         relativeColumn(0)
     }
@@ -67,14 +73,34 @@ class Formula {
         }
     }
 
+    /**
+     * Retrieves a cell relative to the current cell. Use negative values to reference rows and columns before the current cell and positive values to reference rows and columns after the current cell.
+     *
+     * @param columnIndex The column index
+     * @param rowIndex The row index
+     * @return A cell relative to the current cell
+     */
     String relativeCell(int columnIndex, int rowIndex) {
         relativeColumn(columnIndex) + relativeRow(rowIndex)
     }
 
+    /**
+     * Retrieves a cell relative to the current cell. Use negative values to reference previous columns and positive values to reference columns after the current cell.
+     *
+     * @param columnIndex The column index
+     * @return A cell relative to the current cell
+     */
     String relativeCell(int columnIndex) {
         relativeCell(columnIndex, 0)
     }
 
+    /**
+     * Retrieves an exact cell reference
+     *
+     * @param columnIndex The column index
+     * @param rowIndex The row index
+     * @return The desired cell
+     */
     String exactCell(int columnIndex, int rowIndex) {
         if (rowIndex < 0) {
             throw new IllegalArgumentException("An invalid row index of $rowIndex was specified")
@@ -82,6 +108,13 @@ class Formula {
         exactColumn(columnIndex) + (rowIndex + 1)
     }
 
+    /**
+     * Retrieves an exact cell reference based on a previously defined column definition (created by {@link com.jameskleeh.excel.internal.CreatesCells#column} and row index
+     *
+     * @param columnName The column identifier
+     * @param rowIndex The row index
+     * @return The desired cell
+     */
     String exactCell(String columnName, int rowIndex) {
         if (columnIndexes && columnIndexes.containsKey(columnName)) {
             exactCell(columnIndexes[columnName], rowIndex)
@@ -90,6 +123,12 @@ class Formula {
         }
     }
 
+    /**
+     * Retrieves an exact cell reference based on a previously defined column definition (created by {@link com.jameskleeh.excel.internal.CreatesCells#column}
+     *
+     * @param columnName The column identifier
+     * @return The actual header column
+     */
     String exactCell(String columnName) {
         exactCell(columnName, 0)
     }

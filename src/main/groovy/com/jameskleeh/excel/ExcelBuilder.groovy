@@ -23,15 +23,30 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * The main class used to start building an excel document
+ *
+ * @author James Kleeh
+ * @since 0.1.0
  */
 @CompileStatic
 class ExcelBuilder {
 
+    /**
+     * Builds an excel document and sends the data to an output stream. The output stream is NOT closed.
+     *
+     * @param outputStream An output stream to push data onto
+     * @param callable The closure to build the document
+     */
     static void output(OutputStream outputStream, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Workbook) Closure callable) {
         XSSFWorkbook wb = build(callable)
         wb.write(outputStream)
     }
 
+    /**
+     * Builds an excel document
+     *
+     * @param callable The closure to build the document
+     * @return The native workbook
+     */
     static XSSFWorkbook build(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Workbook) Closure callable) {
         XSSFWorkbook wb = new XSSFWorkbook()
         callable.resolveStrategy = Closure.DELEGATE_FIRST

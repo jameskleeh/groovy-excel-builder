@@ -27,6 +27,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy
 
+/**
+ * A class designed to be a delegate when a column is created
+ *
+ * @author James Kleeh
+ * @since 0.2.0
+ */
 @CompileStatic
 class Column extends CreatesCells {
 
@@ -50,10 +56,16 @@ class Column extends CreatesCells {
         cell
     }
 
+    /**
+     * @see CreatesCells#skipCells
+     */
     void skipCells(int num) {
         rowIdx += num
     }
 
+    /**
+     * @see CreatesCells#merge(Map style, Closure callable)
+     */
     @Override
     void merge(Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
         Map existingDefaultOptions = defaultOptions
@@ -78,6 +90,9 @@ class Column extends CreatesCells {
         defaultOptions = existingDefaultOptions
     }
 
+    /**
+     * @see CreatesCells#merge(Closure callable)
+     */
     @Override
     void merge(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
         merge(null, callable)

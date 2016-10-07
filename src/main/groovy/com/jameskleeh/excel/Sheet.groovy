@@ -25,6 +25,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A class used to create a sheet in an excel document
+ *
+ * @author James Kleeh
+ * @since 0.1.0
  */
 @CompileStatic
 class Sheet {
@@ -47,24 +50,49 @@ class Sheet {
         this.styleBuilder = styleBuilder
     }
 
+    /**
+     * Sets the default styling for the sheet
+     *
+     * @param options Style options
+     */
     void defaultStyle(Map options) {
         options = new LinkedHashMap(options)
         styleBuilder.convertSimpleOptions(options)
         defaultOptions = options
     }
 
+    /**
+     * Skips rows
+     * @param num The number of rows to skip
+     */
     void skipRows(int num) {
         rowIdx += num
     }
 
+    /**
+     * Used to define headers for a sheet
+     *
+     * @param callable To build header data
+     */
     void columns(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         row(callable)
     }
 
+    /**
+     * Used to define headers for a sheet
+     *
+     * @param options Default style options for the header
+     * @param callable To build header data
+     */
     void columns(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         row(options, callable)
     }
 
+    /**
+     * Output data by column
+     *
+     * @param callable To build column data
+     */
     void column(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.delegate = new Column(workbook, sheet, defaultOptions, columnIndexes, styleBuilder, columnIdx, rowIdx)
@@ -72,10 +100,21 @@ class Sheet {
         columnIdx++
     }
 
+    /**
+     * Creates a row
+     *
+     * @return The native row
+     */
     XSSFRow row() {
         row([:], null)
     }
 
+    /**
+     * Creates a row
+     *
+     * @param cells A list of data to output as cells
+     * @return The native row
+     */
     XSSFRow row(Object...cells) {
         row {
             cells.each { val ->
@@ -84,10 +123,23 @@ class Sheet {
         }
     }
 
+    /**
+     * Creates a row
+     *
+     * @param callable To build row data
+     * @return The native row
+     */
     XSSFRow row(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         row([:], callable)
     }
 
+    /**
+     * Creates a row
+     *
+     * @param options Default styling options
+     * @param callable To build row data
+     * @return The native row
+     */
     XSSFRow row(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         XSSFRow row = sheet.createRow(rowIdx)
         if (options?.containsKey(HEIGHT)) {

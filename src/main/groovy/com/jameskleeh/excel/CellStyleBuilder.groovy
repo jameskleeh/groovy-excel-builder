@@ -39,7 +39,7 @@ import java.awt.Color
  * A class to build an {@link org.apache.poi.xssf.usermodel.XSSFCellStyle} from a map
  *
  * @author James Kleeh
- * @since 1.0.0
+ * @since 0.1.0
  */
 @CompileStatic
 class CellStyleBuilder {
@@ -440,6 +440,12 @@ class CellStyleBuilder {
         }
     }
 
+    /**
+     * Merges multiple maps
+     *
+     * @param sources The maps to merge
+     * @return The merged map
+     */
     @CompileStatic(TypeCheckingMode.SKIP)
     Map merge(Map[] sources) {
         if (sources.length == 0) {

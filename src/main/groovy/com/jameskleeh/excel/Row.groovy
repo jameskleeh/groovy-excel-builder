@@ -28,6 +28,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A class used to create a row in an excel document
+ *
+ * @author James Kleeh
+ * @since 0.1.0
  */
 @CompileStatic
 class Row extends CreatesCells {
@@ -49,11 +52,19 @@ class Row extends CreatesCells {
         cell
     }
 
+    /**
+     * @see CreatesCells#skipCells
+     */
     @Override
     void skipCells(int num) {
         cellIdx += num
     }
 
+    /**
+     * Skip to a previously defined column created by {@link CreatesCells#column}
+     *
+     * @param id The column identifier
+     */
     void skipTo(Object id) {
         if (columnIndexes && columnIndexes.containsKey(id)) {
             cellIdx = columnIndexes[id]
@@ -62,6 +73,9 @@ class Row extends CreatesCells {
         }
     }
 
+    /**
+     * @see CreatesCells#merge(Map style, Closure callable)
+     */
     @Override
     void merge(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         Map existingDefaultOptions = defaultOptions
@@ -86,17 +100,12 @@ class Row extends CreatesCells {
         defaultOptions = existingDefaultOptions
     }
 
+    /**
+     * @see CreatesCells#merge(Closure callable)
+     */
     @Override
     void merge(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         merge(null, callable)
-    }
-
-    @Override
-    void merge(Object value, Integer count, final Map style = null) {
-        merge(style) {
-            cell(value)
-            skipCells(count)
-        }
     }
 
 }
