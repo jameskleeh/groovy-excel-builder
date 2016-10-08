@@ -29,7 +29,6 @@ You can also specify the font color:
 
 [source,groovy]
 ----
-import com.jameskleeh.excel.Font
 import java.awt.Color
 
 ...
@@ -38,6 +37,24 @@ cell("A", [font: [bold: true, color: Color.RED])
 ----
 
 TIP: Any option that expects a color supports colors specified by an instance of java.awt.Color or the string hex value ("#FFFFFF")
+
+The font size can also be specified:
+
+[source,groovy]
+----
+...
+cell("A", [font: [size: 12.5])
+...
+----
+
+The font name can be set as well:
+
+[source,groovy]
+----
+...
+cell("A", [font: [name: "Arial"])
+...
+----
 
 === Hidden
 
@@ -250,10 +267,10 @@ If you have a fill pattern set, the `foregroundColor` attribute will set the for
 
 [source,groovy]
 ----
+import java.awt.Color
+
 ...
 cell("A", [foregroundColor: "#000000"])
-
-// or as a java.awt.Color
 cell("B", [foregroundColor: Color.BLACK])
 ...
 ----
@@ -264,10 +281,10 @@ To set the background color of a cell, use the `backgroundColor` argument:
 
 [source,groovy]
 ----
+import java.awt.Color
+
 ...
 cell("A", [backgroundColor: "#000000"])
-
-// or as a java.awt.Color
 cell("B", [backgroundColor: Color.BLACK])
 ...
 ----

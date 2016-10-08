@@ -68,6 +68,8 @@ class CellStyleBuilder {
     protected static final String FONT_STRIKEOUT = 'strikeout'
     protected static final String FONT_UNDERLINE = 'underline'
     protected static final String FONT_COLOR = 'color'
+    protected static final String FONT_NAME = 'name'
+    protected static final String FONT_SIZE = 'size'
     protected static final String FILL = 'fill'
     protected static final String BACKGROUND_COLOR = 'backgroundColor'
     protected static final String FOREGROUND_COLOR = 'foregroundColor'
@@ -181,6 +183,12 @@ class CellStyleBuilder {
                 }
                 if (fontMap.containsKey(FONT_COLOR)) {
                     font.setColor(getColor(fontMap[FONT_COLOR]))
+                }
+                if (fontMap.containsKey(FONT_SIZE)) {
+                    font.setFontHeight((Double)fontMap[FONT_SIZE])
+                }
+                if (fontMap.containsKey(FONT_NAME)) {
+                    font.setFontName((String)fontMap[FONT_NAME])
                 }
             } else {
                 throw new IllegalArgumentException('The font option must be an instance of a Map')
