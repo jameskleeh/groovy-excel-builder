@@ -20,10 +20,15 @@ package com.jameskleeh.excel.internal
 
 import com.jameskleeh.excel.CellStyleBuilder
 import com.jameskleeh.excel.Excel
-import com.jameskleeh.excel.Formula
+import com.jameskleeh.excel.Font
+import com.jameskleeh.excel.CellFinder
+import org.apache.poi.common.usermodel.Hyperlink
 import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFHyperlink
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+
+import java.awt.Color
 
 /**
  * A base class used to create cells
@@ -37,9 +42,10 @@ abstract class CreatesCells {
     protected Map defaultOptions
     protected final Map<Object, Integer> columnIndexes
     protected final CellStyleBuilder styleBuilder
+    protected static final Map LINK_OPTIONS = [font: [style: Font.UNDERLINE, color: Color.BLUE]]
 
-    CreatesCells(XSSFWorkbook workbook, XSSFSheet sheet, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
-        this.workbook = workbook
+    CreatesCells(XSSFSheet sheet, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
+        this.workbook = sheet.workbook
         this.sheet = sheet
         this.defaultOptions = defaultOptions
         this.columnIndexes = columnIndexes
@@ -121,7 +127,7 @@ abstract class CreatesCells {
      * @param callable The return value will be assigned to the cell formula. The closure delegate contains helper methods to get references to other cells.
      * @return The native cell
      */
-    XSSFCell formula(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
+    XSSFCell formula(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellFinder) Closure callable) {
         formula(null, callable)
     }
 
@@ -132,10 +138,10 @@ abstract class CreatesCells {
      * @param callable The return value will be assigned to the cell formula. The closure delegate contains helper methods to get references to other cells.
      * @return The native cell
      */
-    XSSFCell formula(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Formula) Closure callable) {
+    XSSFCell formula(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellFinder) Closure callable) {
         XSSFCell cell = nextCell()
         callable.resolveStrategy = Closure.DELEGATE_FIRST
-        callable.delegate = new Formula(cell, columnIndexes)
+        callable.delegate = new CellFinder(cell, columnIndexes)
         String formula
         if (callable.maximumNumberOfParameters == 1) {
             formula = (String)callable.call(cell)
@@ -199,6 +205,40 @@ abstract class CreatesCells {
             }
         }
         cell
+    }
+
+    protected XSSFCell handleLink(XSSFCell cell, String address, int linkType) {
+        XSSFHyperlink link = workbook.creationHelper.createHyperlink(linkType)
+        link.address = address
+        cell.hyperlink = link
+        cell
+    }
+
+    /**
+     * Creates a cell with a hyperlink
+     *
+     * @param value The cell value
+     * @param address The link address
+     * @param linkType The type of link. One of {@link Hyperlink#LINK_URL}, {@link Hyperlink#LINK_EMAIL}, {@link Hyperlink#LINK_FILE}
+     * @return The native cell
+     */
+    XSSFCell link(Object value, String address, int linkType) {
+        XSSFCell cell = cell(value, LINK_OPTIONS)
+        handleLink(cell, address, linkType)
+    }
+
+    /**
+     * Creates a cell with a hyperlink to another cell in the document
+     *
+     * @param value The cell value
+     * @param callable The closure to build the link
+     * @return The native cell
+     */
+    XSSFCell link(Object value, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = CellFinder) Closure callable) {
+        XSSFCell cell = cell(value, LINK_OPTIONS)
+        callable.resolveStrategy = Closure.DELEGATE_FIRST
+        callable.delegate = new CellFinder(cell, columnIndexes)
+        handleLink(cell, callable.call().toString(), Hyperlink.LINK_DOCUMENT)
     }
 
     /**

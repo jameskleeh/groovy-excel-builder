@@ -196,6 +196,24 @@ class CellStyleBuilderSpec extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [font: [size: 13]])
+
+        then:
+        cellStyle.font.fontHeight == (short)260
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [font: [size: 12.5]])
+
+        then:
+        cellStyle.font.fontHeight == (short)250
+
+        when:
+        cellStyle = cellStyleBuilder.buildStyle('', [font: [name: 'Arial']])
+
+        then:
+        cellStyle.font.fontName == 'Arial'
     }
 
     void "test buildStyle hidden"() {
@@ -595,7 +613,7 @@ class CellStyleBuilderSpec extends Specification {
         style.borderBottomEnum == BorderStyle.DASH_DOT
     }
 
-    void "test merging of options"() {
+    void "test merging of options with rows"() {
         given:
         XSSFCell testCell1
         XSSFCell testCell2
@@ -652,5 +670,61 @@ class CellStyleBuilderSpec extends Specification {
         style4.borderBottomEnum == BorderStyle.NONE
     }
 
+    void "test merging of options with columns"() {
+        given:
+        XSSFCell testCell1
+        XSSFCell testCell2
+        XSSFCell testCell3
+        XSSFCell testCell4
+        ExcelBuilder.build {
+            sheet {
+                defaultStyle([border: BorderStyle.MEDIUM])
+                column {
+                    defaultStyle([border: [left: BorderStyle.HAIR]])
+                    merge([border: [right: BorderStyle.THICK], alignment: 'center']) {
+                        testCell1 = cell('Foo')
+                        cell('')
+                        cell('')
+                        cell('')
+                        cell('')
+                        cell('')
+                    }
+                    testCell2 = cell('')
+                }
+                column {
+                    testCell3 = cell('')
+                }
+            }
+            sheet {
+                column {
+                    testCell4 = cell('')
+                }
+            }
+        }
+
+        when:
+        XSSFCellStyle style1 = testCell1.cellStyle //sheet, row, merge
+        XSSFCellStyle style2 = testCell2.cellStyle //sheet, row
+        XSSFCellStyle style3 = testCell3.cellStyle //sheet
+        XSSFCellStyle style4 = testCell4.cellStyle //none
+
+        then:
+        style1.borderLeftEnum == BorderStyle.HAIR
+        style1.borderTopEnum == BorderStyle.MEDIUM
+        style1.borderRightEnum == BorderStyle.THICK
+        style1.borderBottomEnum == BorderStyle.MEDIUM
+        style2.borderLeftEnum == BorderStyle.HAIR
+        style2.borderTopEnum == BorderStyle.MEDIUM
+        style2.borderRightEnum == BorderStyle.MEDIUM
+        style2.borderBottomEnum == BorderStyle.MEDIUM
+        style3.borderLeftEnum == BorderStyle.MEDIUM
+        style3.borderTopEnum == BorderStyle.MEDIUM
+        style3.borderRightEnum == BorderStyle.MEDIUM
+        style3.borderBottomEnum == BorderStyle.MEDIUM
+        style4.borderLeftEnum == BorderStyle.NONE
+        style4.borderTopEnum == BorderStyle.NONE
+        style4.borderRightEnum == BorderStyle.NONE
+        style4.borderBottomEnum == BorderStyle.NONE
+    }
 
 }

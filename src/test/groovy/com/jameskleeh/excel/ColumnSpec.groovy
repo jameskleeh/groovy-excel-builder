@@ -1,6 +1,9 @@
 package com.jameskleeh.excel
 
+import org.apache.poi.common.usermodel.Hyperlink
+import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
@@ -85,5 +88,38 @@ class ColumnSpec extends Specification {
         sheet.getRow(1).getCell(0).getStringCellValue() == 'A2'
         sheet.getRow(4).getCell(0).getStringCellValue() == 'A5'
         sheet.getRow(5).getCell(0).getStringCellValue() == 'A6'
+    }
+
+    void "test link"() {
+        XSSFWorkbook workbook = ExcelBuilder.build {
+            sheet("X") {
+                row {
+                    link('Test URL', 'http://www.google.com', Hyperlink.LINK_URL)
+                    link('Test File', 'test.docx', Hyperlink.LINK_FILE)
+                    link('Test Email', 'mailto:foo@bar.com', Hyperlink.LINK_EMAIL)
+                    link('Test Document') {
+                        "'${getSheetName()}'!${exactCell(1,1)}"
+                    }
+                }
+            }
+        }
+
+        when:
+        XSSFRow row = workbook.getSheetAt(0).getRow(0)
+        List<Cell> cells = row.cellIterator().toList()
+
+        then:
+        cells[0].stringCellValue == 'Test URL'
+        cells[0].hyperlink.address == 'http://www.google.com'
+        cells[0].hyperlink.type == Hyperlink.LINK_URL
+        cells[1].stringCellValue == 'Test File'
+        cells[1].hyperlink.address == 'test.docx'
+        cells[1].hyperlink.type == Hyperlink.LINK_FILE
+        cells[2].stringCellValue == 'Test Email'
+        cells[2].hyperlink.address == 'mailto:foo@bar.com'
+        cells[2].hyperlink.type == Hyperlink.LINK_EMAIL
+        cells[3].stringCellValue == 'Test Document'
+        cells[3].hyperlink.address == "'X'!B2"
+        cells[3].hyperlink.type == Hyperlink.LINK_DOCUMENT
     }
 }

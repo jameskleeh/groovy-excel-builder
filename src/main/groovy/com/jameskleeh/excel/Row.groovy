@@ -39,8 +39,8 @@ class Row extends CreatesCells {
 
     private int cellIdx
 
-    Row(XSSFWorkbook workbook, XSSFSheet sheet, XSSFRow row, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
-        super(workbook, sheet, defaultOptions, columnIndexes, styleBuilder)
+    Row(XSSFRow row, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
+        super(row.sheet, defaultOptions, columnIndexes, styleBuilder)
         this.row = row
         this.cellIdx = 0
     }

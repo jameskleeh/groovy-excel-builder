@@ -39,8 +39,9 @@ class Column extends CreatesCells {
     private int columnIdx
     private int rowIdx
 
-    Column(XSSFWorkbook workbook, XSSFSheet sheet, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder, int columnIdx, int rowIdx) {
-        super(workbook, sheet, defaultOptions, columnIndexes, styleBuilder)
+    Column(XSSFSheet sheet, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder, int columnIdx, int rowIdx) {
+
+        super(sheet, defaultOptions, columnIndexes, styleBuilder)
         this.columnIdx = columnIdx
         this.rowIdx = rowIdx
     }

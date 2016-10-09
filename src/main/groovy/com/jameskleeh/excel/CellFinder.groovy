@@ -23,18 +23,18 @@ import org.apache.poi.ss.util.CellReference
 import org.apache.poi.xssf.usermodel.XSSFCell
 
 /**
- * A class to get references to cells for use in formulas
+ * A class to get references to cells for use in other functions
  *
  * @author James Kleeh
  * @since 0.1.0
  */
 @CompileStatic
-class Formula {
+class CellFinder {
 
     private final XSSFCell cell
     private final Map<Object, Integer> columnIndexes
 
-    Formula(XSSFCell cell, Map<Object, Integer> columnIndexes) {
+    CellFinder(XSSFCell cell, Map<Object, Integer> columnIndexes) {
         this.cell = cell
         this.columnIndexes = columnIndexes
     }
@@ -131,5 +131,12 @@ class Formula {
      */
     String exactCell(String columnName) {
         exactCell(columnName, 0)
+    }
+
+    /**
+     * @return The current sheet name
+     */
+    String getSheetName() {
+        cell.sheet.sheetName
     }
 }

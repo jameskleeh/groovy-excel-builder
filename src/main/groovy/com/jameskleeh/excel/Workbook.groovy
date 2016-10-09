@@ -109,7 +109,7 @@ class Workbook {
             }
         }
 
-        callable.delegate = new Sheet(wb, sheet, styleBuilder)
+        callable.delegate = new Sheet(sheet, styleBuilder)
         if (callable.maximumNumberOfParameters == 1) {
             callable.call(sheet)
         } else {

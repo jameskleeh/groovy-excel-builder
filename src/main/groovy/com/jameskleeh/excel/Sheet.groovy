@@ -21,7 +21,6 @@ package com.jameskleeh.excel
 import groovy.transform.CompileStatic
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A class used to create a sheet in an excel document
@@ -33,7 +32,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 class Sheet {
 
     private final XSSFSheet sheet
-    private final XSSFWorkbook workbook
     private int rowIdx
     private int columnIdx
     private Map defaultOptions
@@ -42,8 +40,7 @@ class Sheet {
 
     private static final String HEIGHT = 'height'
 
-    Sheet(XSSFWorkbook workbook, XSSFSheet sheet, CellStyleBuilder styleBuilder) {
-        this.workbook = workbook
+    Sheet(XSSFSheet sheet, CellStyleBuilder styleBuilder) {
         this.sheet = sheet
         this.rowIdx = 0
         this.columnIdx = 0
@@ -95,7 +92,7 @@ class Sheet {
      */
     void column(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
         callable.resolveStrategy = Closure.DELEGATE_FIRST
-        callable.delegate = new Column(workbook, sheet, defaultOptions, columnIndexes, styleBuilder, columnIdx, rowIdx)
+        callable.delegate = new Column(sheet, defaultOptions, columnIndexes, styleBuilder, columnIdx, rowIdx)
         callable.call()
         columnIdx++
     }
@@ -155,7 +152,7 @@ class Sheet {
 
         if (callable != null) {
             callable.resolveStrategy = Closure.DELEGATE_FIRST
-            callable.delegate = new Row(workbook, sheet, row, defaultOptions, columnIndexes, styleBuilder)
+            callable.delegate = new Row(row, defaultOptions, columnIndexes, styleBuilder)
             if (callable.maximumNumberOfParameters == 1) {
                 callable.call(row)
             } else {

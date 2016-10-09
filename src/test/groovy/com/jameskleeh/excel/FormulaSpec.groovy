@@ -5,14 +5,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
 import spock.lang.Subject
 
-@Subject(Formula)
+@Subject(CellFinder)
 class FormulaSpec extends Specification {
 
     void "test getRow"() {
         given:
         XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(0)
 
-        Formula formula = new Formula(cell, null)
+        CellFinder formula = new CellFinder(cell, null)
 
         expect:
         formula.getRow() == 3
@@ -22,7 +22,7 @@ class FormulaSpec extends Specification {
         given:
         XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(2)
 
-        Formula formula = new Formula(cell, null)
+        CellFinder formula = new CellFinder(cell, null)
 
         expect:
         formula.getColumn() == 'C'
@@ -31,7 +31,7 @@ class FormulaSpec extends Specification {
     void "test relativeCell(int columnIndex, int rowIndex)"() {
         given:
         XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(2)
-        Formula formula = new Formula(cell, null)
+        CellFinder formula = new CellFinder(cell, null)
 
         when:
         formula.relativeCell(-3, 0)
@@ -65,7 +65,7 @@ class FormulaSpec extends Specification {
     void "test relativeCell(int columnIndex)"() {
         given:
         XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(2)
-        Formula formula = new Formula(cell, null)
+        CellFinder formula = new CellFinder(cell, null)
 
         when:
         formula.relativeCell(-3)
@@ -88,7 +88,7 @@ class FormulaSpec extends Specification {
 
     void "test exactCell(int columnIndex, int rowIndex)"() {
         given:
-        Formula formula = new Formula(null, null)
+        CellFinder formula = new CellFinder(null, null)
 
         when:
         formula.exactCell(-1, 0)
@@ -119,7 +119,7 @@ class FormulaSpec extends Specification {
 
     void "test exactCell based on column name"() {
         given:
-        Formula formula = new Formula(null, ['foo': 0, 'bar': 2])
+        CellFinder formula = new CellFinder(null, ['foo': 0, 'bar': 2])
 
         when:
         formula.exactCell('x', 0)
@@ -155,6 +155,15 @@ class FormulaSpec extends Specification {
         'foo'   | 1     | "A2"
         'bar'   | 0     | "C1"
         'bar'   | 2     | "C3"
+    }
+
+    void "test getSheetName"() {
+        given:
+        XSSFCell cell = new XSSFWorkbook().createSheet("Foo").createRow(2).createCell(2)
+        CellFinder formula = new CellFinder(cell, null)
+
+        expect:
+        formula.sheetName == 'Foo'
     }
 
 }
