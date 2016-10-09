@@ -561,8 +561,7 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">com.jameskleeh.excel.Font</span>
-<span class="keyword">import</span> <span class="include">java.awt.Color</span>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.awt.Color</span>
 
 ...
 cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">bold</span>: <span class="predefined-constant">true</span>, <span class="key">color</span>: <span class="predefined-type">Color</span>.RED])
@@ -580,6 +579,26 @@ Any option that expects a color supports colors specified by an instance of java
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>The font size can also be specified:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">size</span>: <span class="float">12.5</span>])
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The font name can be set as well:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Arial</span><span class="delimiter">&quot;</span></span>])
+...</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -832,10 +851,10 @@ You must set a foreground or background color in order to see any result from th
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">...
-cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">foregroundColor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#000000</span><span class="delimiter">&quot;</span></span>])
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.awt.Color</span>
 
-<span class="comment">// or as a java.awt.Color</span>
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">foregroundColor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#000000</span><span class="delimiter">&quot;</span></span>])
 cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, [<span class="key">foregroundColor</span>: <span class="predefined-type">Color</span>.BLACK])
 ...</code></pre>
 </div>
@@ -848,10 +867,10 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">...
-cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">backgroundColor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#000000</span><span class="delimiter">&quot;</span></span>])
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.awt.Color</span>
 
-<span class="comment">// or as a java.awt.Color</span>
+...
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">backgroundColor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#000000</span><span class="delimiter">&quot;</span></span>])
 cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, [<span class="key">backgroundColor</span>: <span class="predefined-type">Color</span>.BLACK])
 ...</code></pre>
 </div>
@@ -862,7 +881,7 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-10-05 04:56:42 UTC
+Last updated 2016-10-09 22:38:12 UTC
 </div>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.0">
-<title>Introduction</title>
+<title>Links</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -506,19 +506,63 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#introduction">Introduction</a></li>
+<li><a href="#links">Links</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_links">Creating Links</a></li>
+<li><a href="#_document_links">Document Links</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="introduction">Introduction</h2>
+<h2 id="links">Links</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This module exposes a Groovy DSL to create real Excel documents using <a href="https://poi.apache.org/">Apache POI</a> under the hood. The goal of this module is to abstract away the most common uses of <a href="https://poi.apache.org/">Apache POI</a> to make creating Excel documents very easy, while providing a hook into the underlying API to allow users to do anything that is not provided automatically.</p>
+<p>The <code>link</code> method allows you to create a cell that will contain a link. Links can link to files, cells, web addresses, or email addresses.</p>
 </div>
+<div class="sect2">
+<h3 id="_creating_links">Creating Links</h3>
 <div class="paragraph">
-<p>If you encounter any issues or inconsistencies while using this library, or if you have a great idea for improving this library, please <a href="https://github.com/jameskleeh/groovy-excel-builder/issues">create an issue</a>!</p>
+<p>To create a link to a URL, simply create a link like the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.apache.poi.xssf.usermodel.XSSFCell</span>
+<span class="keyword">import</span> <span class="include">org.apache.poi.common.usermodel.Hyperlink</span>
+
+ExcelBuilder.build {
+    sheet {
+        row {
+            XSSFCell myCell = link(<span class="string"><span class="delimiter">&quot;</span><span class="content">Google</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.google.com</span><span class="delimiter">&quot;</span></span>, Hyperlink.LINK_URL)
+            link(<span class="string"><span class="delimiter">&quot;</span><span class="content">John Smith</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mailto:john@smith.com</span><span class="delimiter">&quot;</span></span>, Hyperlink.LINK_EMAIL)
+            link(<span class="string"><span class="delimiter">&quot;</span><span class="content">Open File</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">localFile.docx</span><span class="delimiter">&quot;</span></span>, Hyperlink.LINK_FILE)
+            link(<span class="string"><span class="delimiter">&quot;</span><span class="content">Go To Cell</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">'Sheet Name'!A2</span><span class="delimiter">&quot;</span></span>, Hyperlink.LINK_DOCUMENT)
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_document_links">Document Links</h3>
+<div class="paragraph">
+<p>There is an additional <code>link</code> method to assist you in creating links to cells in the current document. The method takes in a closure that has the same methods available when creating formulas. See the <a href="#formulas">section on formulas</a> for the full documentation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">ExcelBuilder.build {
+    sheet {
+        row {
+            link(<span class="string"><span class="delimiter">&quot;</span><span class="content">Go To Cell</span><span class="delimiter">&quot;</span></span>) {
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="inline"><span class="inline-delimiter">${</span>sheetName<span class="inline-delimiter">}</span></span><span class="content">'!</span><span class="inline"><span class="inline-delimiter">${</span>exactCell(<span class="integer">0</span>,<span class="integer">0</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
