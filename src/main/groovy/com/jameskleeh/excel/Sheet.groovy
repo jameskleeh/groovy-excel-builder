@@ -67,6 +67,14 @@ class Sheet {
     }
 
     /**
+     * Skips columns
+     * @param num The number of columns to skip
+     */
+    void skipColumns(int num) {
+        columnIdx += num
+    }
+
+    /**
      * Used to define headers for a sheet
      *
      * @param callable To build header data
@@ -95,6 +103,19 @@ class Sheet {
         callable.delegate = new Column(sheet, defaultOptions, columnIndexes, styleBuilder, columnIdx, rowIdx)
         callable.call()
         columnIdx++
+    }
+
+    /**
+     * Skip to a previously defined column created by {@link #column}
+     *
+     * @param id The column identifier
+     */
+    void skipTo(Object id) {
+        if (columnIndexes && columnIndexes.containsKey(id)) {
+            columnIdx = columnIndexes[id]
+        } else {
+            throw new IllegalArgumentException("Column index not specified for $id")
+        }
     }
 
     /**

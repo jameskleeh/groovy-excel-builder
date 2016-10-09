@@ -9,7 +9,11 @@ include::sheets.adoc[]
 
 include::rows.adoc[]
 
+include::columns.adoc[]
+
 include::cells.adoc[]
+
+include::links.adoc[]
 
 include::formulas.adoc[]
 

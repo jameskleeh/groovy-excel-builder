@@ -1,0 +1,42 @@
+[[links]]
+== Links
+
+The `link` method allows you to create a cell that will contain a link. Links can link to files, cells, web addresses, or email addresses.
+
+=== Creating Links
+
+To create a link to a URL, simply create a link like the following example:
+
+[source,groovy]
+----
+import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.common.usermodel.Hyperlink
+
+ExcelBuilder.build {
+    sheet {
+        row {
+            XSSFCell myCell = link("Google", "http://www.google.com", Hyperlink.LINK_URL)
+            link("John Smith", "mailto:john@smith.com", Hyperlink.LINK_EMAIL)
+            link("Open File", "localFile.docx", Hyperlink.LINK_FILE)
+            link("Go To Cell", "'Sheet Name'!A2", Hyperlink.LINK_DOCUMENT)
+        }
+    }
+}
+----
+
+=== Document Links
+
+There is an additional `link` method to assist you in creating links to cells in the current document. The method takes in a closure that has the same methods available when creating formulas. See the link:#formulas[section on formulas] for the full documentation.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        row {
+            link("Go To Cell") {
+                "'${sheetName}'!${exactCell(0,0}"
+            }
+        }
+    }
+}
+----

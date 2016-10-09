@@ -1,4 +1,4 @@
-[[formuals]]
+[[formulas]]
 == Formulas
 
 The Groovy Excel Builder supports formulas in excel documents by providing an easy way to create formulas with support for helper methods to get cell references.

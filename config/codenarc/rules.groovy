@@ -86,7 +86,7 @@ ruleset {
     IfStatementCouldBeTernary
     InvertedIfElse
     LongLiteralWithLowerCaseL
-    'NoDef' enabled: false
+    'NoDef' enabled: true
     //ParameterReassignment
     TernaryCouldBeElvis
     VectorIsObsolete
@@ -148,7 +148,7 @@ ruleset {
     ThrowThrowable
 
     // rulesets/formatting.xml
-    BlankLineBeforePackage
+    //BlankLineBeforePackage
     BracesForClass
     BracesForForLoop
     BracesForIfElse

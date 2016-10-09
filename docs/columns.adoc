@@ -1,0 +1,113 @@
+[[columns]]
+== Columns
+
+If you wish to build your document by column instead of by row, you can do so with the `column` method.
+
+=== Underlying API
+
+There is no such thing as a column object in the Apache POI API, however you can get a reference to each cell which will allow you to access the row.
+
+[source,groovy]
+----
+import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFRow
+
+ExcelBuilder.build {
+    sheet {
+        column {
+            XSSFCell myCell = cell("A1")
+            XSSFRow rowOne = myCell.row
+        }
+    }
+}
+----
+
+=== Defaults
+
+You can apply default styling at the column level in addition to the sheet level. Styles that conflict with defaults at the sheet level will override.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        defaultStyle [:]
+        column {
+            defaultStyle [:]
+        }
+    }
+}
+----
+
+=== Skipping Cells
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        column {
+            cell("foo")
+            skipCells(2)
+            cell("bar")
+        }
+    }
+}
+----
+
+The previous example will produce a document with "foo" in cell A1 and "bar" in A4.
+
+==== Usage with a header row
+
+You can create columns with a header row. The columns will start after rows previously created.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        columns {
+            column("Foo", "foo")
+            skipCells(1)
+            column("Bar", "bar")
+        }
+        column {
+            cell("A2")
+            cell("A3")
+        }
+    }
+}
+----
+
+The example above will put the text "A2" in cell A2.
+
+=== Skipping Columns
+
+It is very easy to skip any number of columns. See the following example:
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        column {
+            cell("A")
+            cell("B")
+            cell("C")
+        }
+        skipColumns(2)
+        column {
+            cell("A")
+            cell("B")
+            cell("C")
+        }
+    }
+}
+----
+
+The above example will produce a sheet that looks something like this:
+
+[width="50%"]
+|=======
+|  |A |B |C |D
+
+|*1* |A |  |  |A
+|*2* |B |  |  |B
+|*3* |C |  |  |C
+|=======
