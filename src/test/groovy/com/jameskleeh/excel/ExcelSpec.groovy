@@ -1,13 +1,8 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.ss.usermodel.FillPatternType
+import spock.lang.Issue
 import spock.lang.Specification
 
-import java.awt.Color
-
-/**
- * Created by jameskleeh on 9/25/16.
- */
 class ExcelSpec extends Specification {
 
     void cleanup() {
@@ -123,6 +118,26 @@ class ExcelSpec extends Specification {
 
         then:
         format == 18
+    }
+
+    @Issue("https://github.com/jameskleeh/groovy-excel-builder/issues/7")
+    void "test creating cells with registered cell formats"() {
+        Excel.registerCellRenderer(String, 0) { it + 'extra' }
+        Excel.registerCellFormat(BigDecimal, 0xa)
+
+        when:
+        def wb = ExcelBuilder.build {
+            sheet {
+                row {
+                    cell(new BigDecimal("1.32"))
+                    cell("Foo")
+                }
+            }
+        }
+
+        then:
+        wb.getSheetAt(0).getRow(0).getCell(0).cellStyle.dataFormat == (short)0xa
+        wb.getSheetAt(0).getRow(0).getCell(1).stringCellValue == "Fooextra"
     }
 
 }

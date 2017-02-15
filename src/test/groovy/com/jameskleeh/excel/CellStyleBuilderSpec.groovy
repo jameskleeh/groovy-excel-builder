@@ -16,6 +16,11 @@ import java.awt.Color
  */
 class CellStyleBuilderSpec extends Specification {
 
+    void cleanup() {
+        Excel.formatEntries.clear()
+        Excel.rendererEntries.clear()
+    }
+
     void "test convertSimpleOptions"() {
         given:
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
@@ -94,8 +99,8 @@ class CellStyleBuilderSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
 
-        when:
-        cellStyle = cellStyleBuilder.buildStyle("someString", [:])
+        when: "A call to getStyle is essential here to bring in the formats registered in Excel"
+        cellStyle = cellStyleBuilder.getStyle("someString", [:])
 
         then:
         cellStyle.dataFormatString == "bar"

@@ -356,11 +356,6 @@ class CellStyleBuilder {
         XSSFCellStyle cellStyle = workbook.createCellStyle()
         if (options.containsKey(FORMAT)) {
             setFormat(cellStyle, options[FORMAT])
-        } else {
-            Object format = Excel.getFormat(value.class)
-            if (format) {
-                setFormat(cellStyle, format)
-            }
         }
         if (options.containsKey(FONT)) {
             setFont(cellStyle, options[FONT])
@@ -405,6 +400,12 @@ class CellStyleBuilder {
         convertSimpleOptions(options)
         convertSimpleOptions(defaultOptions)
         options = merge(defaultOptions, options)
+        if (!options.containsKey(FORMAT) && value != null) {
+            def format = Excel.getFormat(value.class)
+            if (format != null) {
+                options.put(FORMAT, format)
+            }
+        }
         if (options) {
             WorkbookCache workbookCache = WORKBOOK_CACHE.get(workbook)
             if (workbookCache.containsStyle(options)) {

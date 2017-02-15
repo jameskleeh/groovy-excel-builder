@@ -23,8 +23,6 @@ import groovy.transform.CompileStatic
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A class used to create a row in an excel document

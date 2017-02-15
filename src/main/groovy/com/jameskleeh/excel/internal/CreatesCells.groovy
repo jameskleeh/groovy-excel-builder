@@ -186,7 +186,10 @@ abstract class CreatesCells {
 
         XSSFCell cell = nextCell()
         setStyle(value, cell, style)
-        if (value instanceof String) {
+        Closure callable = Excel.getRenderer(value.class)
+        if (callable != null) {
+            cell.setCellValue((String)callable.call(value))
+        } else if (value instanceof String) {
             cell.setCellValue(value)
         } else if (value instanceof Calendar) {
             cell.setCellValue(value)
@@ -197,12 +200,7 @@ abstract class CreatesCells {
         } else if (value instanceof Boolean) {
             cell.setCellValue(value)
         } else {
-            Closure callable = Excel.getRenderer(value.class)
-            if (callable != null) {
-                cell.setCellValue((String)callable.call(value))
-            } else {
-                cell.setCellValue(value.toString())
-            }
+            cell.setCellValue(value.toString())
         }
         cell
     }
