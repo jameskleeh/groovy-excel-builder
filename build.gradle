@@ -14,7 +14,7 @@ apply plugin: "jacoco"
 
 
 group 'com.jameskleeh'
-version '0.3.0'
+version '0.4.0'
 
 targetCompatibility = 1.7
 
@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     provided 'org.codehaus.groovy:groovy-all:2.4.7'
-    compile "org.apache.poi:poi-ooxml:3.14"
+    compile "org.apache.poi:poi-ooxml:3.16"
     codenarc 'org.codenarc:CodeNarc:0.25.2'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testRuntime "org.slf4j:slf4j-api:1.7.10"

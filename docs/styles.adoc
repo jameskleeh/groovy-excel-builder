@@ -1,7 +1,20 @@
 [[styles]]
 == Styling Cells
 
-There are many options available for styling cells to meet your requirements.
+There are many options available for styling cells to meet your requirements. Any method that creates a cell can have styling applied to it.
+
+Examples:
+
+* column(value, id, style)
+* cell(value, style)
+* formula(value, style)
+* formula(style, closure)
+
+In addition, you can apply default styling to other elements.
+
+* row { defaultStyle(style) ... }
+* sheet { defaultStyle(style) ... }
+* merge(style) { }
 
 === Font
 
@@ -52,7 +65,7 @@ The font name can be set as well:
 [source,groovy]
 ----
 ...
-cell("A", [font: [name: "Arial"])
+cell("A", [font: [name: "Arial"]])
 ...
 ----
 

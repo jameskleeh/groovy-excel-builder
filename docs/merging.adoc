@@ -1,0 +1,47 @@
+[[merging]]
+== Merging Cells
+
+This module supports merging cells with an easy to use API.
+
+[source,groovy]
+----
+row {
+    merge {
+        //Anything you can do inside row directly
+        cell("Foo")
+        cell("Bar")
+    }
+}
+----
+
+You can also apply default styling to the merged cells
+
+[source,groovy]
+----
+row {
+    merge(font: Font.BOLD) {
+        //Anything you can do inside row directly
+        cell("Foo")
+        cell("Bar")
+    }
+}
+----
+
+If you only have one piece of data, but want that data to account for multiple columns, you can pass a number to the merge method.
+
+[source,groovy]
+----
+row {
+    //The value "Foo" will span 3 columns
+    merge("Foo", 3)
+}
+----
+
+You can also apply default styling to the merged cells created in that way
+
+[source,groovy]
+----
+row {
+    merge("Foo", 3, [font: Font.BOLD])
+}
+----

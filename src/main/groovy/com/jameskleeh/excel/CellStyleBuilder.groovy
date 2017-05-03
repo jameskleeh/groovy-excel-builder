@@ -249,7 +249,7 @@ class CellStyleBuilder {
         }
 
         if (hAlign != null) {
-            cellStyle.setAlignment((short)hAlign.ordinal())
+            cellStyle.setAlignment(hAlign)
         } else {
             throw new IllegalArgumentException("The horizontal alignment must be an instance of ${HorizontalAlignment.getCanonicalName()}")
         }
@@ -264,7 +264,7 @@ class CellStyleBuilder {
         }
 
         if (vAlign != null) {
-            cellStyle.setVerticalAlignment((short)vAlign.ordinal())
+            cellStyle.setVerticalAlignment(vAlign)
         } else {
             throw new IllegalArgumentException("The vertical alignment must be an instance of ${VerticalAlignment.getCanonicalName()}")
         }

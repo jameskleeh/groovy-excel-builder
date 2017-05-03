@@ -108,3 +108,15 @@ formula {
 The resulting formula will be:
 
 `SUM($A2, A$3, $A$4)`
+
+=== Formula Styling
+
+Formulas support a Map parameter that is the styling options
+
+[source,groovy]
+----
+formula("CONCATENATE(A1,A2)", [font: Font.BOLD])
+formula([font: Font.BOLD]) {
+    ...
+}
+----

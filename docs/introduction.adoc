@@ -4,3 +4,7 @@
 This module exposes a Groovy DSL to create real Excel documents using {apachePoi}[Apache POI] under the hood. The goal of this module is to abstract away the most common uses of {apachePoi}[Apache POI] to make creating Excel documents very easy, while providing a hook into the underlying API to allow users to do anything that is not provided automatically.
 
 If you encounter any issues or inconsistencies while using this library, or if you have a great idea for improving this library, please https://github.com/jameskleeh/groovy-excel-builder/issues[create an issue]!
+
+=== Common Problems
+
+If you encounter a class not found exception for `org.openxmlformats.schemas.spreadsheetml.x2006.main.CTExtensionList`, try adding `org.apache.poi:ooxml-schemas:1.3` and `org.apache.xmlbeans:xmlbeans:2.6.0` to your dependencies.

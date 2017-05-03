@@ -13,6 +13,8 @@ include::columns.adoc[]
 
 include::cells.adoc[]
 
+include::merging.adoc[]
+
 include::links.adoc[]
 
 include::formulas.adoc[]

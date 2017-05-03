@@ -23,6 +23,7 @@ import com.jameskleeh.excel.Excel
 import com.jameskleeh.excel.Font
 import com.jameskleeh.excel.CellFinder
 import org.apache.poi.common.usermodel.Hyperlink
+import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFHyperlink
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -205,7 +206,7 @@ abstract class CreatesCells {
         cell
     }
 
-    protected XSSFCell handleLink(XSSFCell cell, String address, int linkType) {
+    protected XSSFCell handleLink(XSSFCell cell, String address, HyperlinkType linkType) {
         XSSFHyperlink link = workbook.creationHelper.createHyperlink(linkType)
         link.address = address
         cell.hyperlink = link
@@ -219,8 +220,23 @@ abstract class CreatesCells {
      * @param address The link address
      * @param linkType The type of link. One of {@link Hyperlink#LINK_URL}, {@link Hyperlink#LINK_EMAIL}, {@link Hyperlink#LINK_FILE}
      * @return The native cell
+     *
+     * @deprecated Use {@link #link(Object, String, HyperlinkType}
      */
+    @Deprecated
     XSSFCell link(Object value, String address, int linkType) {
+        link(value, address, HyperlinkType.forInt(linkType))
+    }
+
+    /**
+     * Creates a cell with a hyperlink
+     *
+     * @param value The cell value
+     * @param address The link address
+     * @param linkType The type of link. One of {@link HyperlinkType#URL}, {@link HyperlinkType#EMAIL}, {@link HyperlinkType#FILE}
+     * @return The native cell
+     */
+    XSSFCell link(Object value, String address, HyperlinkType linkType) {
         XSSFCell cell = cell(value, LINK_OPTIONS)
         handleLink(cell, address, linkType)
     }
@@ -236,7 +252,7 @@ abstract class CreatesCells {
         XSSFCell cell = cell(value, LINK_OPTIONS)
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.delegate = new CellFinder(cell, columnIndexes)
-        handleLink(cell, callable.call().toString(), Hyperlink.LINK_DOCUMENT)
+        handleLink(cell, callable.call().toString(), HyperlinkType.DOCUMENT)
     }
 
     /**

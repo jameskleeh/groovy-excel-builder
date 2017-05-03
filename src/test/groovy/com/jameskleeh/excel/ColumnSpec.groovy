@@ -1,6 +1,7 @@
 package com.jameskleeh.excel
 
 import org.apache.poi.common.usermodel.Hyperlink
+import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFRow
@@ -94,9 +95,9 @@ class ColumnSpec extends Specification {
         XSSFWorkbook workbook = ExcelBuilder.build {
             sheet("X") {
                 row {
-                    link('Test URL', 'http://www.google.com', Hyperlink.LINK_URL)
-                    link('Test File', 'test.docx', Hyperlink.LINK_FILE)
-                    link('Test Email', 'mailto:foo@bar.com', Hyperlink.LINK_EMAIL)
+                    link('Test URL', 'http://www.google.com', HyperlinkType.URL)
+                    link('Test File', 'test.docx', HyperlinkType.FILE)
+                    link('Test Email', 'mailto:foo@bar.com', HyperlinkType.EMAIL)
                     link('Test Document') {
                         "'${getSheetName()}'!${exactCell(1,1)}"
                     }
@@ -111,15 +112,15 @@ class ColumnSpec extends Specification {
         then:
         cells[0].stringCellValue == 'Test URL'
         cells[0].hyperlink.address == 'http://www.google.com'
-        cells[0].hyperlink.type == Hyperlink.LINK_URL
+        cells[0].hyperlink.typeEnum == HyperlinkType.URL
         cells[1].stringCellValue == 'Test File'
         cells[1].hyperlink.address == 'test.docx'
-        cells[1].hyperlink.type == Hyperlink.LINK_FILE
+        cells[1].hyperlink.typeEnum == HyperlinkType.FILE
         cells[2].stringCellValue == 'Test Email'
         cells[2].hyperlink.address == 'mailto:foo@bar.com'
-        cells[2].hyperlink.type == Hyperlink.LINK_EMAIL
+        cells[2].hyperlink.typeEnum == HyperlinkType.EMAIL
         cells[3].stringCellValue == 'Test Document'
         cells[3].hyperlink.address == "'X'!B2"
-        cells[3].hyperlink.type == Hyperlink.LINK_DOCUMENT
+        cells[3].hyperlink.typeEnum == HyperlinkType.DOCUMENT
     }
 }
