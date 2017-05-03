@@ -530,7 +530,42 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="styles">Styling Cells</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are many options available for styling cells to meet your requirements.</p>
+<p>There are many options available for styling cells to meet your requirements. Any method that creates a cell can have styling applied to it.</p>
+</div>
+<div class="paragraph">
+<p>Examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>column(value, id, style)</p>
+</li>
+<li>
+<p>cell(value, style)</p>
+</li>
+<li>
+<p>formula(value, style)</p>
+</li>
+<li>
+<p>formula(style, closure)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In addition, you can apply default styling to other elements.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>row { defaultStyle(style) &#8230;&#8203; }</p>
+</li>
+<li>
+<p>sheet { defaultStyle(style) &#8230;&#8203; }</p>
+</li>
+<li>
+<p>merge(style) { }</p>
+</li>
+</ul>
 </div>
 <div class="sect2">
 <h3 id="_font">Font</h3>
@@ -596,7 +631,7 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">...
-cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Arial</span><span class="delimiter">&quot;</span></span>])
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Arial</span><span class="delimiter">&quot;</span></span>]])
 ...</code></pre>
 </div>
 </div>
@@ -881,7 +916,7 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-15 05:51:22 UTC
+Last updated 2017-05-03 20:42:26 UTC
 </div>
 </div>
 </body>

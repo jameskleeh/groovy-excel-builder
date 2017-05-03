@@ -511,6 +511,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_simple_string">Simple String</a></li>
 <li><a href="#_closure_customization">Closure Customization</a></li>
 <li><a href="#_anchoring_cells">Anchoring Cells</a></li>
+<li><a href="#_formula_styling">Formula Styling</a></li>
 </ul>
 </li>
 </ul>
@@ -645,12 +646,26 @@ formula {
 <p><code>SUM($A2, A$3, $A$4)</code></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_formula_styling">Formula Styling</h3>
+<div class="paragraph">
+<p>Formulas support a Map parameter that is the styling options</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">formula(<span class="string"><span class="delimiter">&quot;</span><span class="content">CONCATENATE(A1,A2)</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD])
+formula([<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD]) {
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-15 05:51:22 UTC
+Last updated 2017-05-03 20:42:26 UTC
 </div>
 </div>
 </body>

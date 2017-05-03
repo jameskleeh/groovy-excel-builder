@@ -511,7 +511,11 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#introduction">Introduction</a></li>
+<li><a href="#introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_common_problems">Common Problems</a></li>
+</ul>
+</li>
 <li><a href="#gettingStarted">Getting Started</a>
 <ul class="sectlevel2">
 <li><a href="#_installation">Installation</a></li>
@@ -553,6 +557,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_cell_formatting">Cell Formatting</a></li>
 </ul>
 </li>
+<li><a href="#merging">Merging Cells</a></li>
 <li><a href="#links">Links</a>
 <ul class="sectlevel2">
 <li><a href="#_creating_links">Creating Links</a></li>
@@ -564,6 +569,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_simple_string">Simple String</a></li>
 <li><a href="#_closure_customization">Closure Customization</a></li>
 <li><a href="#_anchoring_cells">Anchoring Cells</a></li>
+<li><a href="#_formula_styling">Formula Styling</a></li>
 </ul>
 </li>
 <li><a href="#styles">Styling Cells</a>
@@ -595,6 +601,12 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph">
 <p>If you encounter any issues or inconsistencies while using this library, or if you have a great idea for improving this library, please <a href="https://github.com/jameskleeh/groovy-excel-builder/issues">create an issue</a>!</p>
 </div>
+<div class="sect2">
+<h3 id="_common_problems">Common Problems</h3>
+<div class="paragraph">
+<p>If you encounter a class not found exception for <code>org.openxmlformats.schemas.spreadsheetml.x2006.main.CTExtensionList</code>, try adding <code>org.apache.poi:ooxml-schemas:1.3</code> and <code>org.apache.xmlbeans:xmlbeans:2.6.0</code> to your dependencies.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -611,14 +623,14 @@ table.CodeRay td.code>pre{padding:0}
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>com.jameskleeh<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>excel-builder<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>0.3.0<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.4.0<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">com.jameskleeh:excel-builder:0.3.0</span><span class="delimiter">'</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">com.jameskleeh:excel-builder:0.4.0</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -1484,6 +1496,60 @@ Excel.registerCellFormat(LocalTime, <span class="integer">0</span>, <span class=
 </div>
 </div>
 <div class="sect1">
+<h2 id="merging">Merging Cells</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This module supports merging cells with an easy to use API.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">row {
+    merge {
+        <span class="comment">//Anything you can do inside row directly</span>
+        cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)
+        cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also apply default styling to the merged cells</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">row {
+    merge(<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD) {
+        <span class="comment">//Anything you can do inside row directly</span>
+        cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)
+        cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you only have one piece of data, but want that data to account for multiple columns, you can pass a number to the merge method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">row {
+    <span class="comment">//The value &quot;Foo&quot; will span 3 columns</span>
+    merge(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="integer">3</span>)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also apply default styling to the merged cells created in that way</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">row {
+    merge(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="integer">3</span>, [<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD])
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="links">Links</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1661,13 +1727,62 @@ formula {
 <p><code>SUM($A2, A$3, $A$4)</code></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_formula_styling">Formula Styling</h3>
+<div class="paragraph">
+<p>Formulas support a Map parameter that is the styling options</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">formula(<span class="string"><span class="delimiter">&quot;</span><span class="content">CONCATENATE(A1,A2)</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD])
+formula([<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD]) {
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="styles">Styling Cells</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are many options available for styling cells to meet your requirements.</p>
+<p>There are many options available for styling cells to meet your requirements. Any method that creates a cell can have styling applied to it.</p>
+</div>
+<div class="paragraph">
+<p>Examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>column(value, id, style)</p>
+</li>
+<li>
+<p>cell(value, style)</p>
+</li>
+<li>
+<p>formula(value, style)</p>
+</li>
+<li>
+<p>formula(style, closure)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In addition, you can apply default styling to other elements.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>row { defaultStyle(style) &#8230;&#8203; }</p>
+</li>
+<li>
+<p>sheet { defaultStyle(style) &#8230;&#8203; }</p>
+</li>
+<li>
+<p>merge(style) { }</p>
+</li>
+</ul>
 </div>
 <div class="sect2">
 <h3 id="_font">Font</h3>
@@ -1733,7 +1848,7 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">...
-cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Arial</span><span class="delimiter">&quot;</span></span>])
+cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, [<span class="key">font</span>: [<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Arial</span><span class="delimiter">&quot;</span></span>]])
 ...</code></pre>
 </div>
 </div>
@@ -2018,7 +2133,7 @@ cell(<span class="string"><span class="delimiter">&quot;</span><span class="cont
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-15 05:51:22 UTC
+Last updated 2017-05-03 20:42:26 UTC
 </div>
 </div>
 </body>
