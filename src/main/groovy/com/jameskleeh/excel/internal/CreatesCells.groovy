@@ -187,6 +187,9 @@ abstract class CreatesCells {
 
         XSSFCell cell = nextCell()
         setStyle(value, cell, style)
+        if (value == null) {
+            return
+        }
         Closure callable = Excel.getRenderer(value.class)
         if (callable != null) {
             cell.setCellValue((String)callable.call(value))

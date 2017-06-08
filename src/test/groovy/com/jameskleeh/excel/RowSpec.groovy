@@ -1,6 +1,7 @@
 package com.jameskleeh.excel
 
 import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
@@ -135,5 +136,23 @@ class RowSpec extends Specification {
         cells.next().booleanCellValue == false
         cells.next().stringCellValue == 'foox'
         cells.next().numericCellValue == new Double(1)
+    }
+
+    void "test cell with null value"() {
+        given:
+        XSSFWorkbook workbook = ExcelBuilder.build {
+            sheet {
+                row {
+                    cell(null)
+                }
+            }
+        }
+
+        when:
+        Cell cell = workbook.getSheetAt(0).getRow(0).getCell(0)
+
+        then:
+        noExceptionThrown()
+        cell.getCellTypeEnum() == CellType.BLANK
     }
 }
