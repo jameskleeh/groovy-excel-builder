@@ -216,6 +216,7 @@ class CellStyleBuilder {
         new XSSFColor(color)
     }
 
+    @SuppressWarnings('UnnecessaryGetter')
     private BorderStyle getBorderStyle(Object obj) {
         if (obj instanceof BorderStyle) {
             return (BorderStyle)obj
@@ -240,6 +241,7 @@ class CellStyleBuilder {
         }
     }
 
+    @SuppressWarnings('UnnecessaryGetter')
     private void setHorizontalAlignment(XSSFCellStyle cellStyle, Object horizontalAlignment) {
         HorizontalAlignment hAlign
         if (horizontalAlignment instanceof HorizontalAlignment) {
@@ -255,6 +257,7 @@ class CellStyleBuilder {
         }
     }
 
+    @SuppressWarnings('UnnecessaryGetter')
     private void setVerticalAlignment(XSSFCellStyle cellStyle, Object verticalAlignment) {
         VerticalAlignment vAlign
         if (verticalAlignment instanceof VerticalAlignment) {
@@ -401,7 +404,7 @@ class CellStyleBuilder {
         convertSimpleOptions(defaultOptions)
         options = merge(defaultOptions, options)
         if (!options.containsKey(FORMAT) && value != null) {
-            def format = Excel.getFormat(value.class)
+            Object format = Excel.getFormat(value.class)
             if (format != null) {
                 options.put(FORMAT, format)
             }

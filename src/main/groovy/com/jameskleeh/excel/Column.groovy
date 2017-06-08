@@ -24,7 +24,6 @@ import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy
 
 /**
@@ -40,7 +39,6 @@ class Column extends CreatesCells {
     private int rowIdx
 
     Column(XSSFSheet sheet, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder, int columnIdx, int rowIdx) {
-
         super(sheet, defaultOptions, columnIndexes, styleBuilder)
         this.columnIdx = columnIdx
         this.rowIdx = rowIdx

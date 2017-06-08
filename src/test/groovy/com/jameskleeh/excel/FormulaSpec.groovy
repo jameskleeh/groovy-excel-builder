@@ -15,7 +15,7 @@ class FormulaSpec extends Specification {
         CellFinder formula = new CellFinder(cell, null)
 
         expect:
-        formula.getRow() == 3
+        formula.row == 3
     }
 
     void "test getColumn"() {
@@ -25,7 +25,7 @@ class FormulaSpec extends Specification {
         CellFinder formula = new CellFinder(cell, null)
 
         expect:
-        formula.getColumn() == 'C'
+        formula.column == 'C'
     }
 
     void "test relativeCell(int columnIndex, int rowIndex)"() {
@@ -53,13 +53,13 @@ class FormulaSpec extends Specification {
 
         where:
         column  | row   | result
-        0       | 0     | "C3"
-        -1      | 0     | "B3"
-        0       | -1    | "C2"
-        -1      | -1    | "B2"
-        1       | 0     | "D3"
-        0       | 1     | "C4"
-        1       | 1     | "D4"
+        0       | 0     | 'C3'
+        -1      | 0     | 'B3'
+        0       | -1    | 'C2'
+        -1      | -1    | 'B2'
+        1       | 0     | 'D3'
+        0       | 1     | 'C4'
+        1       | 1     | 'D4'
     }
 
     void "test relativeCell(int columnIndex)"() {
@@ -81,9 +81,9 @@ class FormulaSpec extends Specification {
 
         where:
         column  | result
-        0       | "C3"
-        -1      | "B3"
-        1       | "D3"
+        0       | 'C3'
+        -1      | 'B3'
+        1       | 'D3'
     }
 
     void "test exactCell(int columnIndex, int rowIndex)"() {
@@ -110,11 +110,11 @@ class FormulaSpec extends Specification {
 
         where:
         column  | row   | result
-        0       | 0     | "A1"
-        1       | 0     | "B1"
-        2       | 0     | "C1"
-        0       | 1     | "A2"
-        0       | 2     | "A3"
+        0       | 0     | 'A1'
+        1       | 0     | 'B1'
+        2       | 0     | 'C1'
+        0       | 1     | 'A2'
+        0       | 2     | 'A3'
     }
 
     void "test exactCell based on column name"() {
@@ -140,8 +140,8 @@ class FormulaSpec extends Specification {
         thrown(IllegalArgumentException)
 
         expect:
-        formula.exactCell('foo') == "A1"
-        formula.exactCell('bar') == "C1"
+        formula.exactCell('foo') == 'A1'
+        formula.exactCell('bar') == 'C1'
 
         when:
         String cell = formula.exactCell(column, row)
@@ -151,15 +151,15 @@ class FormulaSpec extends Specification {
 
         where:
         column  | row   | result
-        'foo'   | 0     | "A1"
-        'foo'   | 1     | "A2"
-        'bar'   | 0     | "C1"
-        'bar'   | 2     | "C3"
+        'foo'   | 0     | 'A1'
+        'foo'   | 1     | 'A2'
+        'bar'   | 0     | 'C1'
+        'bar'   | 2     | 'C3'
     }
 
     void "test getSheetName"() {
         given:
-        XSSFCell cell = new XSSFWorkbook().createSheet("Foo").createRow(2).createCell(2)
+        XSSFCell cell = new XSSFWorkbook().createSheet('Foo').createRow(2).createCell(2)
         CellFinder formula = new CellFinder(cell, null)
 
         expect:

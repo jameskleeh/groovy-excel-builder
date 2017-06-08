@@ -27,7 +27,7 @@ class SheetSpec extends Specification {
     void "test row(Object...)"() {
         XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
-                row(1,2,3)
+                row(1, 2, 3)
             }
         }
 
@@ -35,7 +35,7 @@ class SheetSpec extends Specification {
         Row row = workbook.getSheetAt(0).getRow(0)
 
         then:
-        row.getPhysicalNumberOfCells() == 3
+        row.physicalNumberOfCells == 3
         row.getCell(0).numericCellValue == 1
         row.getCell(1).numericCellValue == 2
         row.getCell(2).numericCellValue == 3

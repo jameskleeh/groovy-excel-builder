@@ -79,13 +79,13 @@ class CellStyleBuilderSpec extends Specification {
         given:
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
         XSSFCellStyle cellStyle
-        Excel.registerCellFormat(String, "bar")
+        Excel.registerCellFormat(String, 'bar')
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle(null, [format: "foo"])
+        cellStyle = cellStyleBuilder.buildStyle(null, [format: 'foo'])
 
         then:
-        cellStyle.dataFormatString == "foo"
+        cellStyle.dataFormatString == 'foo'
 
         when:
         cellStyle = cellStyleBuilder.buildStyle(null, [format: 1])
@@ -99,11 +99,11 @@ class CellStyleBuilderSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
 
-        when: "A call to getStyle is essential here to bring in the formats registered in Excel"
-        cellStyle = cellStyleBuilder.getStyle("someString", [:])
+        when: 'A call to getStyle is essential here to bring in the formats registered in Excel'
+        cellStyle = cellStyleBuilder.getStyle('someString', [:])
 
         then:
-        cellStyle.dataFormatString == "bar"
+        cellStyle.dataFormatString == 'bar'
     }
 
     void "test buildStyle font"() {
@@ -115,7 +115,7 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle = cellStyleBuilder.buildStyle('', [font: 1])
 
         then:
-        def ex = thrown(IllegalArgumentException)
+        Exception ex = thrown(IllegalArgumentException)
         ex.message == 'The font option must be an instance of a Map'
 
         when:
@@ -182,19 +182,19 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle = cellStyleBuilder.buildStyle('', [font: [color: 'FFFFFF']])
 
         then:
-        cellStyle.font.getXSSFColor().getRGB() == [255, 255, 255] as byte[]
+        cellStyle.font.XSSFColor.RGB == [255, 255, 255] as byte[]
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [font: [color: '#000000']])
 
         then:
-        cellStyle.font.getXSSFColor().getRGB() == [0, 0, 0] as byte[]
+        cellStyle.font.XSSFColor.RGB == [0, 0, 0] as byte[]
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [font: [color: Color.BLUE]])
 
         then:
-        cellStyle.font.getXSSFColor().getRGB() == [0, 0, 255] as byte[]
+        cellStyle.font.XSSFColor.RGB == [0, 0, 255] as byte[]
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [font: [color: 1L]])
@@ -239,7 +239,7 @@ class CellStyleBuilderSpec extends Specification {
         !cellStyle.hidden
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [hidden: "x"])
+        cellStyle = cellStyleBuilder.buildStyle('', [hidden: 'x'])
 
         then:
         thrown(IllegalArgumentException)
@@ -263,7 +263,7 @@ class CellStyleBuilderSpec extends Specification {
         !cellStyle.locked
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [locked: "x"])
+        cellStyle = cellStyleBuilder.buildStyle('', [locked: 'x'])
 
         then:
         thrown(IllegalArgumentException)
@@ -287,7 +287,7 @@ class CellStyleBuilderSpec extends Specification {
         !cellStyle.wrapText
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [wrapped: "x"])
+        cellStyle = cellStyleBuilder.buildStyle('', [wrapped: 'x'])
 
         then:
         thrown(IllegalArgumentException)
@@ -371,7 +371,7 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle.rotation == (short)1
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [rotation: "foo"])
+        cellStyle = cellStyleBuilder.buildStyle('', [rotation: 'foo'])
 
         then:
         thrown(ClassCastException)
@@ -395,7 +395,7 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle.indention == (short)1
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [indent: "foo"])
+        cellStyle = cellStyleBuilder.buildStyle('', [indent: 'foo'])
 
         then:
         thrown(ClassCastException)
@@ -414,30 +414,30 @@ class CellStyleBuilderSpec extends Specification {
 
         when:
         cellStyle = cellStyleBuilder.buildStyle('', [border: [style: BorderStyle.DOTTED, color: Color.RED]])
+        byte[] color = [255, 0, 0] as byte[]
 
         then:
         cellStyle.borderLeftEnum == BorderStyle.DOTTED
-        cellStyle.leftBorderXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        cellStyle.leftBorderXSSFColor.RGB == color
         cellStyle.borderRightEnum == BorderStyle.DOTTED
-        cellStyle.rightBorderXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        cellStyle.rightBorderXSSFColor.RGB == color
         cellStyle.borderBottomEnum == BorderStyle.DOTTED
-        cellStyle.bottomBorderXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        cellStyle.bottomBorderXSSFColor.RGB == color
         cellStyle.borderTopEnum == BorderStyle.DOTTED
-        cellStyle.topBorderXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        cellStyle.topBorderXSSFColor.RGB == color
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [border: [style: BorderStyle.DOTTED, color: Color.RED, left: [color: Color.BLUE], right: [style: BorderStyle.DASHED], bottom: [color: "FFFFFF"], top: [color: "#000000"]]])
+        cellStyle = cellStyleBuilder.buildStyle('', [border: [style: BorderStyle.DOTTED, color: Color.RED, left: [color: Color.BLUE], right: [style: BorderStyle.DASHED], bottom: [color: 'FFFFFF'], top: [color: '#000000']]])
 
         then:
         cellStyle.borderLeftEnum == BorderStyle.DOTTED
-        cellStyle.leftBorderXSSFColor.getRGB() == [0, 0, 255] as byte[]
+        cellStyle.leftBorderXSSFColor.RGB == [0, 0, 255] as byte[]
         cellStyle.borderRightEnum == BorderStyle.DASHED
-        cellStyle.rightBorderXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        cellStyle.rightBorderXSSFColor.RGB == [255, 0, 0] as byte[]
         cellStyle.borderBottomEnum == BorderStyle.DOTTED
-        cellStyle.bottomBorderXSSFColor.getRGB() == [255, 255, 255] as byte[]
+        cellStyle.bottomBorderXSSFColor.RGB == [255, 255, 255] as byte[]
         cellStyle.borderTopEnum == BorderStyle.DOTTED
-        cellStyle.topBorderXSSFColor.getRGB() == [0, 0, 0] as byte[]
-
+        cellStyle.topBorderXSSFColor.RGB == [0, 0, 0] as byte[]
 
         when:
         Map options = [border: [style: BorderStyle.DOTTED, left: BorderStyle.THIN]]
@@ -469,13 +469,13 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle.fillPatternEnum == FillPatternType.DIAMONDS
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [fill: "diamonds"])
+        cellStyle = cellStyleBuilder.buildStyle('', [fill: 'diamonds'])
 
         then:
         cellStyle.fillPatternEnum == FillPatternType.DIAMONDS
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [fill: "x"])
+        cellStyle = cellStyleBuilder.buildStyle('', [fill: 'x'])
 
         then:
         thrown(IllegalArgumentException)
@@ -496,22 +496,22 @@ class CellStyleBuilderSpec extends Specification {
         cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: Color.RED])
 
         then:
-        cellStyle.fillForegroundXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        cellStyle.fillForegroundXSSFColor.RGB == [255, 0, 0] as byte[]
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: "FFFFFF"])
+        cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: 'FFFFFF'])
 
         then:
-        cellStyle.fillForegroundXSSFColor.getRGB() == [255, 255, 255] as byte[]
+        cellStyle.fillForegroundXSSFColor.RGB == [255, 255, 255] as byte[]
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: "#000000"])
+        cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: '#000000'])
 
         then:
-        cellStyle.fillForegroundXSSFColor.getRGB() == [0, 0, 0] as byte[]
+        cellStyle.fillForegroundXSSFColor.RGB == [0, 0, 0] as byte[]
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: "blue"])
+        cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: 'blue'])
 
         then:
         thrown(IllegalArgumentException)
@@ -522,35 +522,35 @@ class CellStyleBuilderSpec extends Specification {
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
         XSSFCellStyle cellStyle
 
-        when: "Only the background color is specified"
+        when: 'Only the background color is specified'
         cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: Color.RED])
 
-        then: "The foreground color is set instead of the background and the fill pattern is set to solid"
-        cellStyle.fillForegroundXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        then: 'The foreground color is set instead of the background and the fill pattern is set to solid'
+        cellStyle.fillForegroundXSSFColor.RGB == [255, 0, 0] as byte[]
         cellStyle.fillBackgroundXSSFColor == null
         cellStyle.fillPatternEnum == FillPatternType.SOLID_FOREGROUND
 
-        when: "Both the foreground and background colors are specified"
+        when: 'Both the foreground and background colors are specified'
         cellStyle = cellStyleBuilder.buildStyle('', [foregroundColor: Color.BLUE, backgroundColor: Color.RED])
 
-        then: "Both are set"
-        cellStyle.fillForegroundXSSFColor.getRGB() == [0, 0, 255] as byte[]
-        cellStyle.fillBackgroundXSSFColor.getRGB() == [255, 0, 0] as byte[]
+        then: 'Both are set'
+        cellStyle.fillForegroundXSSFColor.RGB == [0, 0, 255] as byte[]
+        cellStyle.fillBackgroundXSSFColor.RGB == [255, 0, 0] as byte[]
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: "FFFFFF"])
+        cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: 'FFFFFF'])
 
         then:
-        cellStyle.fillForegroundXSSFColor.getRGB() == [255, 255, 255] as byte[]
+        cellStyle.fillForegroundXSSFColor.RGB == [255, 255, 255] as byte[]
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: "#000000"])
+        cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: '#000000'])
 
         then:
-        cellStyle.fillForegroundXSSFColor.getRGB() == [0, 0, 0] as byte[]
+        cellStyle.fillForegroundXSSFColor.RGB == [0, 0, 0] as byte[]
 
         when:
-        cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: "blue"])
+        cellStyle = cellStyleBuilder.buildStyle('', [backgroundColor: 'blue'])
 
         then:
         thrown(IllegalArgumentException)
@@ -582,7 +582,6 @@ class CellStyleBuilderSpec extends Specification {
         then:
         cell.cellStyle == defaultCell.cellStyle
     }
-
 
     void "test setStyle cell options"() {
         given:

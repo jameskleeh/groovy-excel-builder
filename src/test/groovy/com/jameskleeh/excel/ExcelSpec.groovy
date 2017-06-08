@@ -1,5 +1,6 @@
 package com.jameskleeh.excel
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Issue
 import spock.lang.Specification
 
@@ -22,7 +23,7 @@ class ExcelSpec extends Specification {
         when:
         Closure callable = Excel.getRenderer(Integer)
 
-        then: "Renderers registered later with the same class and priority are chosen"
+        then: 'Renderers registered later with the same class and priority are chosen'
         callable.call(2) == 6
     }
 
@@ -43,7 +44,7 @@ class ExcelSpec extends Specification {
         when:
         Closure callable = Excel.getRenderer(Bar)
 
-        then: "Renderers registered for super classes work"
+        then: 'Renderers registered for super classes work'
         callable.call(1) instanceof Integer
     }
 
@@ -58,7 +59,7 @@ class ExcelSpec extends Specification {
         when:
         Closure callable = Excel.getRenderer(Integer)
 
-        then: "The highest priorty renderer is chosen"
+        then: 'The highest priorty renderer is chosen'
         callable.call(2) == 6
     }
 
@@ -77,7 +78,7 @@ class ExcelSpec extends Specification {
         when:
         Object format = Excel.getFormat(Integer)
 
-        then: "The highest priorty renderer is chosen"
+        then: 'The highest priorty renderer is chosen'
         format == 2
     }
 
@@ -88,7 +89,7 @@ class ExcelSpec extends Specification {
         when:
         Object format = Excel.getFormat(Integer)
 
-        then: "Formats registered later with the same class and priority are chosen"
+        then: 'Formats registered later with the same class and priority are chosen'
         format == 1
     }
 
@@ -98,7 +99,7 @@ class ExcelSpec extends Specification {
         when:
         Object format = Excel.getFormat(Bar)
 
-        then: "Formats registered for super classes work for subclasses"
+        then: 'Formats registered for super classes work for subclasses'
         format == 1
     }
 
@@ -111,7 +112,7 @@ class ExcelSpec extends Specification {
     }
 
     void "test getFormat(String) returns a built in format if it exists"() {
-        Excel.registerCellFormat(Foo, "h:mm AM/PM")
+        Excel.registerCellFormat(Foo, 'h:mm AM/PM')
 
         when:
         Object format = Excel.getFormat(Foo)
@@ -120,24 +121,24 @@ class ExcelSpec extends Specification {
         format == 18
     }
 
-    @Issue("https://github.com/jameskleeh/groovy-excel-builder/issues/7")
+    @Issue('https://github.com/jameskleeh/groovy-excel-builder/issues/7')
     void "test creating cells with registered cell formats"() {
         Excel.registerCellRenderer(String, 0) { it + 'extra' }
         Excel.registerCellFormat(BigDecimal, 0xa)
 
         when:
-        def wb = ExcelBuilder.build {
+        XSSFWorkbook wb = ExcelBuilder.build {
             sheet {
                 row {
-                    cell(new BigDecimal("1.32"))
-                    cell("Foo")
+                    cell(1.32G)
+                    cell('Foo')
                 }
             }
         }
 
         then:
         wb.getSheetAt(0).getRow(0).getCell(0).cellStyle.dataFormat == (short)0xa
-        wb.getSheetAt(0).getRow(0).getCell(1).stringCellValue == "Fooextra"
+        wb.getSheetAt(0).getRow(0).getCell(1).stringCellValue == 'Fooextra'
     }
 
 }

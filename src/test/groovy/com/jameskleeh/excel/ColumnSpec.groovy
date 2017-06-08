@@ -1,6 +1,5 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.common.usermodel.Hyperlink
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.util.CellRangeAddress
@@ -15,7 +14,7 @@ class ColumnSpec extends Specification {
         XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 columns {
-                    column("Column A1", "id")
+                    column('Column A1', 'id')
                 }
                 column {
                     cell('A2')
@@ -32,12 +31,12 @@ class ColumnSpec extends Specification {
         XSSFSheet sheet = workbook.getSheetAt(0)
 
         then:
-        sheet.getRow(0).getCell(0).getStringCellValue() == "Column A1"
+        sheet.getRow(0).getCell(0).stringCellValue == 'Column A1'
         sheet.getRow(0).getCell(1) == null
-        sheet.getRow(1).getCell(0).getStringCellValue() == "A2"
-        sheet.getRow(1).getCell(1).getStringCellValue() == "B2"
-        sheet.getRow(2).getCell(0).getStringCellValue() == "A3"
-        sheet.getRow(2).getCell(1).getStringCellValue() == "B3"
+        sheet.getRow(1).getCell(0).stringCellValue == 'A2'
+        sheet.getRow(1).getCell(1).stringCellValue == 'B2'
+        sheet.getRow(2).getCell(0).stringCellValue == 'A3'
+        sheet.getRow(2).getCell(1).stringCellValue == 'B3'
 
     }
 
@@ -85,21 +84,21 @@ class ColumnSpec extends Specification {
         XSSFSheet sheet = workbook.getSheetAt(0)
 
         then:
-        sheet.getRow(0).getCell(0).getStringCellValue() == 'A1'
-        sheet.getRow(1).getCell(0).getStringCellValue() == 'A2'
-        sheet.getRow(4).getCell(0).getStringCellValue() == 'A5'
-        sheet.getRow(5).getCell(0).getStringCellValue() == 'A6'
+        sheet.getRow(0).getCell(0).stringCellValue == 'A1'
+        sheet.getRow(1).getCell(0).stringCellValue == 'A2'
+        sheet.getRow(4).getCell(0).stringCellValue == 'A5'
+        sheet.getRow(5).getCell(0).stringCellValue == 'A6'
     }
 
     void "test link"() {
         XSSFWorkbook workbook = ExcelBuilder.build {
-            sheet("X") {
+            sheet('X') {
                 row {
                     link('Test URL', 'http://www.google.com', HyperlinkType.URL)
                     link('Test File', 'test.docx', HyperlinkType.FILE)
                     link('Test Email', 'mailto:foo@bar.com', HyperlinkType.EMAIL)
                     link('Test Document') {
-                        "'${getSheetName()}'!${exactCell(1,1)}"
+                        "'${sheetName}'!${exactCell(1, 1)}"
                     }
                 }
             }

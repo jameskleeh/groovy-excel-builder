@@ -20,7 +20,7 @@ ruleset {
     DuplicateMapKey
     DuplicateSetValue
     EmptyCatchBlock
-    EmptyClass
+    'EmptyClass' doNotApplyToFilesMatching: '.*Spec.groovy'
     EmptyElseBlock
     EmptyFinallyBlock
     EmptyForStatement
@@ -115,7 +115,7 @@ ruleset {
     ToStringReturnsNull
 
     // rulesets/dry.xml
-    DuplicateListLiteral
+    'DuplicateListLiteral' doNotApplyToFilesMatching: '.*Spec.groovy'
     'DuplicateMapLiteral' doNotApplyToFilesMatching: '.*Spec.groovy'
     'DuplicateNumberLiteral' enabled: false
     'DuplicateStringLiteral' enabled: false
@@ -154,7 +154,7 @@ ruleset {
     BracesForIfElse
     BracesForMethod
     BracesForTryCatchFinally
-    ClassJavadoc
+    'ClassJavadoc' doNotApplyToFilesMatching: '.*Spec.groovy'
     ClosureStatementOnOpeningLineOfMultipleLineClosure
     ConsecutiveBlankLines
     FileEndsWithoutNewline
@@ -308,14 +308,14 @@ ruleset {
 
     // rulesets/size.xml
     AbcComplexity   // DEPRECATED: Use the AbcMetric rule instead. Requires the GMetrics jar
-    AbcMetric   // Requires the GMetrics jar
+    'AbcMetric' doNotApplyToFilesMatching: '.*Spec.groovy'   // Requires the GMetrics jar
     ClassSize
     CrapMetric   // Requires the GMetrics jar and a Cobertura coverage file
     'CyclomaticComplexity' doNotApplyToFilesMatching: '.*Spec.groovy'   // Requires the GMetrics jar
     MethodCount
-    MethodSize
-    'NestedBlockDepth' doNotApplyToFileNames: 'WordDocumentBuilder.groovy'
-    ParameterCount
+    'MethodSize' doNotApplyToFilesMatching: '.*Spec.groovy'
+    NestedBlockDepth
+    'ParameterCount' maxParameters: 6
 
     // rulesets/unnecessary.xml
     AddEmptyString

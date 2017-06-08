@@ -2,8 +2,8 @@ package com.jameskleeh.excel
 
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import spock.lang.Issue
 import spock.lang.Specification
 
 class RowSpec extends Specification {
@@ -32,12 +32,12 @@ class RowSpec extends Specification {
         XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 columns {
-                    column("Foo", "foo")
+                    column('Foo', 'foo')
                     skipCells(2)
-                    column("Bar", "bar")
+                    column('Bar', 'bar')
                 }
                 row {
-                    skipTo("bar")
+                    skipTo('bar')
                     cell()
                 }
             }
@@ -55,16 +55,16 @@ class RowSpec extends Specification {
         XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 columns {
-                    column("Foo", "foo")
+                    column('Foo', 'foo')
                     skipCells(2)
-                    column("Bar", "bar")
+                    column('Bar', 'bar')
                 }
                 row {
                     cell()
                     cell()
-                    skipTo("foo")
-                    cell("A1")
-                    cell("A2")
+                    skipTo('foo')
+                    cell('A1')
+                    cell('A2')
                 }
             }
         }
@@ -82,13 +82,13 @@ class RowSpec extends Specification {
         XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
-                    formula("=SUM()")
-                    formula("SUM()")
+                    formula('=SUM()')
+                    formula('SUM()')
                     formula {
-                        "=CONCATENATE()"
+                        '=CONCATENATE()'
                     }
                     formula {
-                        "CONCATENATE()"
+                        'CONCATENATE()'
                     }
                 }
             }
@@ -98,10 +98,10 @@ class RowSpec extends Specification {
         Iterator<Cell> cells = workbook.getSheetAt(0).getRow(0).cellIterator()
 
         then:
-        cells.next().cellFormula == "SUM()"
-        cells.next().cellFormula == "SUM()"
-        cells.next().cellFormula == "CONCATENATE()"
-        cells.next().cellFormula == "CONCATENATE()"
+        cells.next().cellFormula == 'SUM()'
+        cells.next().cellFormula == 'SUM()'
+        cells.next().cellFormula == 'CONCATENATE()'
+        cells.next().cellFormula == 'CONCATENATE()'
         !cells.hasNext()
     }
 
@@ -113,7 +113,7 @@ class RowSpec extends Specification {
             sheet {
                 row {
                     cell()
-                    cell("A")
+                    cell('A')
                     cell(Calendar.instance)
                     cell(new Date())
                     cell(new Double(2.2))
@@ -138,6 +138,7 @@ class RowSpec extends Specification {
         cells.next().numericCellValue == new Double(1)
     }
 
+    @Issue('https://github.com/jameskleeh/groovy-excel-builder/issues/13')
     void "test cell with null value"() {
         given:
         XSSFWorkbook workbook = ExcelBuilder.build {
@@ -153,6 +154,6 @@ class RowSpec extends Specification {
 
         then:
         noExceptionThrown()
-        cell.getCellTypeEnum() == CellType.BLANK
+        cell.cellTypeEnum == CellType.BLANK
     }
 }
