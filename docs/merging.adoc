@@ -9,10 +9,12 @@ row {
     merge {
         //Anything you can do inside row directly
         cell("Foo")
-        cell("Bar")
+        skipCells(5)
     }
 }
 ----
+
+WARNING: Only one call to `cell()` is allowed inside a merge.
 
 You can also apply default styling to the merged cells
 
@@ -22,7 +24,7 @@ row {
     merge(font: Font.BOLD) {
         //Anything you can do inside row directly
         cell("Foo")
-        cell("Bar")
+        skipCells(3)
     }
 }
 ----

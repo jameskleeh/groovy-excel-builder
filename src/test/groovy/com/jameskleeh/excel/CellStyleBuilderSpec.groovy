@@ -731,4 +731,19 @@ class CellStyleBuilderSpec extends Specification {
         style4.borderBottomEnum == BorderStyle.NONE
     }
 
+    void "temp test"() {
+        ExcelBuilder.output(new FileOutputStream(new File('/Users/jameskleeh/Desktop/foo.xlsx'))) {
+            sheet {
+                row {
+                    merge([border: BorderStyle.THIN]) {
+                        cell('Test')
+                        skipCells(1)
+                    }
+                }
+            }
+        }
+        expect:
+        true
+    }
+
 }

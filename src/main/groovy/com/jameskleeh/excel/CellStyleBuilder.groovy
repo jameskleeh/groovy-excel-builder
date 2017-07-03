@@ -18,22 +18,30 @@ under the License.
 */
 package com.jameskleeh.excel
 
+import com.jameskleeh.excel.style.BorderStyleApplier
+import com.jameskleeh.excel.style.CellRangeBorderStyleApplier
+import com.jameskleeh.excel.style.CellStyleBorderStyleApplier
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.apache.poi.ss.usermodel.BorderStyle
+import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.Font as FontType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
+import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
 
 import java.awt.Color
+import java.lang.reflect.Method
 
 /**
  * A class to build an {@link org.apache.poi.xssf.usermodel.XSSFCellStyle} from a map
@@ -124,9 +132,9 @@ class CellStyleBuilder {
 
     private void setFormat(XSSFCellStyle cellStyle, Object format) {
         if (format instanceof Integer) {
-            cellStyle.setDataFormat(format)
+            cellStyle.setDataFormat((Integer)format)
         } else if (format instanceof String) {
-            cellStyle.setDataFormat(workbook.creationHelper.createDataFormat().getFormat(format))
+            cellStyle.setDataFormat(workbook.creationHelper.createDataFormat().getFormat((String)format))
         } else {
             throw new IllegalArgumentException('The cell format must be an Integer or String')
         }
@@ -206,7 +214,7 @@ class CellStyleBuilder {
         } else if (obj instanceof String) {
             String hex = (String)obj
             if (hex.startsWith('#')) {
-                color = Color.decode(obj)
+                color = Color.decode(hex)
             } else {
                 color = Color.decode("#$obj")
             }
@@ -225,18 +233,19 @@ class CellStyleBuilder {
         throw new IllegalArgumentException("The border style must be an instance of ${BorderStyle.getCanonicalName()}")
     }
 
-    private void setBorder(Map border, String key, Closure borderCallable, Closure colorCallable) {
+    private void setBorder(Map border, BorderSide side, BorderStyleApplier styleApplier) {
+        final String key = side.name()
         if (border.containsKey(key)) {
             if (border[key] instanceof Map) {
                 Map edge = (Map) border[key]
                 if (edge.containsKey(COLOR)) {
-                    colorCallable.call(getColor(edge[COLOR]))
+                    styleApplier.applyColor(side, getColor(edge[COLOR]))
                 }
                 if (edge.containsKey(STYLE)) {
-                    borderCallable.call(getBorderStyle(edge[STYLE]))
+                    styleApplier.applyStyle(side, getBorderStyle(edge[STYLE]))
                 }
             } else {
-                borderCallable.call(getBorderStyle(border[key]))
+                styleApplier.applyStyle(side, getBorderStyle(border[key]))
             }
         }
     }
@@ -247,7 +256,7 @@ class CellStyleBuilder {
         if (horizontalAlignment instanceof HorizontalAlignment) {
             hAlign = (HorizontalAlignment)horizontalAlignment
         } else if (horizontalAlignment instanceof String) {
-            hAlign = HorizontalAlignment.valueOf(horizontalAlignment.toUpperCase())
+            hAlign = HorizontalAlignment.valueOf(((String)horizontalAlignment).toUpperCase())
         }
 
         if (hAlign != null) {
@@ -263,7 +272,7 @@ class CellStyleBuilder {
         if (verticalAlignment instanceof VerticalAlignment) {
             vAlign = (VerticalAlignment) verticalAlignment
         } else if (verticalAlignment instanceof String) {
-            vAlign = VerticalAlignment.valueOf(verticalAlignment.toUpperCase())
+            vAlign = VerticalAlignment.valueOf(((String)verticalAlignment).toUpperCase())
         }
 
         if (vAlign != null) {
@@ -297,25 +306,19 @@ class CellStyleBuilder {
         }
     }
 
-    private void setBorder(XSSFCellStyle cellStyle, Map border) {
+    private void setBorder(BorderStyleApplier styleApplier, Map border) {
         if (border.containsKey(STYLE)) {
             BorderStyle style = getBorderStyle(border[STYLE])
-            cellStyle.setBorderBottom(style)
-            cellStyle.setBorderTop(style)
-            cellStyle.setBorderLeft(style)
-            cellStyle.setBorderRight(style)
+            styleApplier.applyStyle(style)
         }
         if (border.containsKey(COLOR)) {
             XSSFColor color = getColor(border[COLOR])
-            cellStyle.setBorderColor(BorderSide.BOTTOM, color)
-            cellStyle.setBorderColor(BorderSide.TOP, color)
-            cellStyle.setBorderColor(BorderSide.LEFT, color)
-            cellStyle.setBorderColor(BorderSide.RIGHT, color)
+            styleApplier.applyColor(color)
         }
-        setBorder(border, LEFT, cellStyle.&setBorderLeft, cellStyle.&setLeftBorderColor)
-        setBorder(border, RIGHT, cellStyle.&setBorderRight, cellStyle.&setRightBorderColor)
-        setBorder(border, BOTTOM, cellStyle.&setBorderBottom, cellStyle.&setBottomBorderColor)
-        setBorder(border, TOP, cellStyle.&setBorderTop, cellStyle.&setTopBorderColor)
+        setBorder(border, BorderSide.LEFT, styleApplier)
+        setBorder(border, BorderSide.RIGHT, styleApplier)
+        setBorder(border, BorderSide.BOTTOM, styleApplier)
+        setBorder(border, BorderSide.TOP, styleApplier)
     }
 
     private void setFill(XSSFCellStyle cellStyle, Object fill) {
@@ -323,7 +326,7 @@ class CellStyleBuilder {
         if (fill instanceof FillPatternType) {
             fillPattern = (FillPatternType) fill
         } else if (fill instanceof String) {
-            fillPattern = FillPatternType.valueOf(fill.toUpperCase())
+            fillPattern = FillPatternType.valueOf(((String)fill).toUpperCase())
         }
 
         if (fillPattern != null) {
@@ -385,7 +388,7 @@ class CellStyleBuilder {
             cellStyle.setIndention((short) options[INDENT])
         }
         if (options.containsKey(BORDER)) {
-            setBorder(cellStyle, (Map)options[BORDER])
+            setBorder(new CellStyleBorderStyleApplier(cellStyle), (Map)options[BORDER])
         }
         if (options.containsKey(FILL)) {
             setFill(cellStyle, options[FILL])
@@ -473,6 +476,11 @@ class CellStyleBuilder {
             }
             result
         }
+    }
+
+    void applyBorderToRegion(CellRangeAddress range, XSSFSheet sheet, Map border) {
+        BorderStyleApplier borderStyleApplier = new CellRangeBorderStyleApplier(range, sheet)
+        setBorder(borderStyleApplier, border)
     }
     
 }

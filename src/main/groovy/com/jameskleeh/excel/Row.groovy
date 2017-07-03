@@ -85,6 +85,8 @@ class Row extends CreatesCells {
             defaultOptions = newDefaultOptions
         }
 
+        Map borderOptions = defaultOptions.containsKey('border') ? (Map)defaultOptions.remove('border') : Collections.emptyMap()
+
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         callable.delegate = this
         int startingCellIndex = cellIdx
@@ -93,6 +95,7 @@ class Row extends CreatesCells {
         if (endingCellIndex > startingCellIndex) {
             CellRangeAddress range = new CellRangeAddress(row.rowNum, row.rowNum, startingCellIndex, endingCellIndex)
             sheet.addMergedRegion(range)
+            styleBuilder.applyBorderToRegion(range, sheet, borderOptions)
         }
 
         defaultOptions = existingDefaultOptions

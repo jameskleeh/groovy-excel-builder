@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-./gradlew clean test
+./gradlew clean check
 
 EXIT_STATUS=0
 
