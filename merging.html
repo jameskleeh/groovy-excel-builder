@@ -523,10 +523,22 @@ table.CodeRay td.code>pre{padding:0}
     merge {
         <span class="comment">//Anything you can do inside row directly</span>
         cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)
-        cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>)
+        skipCells(<span class="integer">5</span>)
     }
 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Only one call to <code>cell()</code> is allowed inside a merge.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>You can also apply default styling to the merged cells</p>
@@ -537,7 +549,7 @@ table.CodeRay td.code>pre{padding:0}
     merge(<span class="key">font</span>: <span class="predefined-type">Font</span>.BOLD) {
         <span class="comment">//Anything you can do inside row directly</span>
         cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)
-        cell(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bar</span><span class="delimiter">&quot;</span></span>)
+        skipCells(<span class="integer">3</span>)
     }
 }</code></pre>
 </div>
@@ -568,7 +580,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-05-03 20:42:26 UTC
+Last updated 2017-07-03 18:47:52 -04:00
 </div>
 </div>
 </body>
