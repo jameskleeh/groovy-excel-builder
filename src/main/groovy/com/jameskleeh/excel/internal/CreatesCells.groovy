@@ -22,8 +22,11 @@ import com.jameskleeh.excel.CellStyleBuilder
 import com.jameskleeh.excel.Excel
 import com.jameskleeh.excel.Font
 import com.jameskleeh.excel.CellFinder
+import com.jameskleeh.excel.style.CellRangeBorderStyleApplier
+import groovy.transform.CompileStatic
 import org.apache.poi.common.usermodel.Hyperlink
 import org.apache.poi.common.usermodel.HyperlinkType
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFHyperlink
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -36,6 +39,7 @@ import java.awt.Color
  *
  * @author James Kleeh
  */
+@CompileStatic
 abstract class CreatesCells {
 
     protected final XSSFWorkbook workbook
@@ -163,7 +167,7 @@ abstract class CreatesCells {
      * @return The native cell
      */
     XSSFCell cell() {
-        cell('')
+        cell(null)
     }
 
     /**
@@ -184,25 +188,24 @@ abstract class CreatesCells {
      * @return The native cell
      */
     XSSFCell cell(Object value, final Map style) {
-
         XSSFCell cell = nextCell()
         setStyle(value, cell, style)
         if (value == null) {
-            return
+            return cell
         }
         Closure callable = Excel.getRenderer(value.class)
         if (callable != null) {
             cell.setCellValue((String)callable.call(value))
         } else if (value instanceof String) {
-            cell.setCellValue(value)
+            cell.setCellValue((String)value)
         } else if (value instanceof Calendar) {
-            cell.setCellValue(value)
+            cell.setCellValue((Calendar)value)
         } else if (value instanceof Date) {
-            cell.setCellValue(value)
+            cell.setCellValue((Date)value)
         } else if (value instanceof Number) {
-            cell.setCellValue(value.doubleValue())
+            cell.setCellValue(((Number)value).doubleValue())
         } else if (value instanceof Boolean) {
-            cell.setCellValue(value)
+            cell.setCellValue((Boolean)value)
         } else {
             cell.setCellValue(value.toString())
         }
@@ -286,5 +289,39 @@ abstract class CreatesCells {
             skipCells(count)
         }
     }
+
+    protected void performMerge(Map style, Closure callable) {
+        Map existingDefaultOptions = defaultOptions
+
+        if (style != null && !style.isEmpty()) {
+            Map newDefaultOptions = new LinkedHashMap(style)
+            styleBuilder.convertSimpleOptions(newDefaultOptions)
+            newDefaultOptions = styleBuilder.merge(defaultOptions, newDefaultOptions)
+            defaultOptions = newDefaultOptions
+        }
+
+        Map borderOptions = defaultOptions?.containsKey('border') ? (Map)defaultOptions.remove('border') : Collections.emptyMap()
+
+        callable.resolveStrategy = Closure.DELEGATE_FIRST
+        callable.delegate = this
+        int startingIndex = mergeIndex
+        callable.call()
+        int endingIndex = mergeIndex - 1
+        if (endingIndex > startingIndex) {
+            CellRangeAddress range = getRange(startingIndex, endingIndex)
+            sheet.addMergedRegion(range)
+            if (!borderOptions.isEmpty()) {
+                styleBuilder.applyBorderToRegion(getBorderStyleApplier(range, sheet), borderOptions)
+            }
+        }
+
+        defaultOptions = existingDefaultOptions
+    }
+
+    protected abstract CellRangeAddress getRange(int start, int end)
+
+    protected abstract int getMergeIndex()
+
+    protected abstract CellRangeBorderStyleApplier getBorderStyleApplier(CellRangeAddress range, XSSFSheet sheet)
 
 }

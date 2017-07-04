@@ -163,9 +163,9 @@ class Sheet {
         if (options?.containsKey(HEIGHT)) {
             Object height = options[HEIGHT]
             if (height instanceof Short) {
-                row.setHeight(height)
+                row.setHeight((Short)height)
             } else if (height instanceof Float) {
-                row.setHeightInPoints(height)
+                row.setHeightInPoints((Float)height)
             } else {
                 throw new IllegalArgumentException('Row height must be a short or float')
             }

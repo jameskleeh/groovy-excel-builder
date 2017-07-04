@@ -24,24 +24,18 @@ import com.jameskleeh.excel.style.CellStyleBorderStyleApplier
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import org.apache.poi.ss.usermodel.BorderStyle
-import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.Font as FontType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
-import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
-
 import java.awt.Color
-import java.lang.reflect.Method
 
 /**
  * A class to build an {@link org.apache.poi.xssf.usermodel.XSSFCellStyle} from a map
@@ -234,10 +228,10 @@ class CellStyleBuilder {
     }
 
     private void setBorder(Map border, BorderSide side, BorderStyleApplier styleApplier) {
-        final String key = side.name()
-        if (border.containsKey(key)) {
-            if (border[key] instanceof Map) {
-                Map edge = (Map) border[key]
+        final String KEY = side.name().toLowerCase()
+        if (border.containsKey(KEY)) {
+            if (border[KEY] instanceof Map) {
+                Map edge = (Map) border[KEY]
                 if (edge.containsKey(COLOR)) {
                     styleApplier.applyColor(side, getColor(edge[COLOR]))
                 }
@@ -245,7 +239,7 @@ class CellStyleBuilder {
                     styleApplier.applyStyle(side, getBorderStyle(edge[STYLE]))
                 }
             } else {
-                styleApplier.applyStyle(side, getBorderStyle(border[key]))
+                styleApplier.applyStyle(side, getBorderStyle(border[KEY]))
             }
         }
     }
@@ -478,9 +472,9 @@ class CellStyleBuilder {
         }
     }
 
-    void applyBorderToRegion(CellRangeAddress range, XSSFSheet sheet, Map border) {
-        BorderStyleApplier borderStyleApplier = new CellRangeBorderStyleApplier(range, sheet)
+    void applyBorderToRegion(CellRangeBorderStyleApplier borderStyleApplier, Map border) {
         setBorder(borderStyleApplier, border)
+        borderStyleApplier.setStyles()
     }
     
 }

@@ -619,22 +619,24 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test merging of options with rows"() {
         given:
-        XSSFCell testCell1
+        XSSFCell testCellLeft
+        XSSFCell testCellMiddle
+        XSSFCell testCellMiddle2
+        XSSFCell testCellRight
         XSSFCell testCell2
         XSSFCell testCell3
         XSSFCell testCell4
+
         ExcelBuilder.build {
             sheet {
                 defaultStyle([border: BorderStyle.MEDIUM])
                 row {
                     defaultStyle([border: [left: BorderStyle.HAIR]])
                     merge([border: [right: BorderStyle.THICK], alignment: 'center']) {
-                        testCell1 = cell('Foo')
-                        cell('')
-                        cell('')
-                        cell('')
-                        cell('')
-                        cell('')
+                        testCellLeft = cell('Foo')
+                        testCellMiddle = cell()
+                        testCellMiddle2 = cell()
+                        testCellRight = cell()
                     }
                     testCell2 = cell('')
                 }
@@ -650,16 +652,35 @@ class CellStyleBuilderSpec extends Specification {
         }
 
         when:
-        XSSFCellStyle style1 = testCell1.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeLeft = testCellLeft.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeMiddle = testCellMiddle.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeMiddle2 = testCellMiddle2.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeRight = testCellRight.cellStyle //sheet, row, merge
         XSSFCellStyle style2 = testCell2.cellStyle //sheet, row
         XSSFCellStyle style3 = testCell3.cellStyle //sheet
         XSSFCellStyle style4 = testCell4.cellStyle //none
 
         then:
-        style1.borderLeftEnum == BorderStyle.HAIR
-        style1.borderTopEnum == BorderStyle.MEDIUM
-        style1.borderRightEnum == BorderStyle.THICK
-        style1.borderBottomEnum == BorderStyle.MEDIUM
+        mergeLeft.borderLeftEnum == BorderStyle.HAIR
+        mergeLeft.borderTopEnum == BorderStyle.MEDIUM
+        mergeLeft.borderRightEnum == BorderStyle.NONE
+        mergeLeft.borderBottomEnum == BorderStyle.MEDIUM
+
+        mergeMiddle.borderLeftEnum == BorderStyle.NONE
+        mergeMiddle.borderRightEnum == BorderStyle.NONE
+        mergeMiddle.borderTopEnum == BorderStyle.MEDIUM
+        mergeMiddle.borderBottomEnum == BorderStyle.MEDIUM
+
+        mergeMiddle2.borderLeftEnum == BorderStyle.NONE
+        mergeMiddle2.borderRightEnum == BorderStyle.NONE
+        mergeMiddle2.borderTopEnum == BorderStyle.MEDIUM
+        mergeMiddle2.borderBottomEnum == BorderStyle.MEDIUM
+
+        mergeRight.borderLeftEnum == BorderStyle.NONE
+        mergeRight.borderTopEnum == BorderStyle.MEDIUM
+        mergeRight.borderRightEnum == BorderStyle.THICK
+        mergeRight.borderBottomEnum == BorderStyle.MEDIUM
+
         style2.borderLeftEnum == BorderStyle.HAIR
         style2.borderTopEnum == BorderStyle.MEDIUM
         style2.borderRightEnum == BorderStyle.MEDIUM
@@ -676,7 +697,10 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test merging of options with columns"() {
         given:
-        XSSFCell testCell1
+        XSSFCell testCellTop
+        XSSFCell testCellMiddle
+        XSSFCell testCellMiddle2
+        XSSFCell testCellBottom
         XSSFCell testCell2
         XSSFCell testCell3
         XSSFCell testCell4
@@ -686,12 +710,10 @@ class CellStyleBuilderSpec extends Specification {
                 column {
                     defaultStyle([border: [left: BorderStyle.HAIR]])
                     merge([border: [right: BorderStyle.THICK], alignment: 'center']) {
-                        testCell1 = cell('Foo')
-                        cell('')
-                        cell('')
-                        cell('')
-                        cell('')
-                        cell('')
+                        testCellTop = cell('Foo')
+                        testCellMiddle = cell()
+                        testCellMiddle2 = cell()
+                        testCellBottom = cell()
                     }
                     testCell2 = cell('')
                 }
@@ -707,16 +729,35 @@ class CellStyleBuilderSpec extends Specification {
         }
 
         when:
-        XSSFCellStyle style1 = testCell1.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeTop = testCellTop.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeMiddle = testCellMiddle.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeMiddle2 = testCellMiddle2.cellStyle //sheet, row, merge
+        XSSFCellStyle mergeBottom = testCellBottom.cellStyle //sheet, row, merge
         XSSFCellStyle style2 = testCell2.cellStyle //sheet, row
         XSSFCellStyle style3 = testCell3.cellStyle //sheet
         XSSFCellStyle style4 = testCell4.cellStyle //none
 
         then:
-        style1.borderLeftEnum == BorderStyle.HAIR
-        style1.borderTopEnum == BorderStyle.MEDIUM
-        style1.borderRightEnum == BorderStyle.THICK
-        style1.borderBottomEnum == BorderStyle.MEDIUM
+        mergeTop.borderLeftEnum == BorderStyle.HAIR
+        mergeTop.borderTopEnum == BorderStyle.MEDIUM
+        mergeTop.borderRightEnum == BorderStyle.THICK
+        mergeTop.borderBottomEnum == BorderStyle.NONE
+
+        mergeMiddle.borderLeftEnum == BorderStyle.HAIR
+        mergeMiddle.borderRightEnum == BorderStyle.THICK
+        mergeMiddle.borderTopEnum == BorderStyle.NONE
+        mergeMiddle.borderBottomEnum == BorderStyle.NONE
+
+        mergeMiddle2.borderLeftEnum == BorderStyle.HAIR
+        mergeMiddle2.borderRightEnum == BorderStyle.THICK
+        mergeMiddle2.borderTopEnum == BorderStyle.NONE
+        mergeMiddle2.borderBottomEnum == BorderStyle.NONE
+
+        mergeBottom.borderLeftEnum == BorderStyle.HAIR
+        mergeBottom.borderTopEnum == BorderStyle.NONE
+        mergeBottom.borderRightEnum == BorderStyle.THICK
+        mergeBottom.borderBottomEnum == BorderStyle.MEDIUM
+
         style2.borderLeftEnum == BorderStyle.HAIR
         style2.borderTopEnum == BorderStyle.MEDIUM
         style2.borderRightEnum == BorderStyle.MEDIUM
@@ -731,19 +772,31 @@ class CellStyleBuilderSpec extends Specification {
         style4.borderBottomEnum == BorderStyle.NONE
     }
 
-    void "temp test"() {
-        ExcelBuilder.output(new FileOutputStream(new File('/Users/jameskleeh/Desktop/foo.xlsx'))) {
+    void "test number of styles created"() {
+        XSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
-                    merge([border: BorderStyle.THIN]) {
+                    merge([font: [color: Color.YELLOW], border: [style: BorderStyle.DOTTED, color: Color.RED, left: [color: Color.BLUE], right: [style: BorderStyle.DASHED], bottom: [color: '7900bf'], top: [color: '#2AB54A']]]) {
                         cell('Test')
-                        skipCells(1)
+                        skipCells(3)
                     }
+                    cell('another', [font: [color: Color.YELLOW]])
+                }
+            }
+            sheet {
+                column {
+                    merge([font: [color: Color.YELLOW], border: [style: BorderStyle.DOTTED, color: Color.RED, left: [color: Color.BLUE], right: [style: BorderStyle.DASHED], bottom: [color: '7900bf'], top: [color: '#2AB54A']]]) {
+                        cell('Test')
+                        skipCells(3)
+                    }
+                    cell('another', [font: [color: Color.YELLOW]])
                 }
             }
         }
+
         expect:
-        true
+        //3 for each merge = 6 + default + yellow color
+        workbook.numCellStyles == 8
     }
 
 }

@@ -19,6 +19,8 @@ under the License.
 package com.jameskleeh.excel
 
 import com.jameskleeh.excel.internal.CreatesCells
+import com.jameskleeh.excel.style.CellRangeBorderStyleApplier
+import com.jameskleeh.excel.style.ColumnCellRangeBorderStyleApplier
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
@@ -67,26 +69,22 @@ class Column extends CreatesCells {
      */
     @Override
     void merge(Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
-        Map existingDefaultOptions = defaultOptions
+        performMerge(style, callable)
+    }
 
-        if (style != null && !style.isEmpty()) {
-            Map newDefaultOptions = new LinkedHashMap(style)
-            styleBuilder.convertSimpleOptions(newDefaultOptions)
-            newDefaultOptions = styleBuilder.merge(defaultOptions, newDefaultOptions)
-            defaultOptions = newDefaultOptions
-        }
+    @Override
+    protected CellRangeAddress getRange(int start, int end) {
+        new CellRangeAddress(start, end, columnIdx, columnIdx)
+    }
 
-        callable.resolveStrategy = Closure.DELEGATE_FIRST
-        callable.delegate = this
-        int startingRowIndex = rowIdx
-        callable.call()
-        int endingRowIndex = rowIdx - 1
-        if (endingRowIndex > startingRowIndex) {
-            CellRangeAddress range = new CellRangeAddress(startingRowIndex, endingRowIndex, columnIdx, columnIdx)
-            sheet.addMergedRegion(range)
-        }
+    @Override
+    protected int getMergeIndex() {
+        rowIdx
+    }
 
-        defaultOptions = existingDefaultOptions
+    @Override
+    protected CellRangeBorderStyleApplier getBorderStyleApplier(CellRangeAddress range, XSSFSheet sheet) {
+        new ColumnCellRangeBorderStyleApplier(range, sheet)
     }
 
     /**

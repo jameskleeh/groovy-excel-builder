@@ -19,10 +19,13 @@ under the License.
 package com.jameskleeh.excel
 
 import com.jameskleeh.excel.internal.CreatesCells
+import com.jameskleeh.excel.style.CellRangeBorderStyleApplier
+import com.jameskleeh.excel.style.RowCellRangeBorderStyleApplier
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFSheet
 
 /**
  * A class used to create a row in an excel document
@@ -76,29 +79,22 @@ class Row extends CreatesCells {
      */
     @Override
     void merge(final Map style, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
-        Map existingDefaultOptions = defaultOptions
+        performMerge(style, callable)
+    }
 
-        if (style != null && !style.isEmpty()) {
-            Map newDefaultOptions = new LinkedHashMap(style)
-            styleBuilder.convertSimpleOptions(newDefaultOptions)
-            newDefaultOptions = styleBuilder.merge(defaultOptions, newDefaultOptions)
-            defaultOptions = newDefaultOptions
-        }
+    @Override
+    protected CellRangeAddress getRange(int start, int end) {
+        new CellRangeAddress(row.rowNum, row.rowNum, start, end)
+    }
 
-        Map borderOptions = defaultOptions.containsKey('border') ? (Map)defaultOptions.remove('border') : Collections.emptyMap()
+    @Override
+    protected int getMergeIndex() {
+        cellIdx
+    }
 
-        callable.resolveStrategy = Closure.DELEGATE_FIRST
-        callable.delegate = this
-        int startingCellIndex = cellIdx
-        callable.call()
-        int endingCellIndex = cellIdx - 1
-        if (endingCellIndex > startingCellIndex) {
-            CellRangeAddress range = new CellRangeAddress(row.rowNum, row.rowNum, startingCellIndex, endingCellIndex)
-            sheet.addMergedRegion(range)
-            styleBuilder.applyBorderToRegion(range, sheet, borderOptions)
-        }
-
-        defaultOptions = existingDefaultOptions
+    @Override
+    protected CellRangeBorderStyleApplier getBorderStyleApplier(CellRangeAddress range, XSSFSheet sheet) {
+        new RowCellRangeBorderStyleApplier(range, sheet)
     }
 
     /**

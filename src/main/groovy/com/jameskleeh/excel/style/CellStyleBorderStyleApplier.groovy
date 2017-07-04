@@ -1,22 +1,28 @@
 package com.jameskleeh.excel.style
 
+import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.*
 import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
-import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.*
 
+/**
+ * Applys styles and borders to a cell style object
+ *
+ * @author James Kleeh
+ */
 @CompileStatic
 @TupleConstructor
+@SuppressWarnings('NoWildcardImports')
 class CellStyleBorderStyleApplier implements BorderStyleApplier {
 
     XSSFCellStyle cellStyle
 
     @Override
     void applyStyle(BorderSide side, BorderStyle style) {
-        switch(side) {
+        switch (side) {
             case TOP:
                 cellStyle.setBorderTop(style)
                 break
@@ -42,20 +48,7 @@ class CellStyleBorderStyleApplier implements BorderStyleApplier {
 
     @Override
     void applyColor(BorderSide side, XSSFColor color) {
-        switch(side) {
-            case TOP:
-                cellStyle.setTopBorderColor(color)
-                break
-            case BOTTOM:
-                cellStyle.setBottomBorderColor(color)
-                break
-            case LEFT:
-                cellStyle.setLeftBorderColor(color)
-                break
-            case RIGHT:
-                cellStyle.setRightBorderColor(color)
-                break
-        }
+        cellStyle.setBorderColor(side, color)
     }
 
     @Override

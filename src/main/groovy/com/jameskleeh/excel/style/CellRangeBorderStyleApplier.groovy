@@ -1,71 +1,98 @@
 package com.jameskleeh.excel.style
 
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.ss.util.CellUtil
+import org.apache.poi.xssf.usermodel.XSSFCellStyle
+import org.apache.poi.xssf.usermodel.XSSFSheet
 import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
-import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.*
 
+/**
+ * Applys styles and borders to a range of cells (merged).
+ * Assumes the merged region is within a single row or column, which
+ * is all that is supported in the current API
+ *
+ * @author James Kleeh
+ */
 @CompileStatic
 @TupleConstructor
-class CellRangeBorderStyleApplier implements BorderStyleApplier {
+abstract class CellRangeBorderStyleApplier implements BorderStyleApplier {
 
     CellRangeAddress range
     Sheet sheet
 
-    @Override
-    void applyStyle(BorderSide side, BorderStyle style) {
-        switch(side) {
-            case TOP:
-                RegionUtil.setBorderTop(style, range, sheet)
-                break
-            case BOTTOM:
-                RegionUtil.setBorderBottom(style, range, sheet)
-                break
-            case LEFT:
-                RegionUtil.setBorderLeft(style, range, sheet)
-                break
-            case RIGHT:
-                RegionUtil.setBorderRight(style, range, sheet)
-                break
+    protected XSSFCellStyle leftTop
+    protected XSSFCellStyle middle
+    protected XSSFCellStyle bottomRight
+
+    CellRangeBorderStyleApplier(CellRangeAddress range, XSSFSheet sheet) {
+        this.range = range
+        this.sheet = sheet
+        leftTop = sheet.workbook.createCellStyle()
+        if (range.numberOfCells > 2) {
+            middle = sheet.workbook.createCellStyle()
         }
+        bottomRight = sheet.workbook.createCellStyle()
+
+        Row row = CellUtil.getRow(range.firstRow, sheet)
+        leftTop.cloneStyleFrom(CellUtil.getCell(row, range.firstColumn).cellStyle)
+        middle?.cloneStyleFrom(leftTop)
+        bottomRight.cloneStyleFrom(leftTop)
     }
+
+    @Override
+    abstract void applyStyle(BorderSide side, BorderStyle style)
 
     @Override
     void applyStyle(BorderStyle style) {
-        RegionUtil.setBorderTop(style, range, sheet)
-        RegionUtil.setBorderBottom(style, range, sheet)
-        RegionUtil.setBorderLeft(style, range, sheet)
-        RegionUtil.setBorderRight(style, range, sheet)
-    }
-
-    @Override
-    void applyColor(BorderSide side, XSSFColor color) {
-        switch(side) {
-            case TOP:
-                RegionUtil.setTopBorderColor(color.index, range, sheet)
-                break
-            case BOTTOM:
-                RegionUtil.setBottomBorderColor(color.index, range, sheet)
-                break
-            case LEFT:
-                RegionUtil.setLeftBorderColor(color.index, range, sheet)
-                break
-            case RIGHT:
-                RegionUtil.setRightBorderColor(color.index, range, sheet)
-                break
+        BorderSide.values().each { BorderSide side ->
+            applyStyle(side, style)
         }
     }
 
     @Override
+    abstract void applyColor(BorderSide side, XSSFColor color)
+
+    @Override
     void applyColor(XSSFColor color) {
-        RegionUtil.setTopBorderColor(color.index, range, sheet)
-        RegionUtil.setBottomBorderColor(color.index, range, sheet)
-        RegionUtil.setLeftBorderColor(color.index, range, sheet)
-        RegionUtil.setRightBorderColor(color.index, range, sheet)
+        BorderSide.values().each { BorderSide side ->
+            applyColor(side, color)
+        }
+    }
+
+    private void loopRows(Closure c) {
+        int start = range.firstRow
+        int end = range.lastRow
+        for (int i = start; i <= end; i++) {
+            c.call(CellUtil.getRow(i, sheet), i == start, i == end)
+        }
+    }
+
+    private void loopColumns(Row row, Closure c) {
+        int start = range.firstColumn
+        int end = range.lastColumn
+        for (int i = start; i <= end; i++) {
+            c.call(CellUtil.getCell(row, i), i == start, i == end)
+        }
+    }
+
+    void setStyles() {
+        loopRows { Row row, boolean firstRow, boolean lastRow ->
+            loopColumns(row) { Cell cell, boolean firstCol, boolean lastCol ->
+                if (firstRow && firstCol) {
+                    cell.setCellStyle(leftTop)
+                } else if (lastRow && lastCol) {
+                    cell.setCellStyle(bottomRight)
+                } else {
+                    cell.setCellStyle(middle)
+                }
+            }
+        }
     }
 }

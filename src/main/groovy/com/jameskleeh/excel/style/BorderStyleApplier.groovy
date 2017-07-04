@@ -5,7 +5,9 @@ import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
 
 /**
- * Created by jameskleeh on 7/3/17.
+ * An interface used to apply colors and styles to borders
+ *
+ * @author James Kleeh
  */
 interface BorderStyleApplier {
 
