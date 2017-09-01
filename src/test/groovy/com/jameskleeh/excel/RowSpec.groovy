@@ -156,4 +156,24 @@ class RowSpec extends Specification {
         noExceptionThrown()
         cell.cellTypeEnum == CellType.BLANK
     }
+
+    @Issue('https://github.com/jameskleeh/groovy-excel-builder/issues/17')
+    void "test cell with number value"() {
+        given:
+        XSSFWorkbook workbook = ExcelBuilder.build {
+            sheet {
+                row {
+                    cell(3)
+                }
+            }
+        }
+
+        when:
+        Cell cell = workbook.getSheetAt(0).getRow(0).getCell(0)
+
+        then:
+        noExceptionThrown()
+        cell.cellTypeEnum == CellType.NUMERIC
+        cell.numericCellValue == 3D
+    }
 }
