@@ -38,6 +38,21 @@ ExcelBuilder.build {
 }
 ----
 
+=== Column Width
+
+It is possible to set the column width by passing a map with a width key to the column method. The value must be an integer.
+
+[source,groovy]
+----
+ExcelBuilder.build {
+    sheet {
+        column(width: 500) {
+
+        }
+    }
+}
+----
+
 === Skipping Cells
 
 [source,groovy]

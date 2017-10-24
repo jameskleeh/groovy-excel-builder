@@ -195,8 +195,9 @@ abstract class CreatesCells {
         }
         Closure callable = Excel.getRenderer(value.class)
         if (callable != null) {
-            cell.setCellValue((String)callable.call(value))
-        } else if (value instanceof String) {
+            value = callable.call(value)
+        }
+        if (value instanceof String) {
             cell.setCellValue((String)value)
         } else if (value instanceof Calendar) {
             cell.setCellValue((Calendar)value)

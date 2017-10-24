@@ -39,6 +39,7 @@ class Sheet {
     private final CellStyleBuilder styleBuilder
 
     private static final String HEIGHT = 'height'
+    private static final String WIDTH = 'width'
 
     Sheet(XSSFSheet sheet, CellStyleBuilder styleBuilder) {
         this.sheet = sheet
@@ -103,6 +104,23 @@ class Sheet {
         callable.delegate = new Column(sheet, defaultOptions, columnIndexes, styleBuilder, columnIdx, rowIdx)
         callable.call()
         columnIdx++
+    }
+
+    /**
+     * Output data by column
+     *
+     * @param callable To build column data
+     */
+    void column(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Column) Closure callable) {
+        if (options?.containsKey(WIDTH)) {
+            Object width = options[WIDTH]
+            if (width instanceof Integer) {
+                sheet.setColumnWidth(columnIdx, (Integer)width)
+            } else {
+                throw new IllegalArgumentException('Column width must be an integer')
+            }
+        }
+        column(callable)
     }
 
     /**
