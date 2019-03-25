@@ -18,6 +18,9 @@ under the License.
 */
 package com.jameskleeh.excel.extensions
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 /**
  * A class to create anchored column references
  *
@@ -26,12 +29,19 @@ package com.jameskleeh.excel.extensions
  */
 class StringExtension {
 
+    static final Pattern digit = Pattern.compile("\\d")
+
     static String anchorColumn(final String self) {
         '$' + self
     }
 
     static String anchorRow(final String self) {
-        self[0] + '$' + self[1..-1]
+        Matcher m = digit.matcher(self)
+        int position
+        if (m.find()) {
+            position = m.start()
+        }
+        self[0..position-1] + '$' + self[position..-1]
     }
 
     static String anchor(final String self) {

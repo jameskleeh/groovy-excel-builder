@@ -14,6 +14,9 @@ class StringExtensionSpec extends Specification {
     void "test anchor row"() {
         expect:
         'A2'.anchorRow() == 'A$2'
+        'A25'.anchorRow() == 'A$25'
+        'AB3'.anchorRow() == 'AB$3'
+        'AB25'.anchorRow() == 'AB$25'
     }
 
     void "test anchor"() {
