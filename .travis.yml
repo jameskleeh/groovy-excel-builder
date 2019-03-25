@@ -2,7 +2,7 @@ language: groovy
 sudo: false
 dist: trusty
 jdk:
-- oraclejdk7
+- oraclejdk8
 script: ./travis-build.sh
 before_cache:
 - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
