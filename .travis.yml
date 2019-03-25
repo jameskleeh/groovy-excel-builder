@@ -1,6 +1,6 @@
 language: groovy
 sudo: false
-dist: precise
+dist: xenial
 jdk:
 - oraclejdk7
 script: ./travis-build.sh
