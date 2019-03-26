@@ -6,6 +6,7 @@ plugins {
     id "com.jfrog.artifactory" version "4.4.0"
 }
 
+apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
