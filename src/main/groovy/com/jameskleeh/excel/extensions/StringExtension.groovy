@@ -29,19 +29,19 @@ import java.util.regex.Pattern
  */
 class StringExtension {
 
-    static final Pattern digit = Pattern.compile("\\d")
+    static final Pattern DIGIT = Pattern.compile('\\d')
 
     static String anchorColumn(final String self) {
         '$' + self
     }
 
     static String anchorRow(final String self) {
-        Matcher m = digit.matcher(self)
-        int position
+        Matcher m = DIGIT.matcher(self)
+        int position = 0
         if (m.find()) {
             position = m.start()
         }
-        self[0..position-1] + '$' + self[position..-1]
+        self[0..position - 1] + '$' + self[position.. - 1]
     }
 
     static String anchor(final String self) {
