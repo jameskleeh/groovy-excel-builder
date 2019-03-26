@@ -41,7 +41,7 @@ class StringExtension {
         if (m.find()) {
             position = m.start()
         }
-        self[0..position - 1] + '$' + self[position.. - 1]
+        self[0..position - 1] + '$' + self[position..-1]
     }
 
     static String anchor(final String self) {
