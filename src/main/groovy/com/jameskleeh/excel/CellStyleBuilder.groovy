@@ -46,9 +46,9 @@ import java.awt.Color
 @CompileStatic
 class CellStyleBuilder {
 
-    XSSFWorkbook workbook
+    private final XSSFWorkbook workbook
+    private final WorkbookCache workbookCache
 
-    private static final Map<XSSFWorkbook, WorkbookCache> WORKBOOK_CACHE = [:]
     protected static final String FORMAT = 'format'
     protected static final String HIDDEN = 'hidden'
     protected static final String LOCKED = 'locked'
@@ -78,9 +78,7 @@ class CellStyleBuilder {
 
     CellStyleBuilder(XSSFWorkbook workbook) {
         this.workbook = workbook
-        if (!WORKBOOK_CACHE.containsKey(workbook)) {
-            WORKBOOK_CACHE.put(workbook, new WorkbookCache(workbook))
-        }
+        workbookCache = new WorkbookCache(workbook)
     }
 
     private static void convertBorderOptions(Map options, String key) {
@@ -145,8 +143,6 @@ class CellStyleBuilder {
     }
 
     private void setFont(XSSFCellStyle cellStyle, Object fontOptions) {
-        WorkbookCache workbookCache = WORKBOOK_CACHE.get(workbook)
-
         if (!workbookCache.containsFont(fontOptions)) {
             XSSFFont font = workbook.createFont()
             if (fontOptions instanceof Map) {
@@ -407,7 +403,6 @@ class CellStyleBuilder {
             }
         }
         if (options) {
-            WorkbookCache workbookCache = WORKBOOK_CACHE.get(workbook)
             if (workbookCache.containsStyle(options)) {
                 workbookCache.getStyle(options)
             } else {

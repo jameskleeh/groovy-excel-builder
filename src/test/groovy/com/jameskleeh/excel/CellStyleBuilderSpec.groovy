@@ -565,8 +565,8 @@ class CellStyleBuilderSpec extends Specification {
         cellStyleBuilder.getStyle('', [hidden: true])
 
         then:
-        cellStyleBuilder.WORKBOOK_CACHE[workbook].containsStyle([hidden: true])
-        cellStyleBuilder.WORKBOOK_CACHE[workbook].styles.size() == 1
+        cellStyleBuilder.workbookCache.containsStyle([hidden: true])
+        cellStyleBuilder.workbookCache.styles.size() == 1
     }
 
     void "test setStyle cell no options"() {
