@@ -1,6 +1,5 @@
 package com.jameskleeh.excel
 
-import com.jameskleeh.excel.Font
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
