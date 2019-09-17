@@ -1,6 +1,7 @@
 package com.jameskleeh.excel.style
 
 import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.*
+
 import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
 import org.apache.poi.ss.usermodel.BorderStyle

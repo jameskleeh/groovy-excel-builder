@@ -19,8 +19,8 @@ under the License.
 package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
-import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.streaming.SXSSFRow
+import org.apache.poi.xssf.streaming.SXSSFSheet
 
 /**
  * A class used to create a sheet in an excel document
@@ -31,7 +31,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 @CompileStatic
 class Sheet {
 
-    private final XSSFSheet sheet
+    private final SXSSFSheet sheet
     private int rowIdx
     private int columnIdx
     private Map defaultOptions
@@ -41,7 +41,7 @@ class Sheet {
     private static final String HEIGHT = 'height'
     private static final String WIDTH = 'width'
 
-    Sheet(XSSFSheet sheet, CellStyleBuilder styleBuilder) {
+    Sheet(SXSSFSheet sheet, CellStyleBuilder styleBuilder) {
         this.sheet = sheet
         this.rowIdx = 0
         this.columnIdx = 0
@@ -141,7 +141,7 @@ class Sheet {
      *
      * @return The native row
      */
-    XSSFRow row() {
+    SXSSFRow row() {
         row([:], null)
     }
 
@@ -151,7 +151,7 @@ class Sheet {
      * @param cells A list of data to output as cells
      * @return The native row
      */
-    XSSFRow row(Object...cells) {
+    SXSSFRow row(Object...cells) {
         row {
             cells.each { val ->
                 cell(val)
@@ -165,7 +165,7 @@ class Sheet {
      * @param callable To build row data
      * @return The native row
      */
-    XSSFRow row(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+    SXSSFRow row(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
         row([:], callable)
     }
 
@@ -176,8 +176,8 @@ class Sheet {
      * @param callable To build row data
      * @return The native row
      */
-    XSSFRow row(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
-        XSSFRow row = sheet.createRow(rowIdx)
+    SXSSFRow row(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Row) Closure callable) {
+        SXSSFRow row = sheet.createRow(rowIdx)
         if (options?.containsKey(HEIGHT)) {
             Object height = options[HEIGHT]
             if (height instanceof Short) {

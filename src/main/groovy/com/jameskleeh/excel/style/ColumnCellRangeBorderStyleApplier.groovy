@@ -1,9 +1,7 @@
 package com.jameskleeh.excel.style
 
-import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.BOTTOM
-import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.LEFT
-import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.RIGHT
-import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.TOP
+import static org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide.*
+
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 import org.apache.poi.ss.usermodel.BorderStyle

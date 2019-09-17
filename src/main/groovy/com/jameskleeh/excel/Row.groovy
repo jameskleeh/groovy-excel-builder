@@ -23,9 +23,9 @@ import com.jameskleeh.excel.style.CellRangeBorderStyleApplier
 import com.jameskleeh.excel.style.RowCellRangeBorderStyleApplier
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.streaming.SXSSFCell
+import org.apache.poi.xssf.streaming.SXSSFRow
+import org.apache.poi.xssf.streaming.SXSSFSheet
 
 /**
  * A class used to create a row in an excel document
@@ -36,19 +36,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 @CompileStatic
 class Row extends CreatesCells {
 
-    private final XSSFRow row
+    private final SXSSFRow row
 
     private int cellIdx
 
-    Row(XSSFRow row, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
+    Row(SXSSFRow row, Map defaultOptions, Map<Object, Integer> columnIndexes, CellStyleBuilder styleBuilder) {
         super(row.sheet, defaultOptions, columnIndexes, styleBuilder)
         this.row = row
         this.cellIdx = 0
     }
 
     @Override
-    protected XSSFCell nextCell() {
-        XSSFCell cell = row.createCell(cellIdx)
+    protected SXSSFCell nextCell() {
+        SXSSFCell cell = row.createCell(cellIdx)
         cellIdx++
         cell
     }
@@ -93,7 +93,7 @@ class Row extends CreatesCells {
     }
 
     @Override
-    protected CellRangeBorderStyleApplier getBorderStyleApplier(CellRangeAddress range, XSSFSheet sheet) {
+    protected CellRangeBorderStyleApplier getBorderStyleApplier(CellRangeAddress range, SXSSFSheet sheet) {
         new RowCellRangeBorderStyleApplier(range, sheet)
     }
 

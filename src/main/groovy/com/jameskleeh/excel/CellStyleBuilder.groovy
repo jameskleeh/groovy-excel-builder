@@ -28,14 +28,15 @@ import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.Font as FontType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
-import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.streaming.SXSSFCell
+import org.apache.poi.xssf.streaming.SXSSFRow
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.XSSFFont
-import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
-import java.awt.Color
+
+import java.awt.*
 
 /**
  * A class to build an {@link org.apache.poi.xssf.usermodel.XSSFCellStyle} from a map
@@ -46,7 +47,7 @@ import java.awt.Color
 @CompileStatic
 class CellStyleBuilder {
 
-    private final XSSFWorkbook workbook
+    private final SXSSFWorkbook workbook
     private final WorkbookCache workbookCache
 
     protected static final String FORMAT = 'format'
@@ -76,7 +77,7 @@ class CellStyleBuilder {
     protected static final String BACKGROUND_COLOR = 'backgroundColor'
     protected static final String FOREGROUND_COLOR = 'foregroundColor'
 
-    CellStyleBuilder(XSSFWorkbook workbook) {
+    CellStyleBuilder(SXSSFWorkbook workbook) {
         this.workbook = workbook
         workbookCache = new WorkbookCache(workbook)
     }
@@ -144,7 +145,7 @@ class CellStyleBuilder {
 
     private void setFont(XSSFCellStyle cellStyle, Object fontOptions) {
         if (!workbookCache.containsFont(fontOptions)) {
-            XSSFFont font = workbook.createFont()
+            XSSFFont font = (XSSFFont) workbook.createFont()
             if (fontOptions instanceof Map) {
                 Map fontMap = (Map)fontOptions
                 setBooleanFont(fontMap, FONT_BOLD, font.&setBold)
@@ -211,7 +212,7 @@ class CellStyleBuilder {
         } else {
             throw new IllegalArgumentException("${obj} must be an instance of ${Color.canonicalName} or a hex ${String.canonicalName}")
         }
-        new XSSFColor(color)
+        new XSSFColor(color, workbookCache.colorMap)
     }
 
     @SuppressWarnings('UnnecessaryGetter')
@@ -348,8 +349,8 @@ class CellStyleBuilder {
      * @param options A map of options to configure the style
      * @return A cell style to apply
      */
-     XSSFCellStyle buildStyle(Object value, Map options) {
-        XSSFCellStyle cellStyle = workbook.createCellStyle()
+    XSSFCellStyle buildStyle(Object value, Map options) {
+        XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle()
         if (options.containsKey(FORMAT)) {
             setFormat(cellStyle, options[FORMAT])
         }
@@ -423,7 +424,7 @@ class CellStyleBuilder {
      * @param _options A map of options for styling
      * @param defaultOptions A map of default options for styling
      */
-     void setStyle(Object value, XSSFCell cell, Map options, Map defaultOptions = null) {
+     void setStyle(Object value, SXSSFCell cell, Map options, Map defaultOptions = null) {
          XSSFCellStyle cellStyle = getStyle(value, options, defaultOptions)
          if (cellStyle != null) {
              cell.cellStyle = cellStyle
@@ -437,7 +438,7 @@ class CellStyleBuilder {
      * @param _options A map of options for styling
      * @param defaultOptions A map of default options for styling
      */
-    void setStyle(XSSFRow row, Map options, Map defaultOptions = null) {
+    void setStyle(SXSSFRow row, Map options, Map defaultOptions = null) {
         XSSFCellStyle cellStyle = getStyle(null, options, defaultOptions)
         if (cellStyle != null) {
             row.setRowStyle(cellStyle)

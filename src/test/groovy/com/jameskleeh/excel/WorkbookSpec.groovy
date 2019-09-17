@@ -1,13 +1,13 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import spock.lang.Specification
 import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+import spock.lang.Specification
 
 class WorkbookSpec extends Specification {
 
     void "test sheet"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
 
             }

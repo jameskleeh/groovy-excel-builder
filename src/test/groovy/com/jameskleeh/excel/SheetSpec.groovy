@@ -1,13 +1,13 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import spock.lang.Specification
 
 class SheetSpec extends Specification {
 
     void "test skipRows"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row()
                 skipRows(2)
@@ -25,7 +25,7 @@ class SheetSpec extends Specification {
     }
 
     void "test row(Object...)"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row(1, 2, 3)
             }
@@ -42,7 +42,7 @@ class SheetSpec extends Specification {
     }
 
     void "test row(Map options)"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row([height: 12F]) {
 

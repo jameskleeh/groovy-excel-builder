@@ -1,15 +1,15 @@
 package com.jameskleeh.excel.style
 
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.util.CellUtil
-import org.apache.poi.xssf.usermodel.XSSFCellStyle
-import org.apache.poi.xssf.usermodel.XSSFSheet
 import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
 import org.apache.poi.ss.usermodel.BorderStyle
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.util.CellUtil
+import org.apache.poi.xssf.streaming.SXSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide
 
@@ -31,14 +31,14 @@ abstract class CellRangeBorderStyleApplier implements BorderStyleApplier {
     protected XSSFCellStyle middle
     protected XSSFCellStyle bottomRight
 
-    CellRangeBorderStyleApplier(CellRangeAddress range, XSSFSheet sheet) {
+    CellRangeBorderStyleApplier(CellRangeAddress range, SXSSFSheet sheet) {
         this.range = range
         this.sheet = sheet
-        leftTop = sheet.workbook.createCellStyle()
+        leftTop = (XSSFCellStyle) sheet.workbook.createCellStyle()
         if (range.numberOfCells > 2) {
-            middle = sheet.workbook.createCellStyle()
+            middle = (XSSFCellStyle) sheet.workbook.createCellStyle()
         }
-        bottomRight = sheet.workbook.createCellStyle()
+        bottomRight = (XSSFCellStyle) sheet.workbook.createCellStyle()
 
         Row row = CellUtil.getRow(range.firstRow, sheet)
         leftTop.cloneStyleFrom(CellUtil.getCell(row, range.firstColumn).cellStyle)

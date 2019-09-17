@@ -1,7 +1,7 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.streaming.SXSSFCell
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -10,7 +10,7 @@ class FormulaSpec extends Specification {
 
     void "test getRow"() {
         given:
-        XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(0)
+        SXSSFCell cell = new SXSSFWorkbook().createSheet().createRow(2).createCell(0)
 
         CellFinder formula = new CellFinder(cell, null)
 
@@ -20,7 +20,7 @@ class FormulaSpec extends Specification {
 
     void "test getColumn"() {
         given:
-        XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(2)
+        SXSSFCell cell = new SXSSFWorkbook().createSheet().createRow(2).createCell(2)
 
         CellFinder formula = new CellFinder(cell, null)
 
@@ -30,7 +30,7 @@ class FormulaSpec extends Specification {
 
     void "test relativeCell(int columnIndex, int rowIndex)"() {
         given:
-        XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(2)
+        SXSSFCell cell = new SXSSFWorkbook().createSheet().createRow(2).createCell(2)
         CellFinder formula = new CellFinder(cell, null)
 
         when:
@@ -64,7 +64,7 @@ class FormulaSpec extends Specification {
 
     void "test relativeCell(int columnIndex)"() {
         given:
-        XSSFCell cell = new XSSFWorkbook().createSheet().createRow(2).createCell(2)
+        SXSSFCell cell = new SXSSFWorkbook().createSheet().createRow(2).createCell(2)
         CellFinder formula = new CellFinder(cell, null)
 
         when:
@@ -159,7 +159,7 @@ class FormulaSpec extends Specification {
 
     void "test getSheetName"() {
         given:
-        XSSFCell cell = new XSSFWorkbook().createSheet('Foo').createRow(2).createCell(2)
+        SXSSFCell cell = new SXSSFWorkbook().createSheet('Foo').createRow(2).createCell(2)
         CellFinder formula = new CellFinder(cell, null)
 
         expect:

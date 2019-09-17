@@ -20,8 +20,8 @@ package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
 import org.apache.poi.ss.util.WorkbookUtil
-import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.streaming.SXSSFSheet
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 
 /**
  * A class used to create a workbook in an excel document
@@ -32,13 +32,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 @CompileStatic
 class Workbook {
 
-    private final XSSFWorkbook wb
+    private final SXSSFWorkbook wb
     private final CellStyleBuilder styleBuilder
 
     private static final String WIDTH = 'width'
     private static final String HEIGHT = 'height'
 
-    Workbook(XSSFWorkbook wb) {
+    Workbook(SXSSFWorkbook wb) {
         this.wb = wb
         this.styleBuilder = new CellStyleBuilder(wb)
     }
@@ -51,7 +51,7 @@ class Workbook {
      * @param callable To build data
      * @return The native sheet object
      */
-    XSSFSheet sheet(String name, Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    SXSSFSheet sheet(String name, Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         handleSheet(wb.createSheet(WorkbookUtil.createSafeSheetName(name)), options, callable)
     }
 
@@ -62,7 +62,7 @@ class Workbook {
      * @param callable To build data
      * @return The native sheet object
      */
-    XSSFSheet sheet(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    SXSSFSheet sheet(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         sheet(name, [:], callable)
     }
 
@@ -72,7 +72,7 @@ class Workbook {
      * @param callable To build data
      * @return The native sheet object
      */
-    XSSFSheet sheet(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    SXSSFSheet sheet(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         sheet([:], callable)
     }
 
@@ -83,11 +83,11 @@ class Workbook {
      * @param callable To build data
      * @return The native sheet object
      */
-    XSSFSheet sheet(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
+    SXSSFSheet sheet(Map options, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = Sheet) Closure callable) {
         handleSheet(wb.createSheet(), options, callable)
     }
 
-    private XSSFSheet handleSheet(XSSFSheet sheet, Map options, Closure callable) {
+    private SXSSFSheet handleSheet(SXSSFSheet sheet, Map options, Closure callable) {
         callable.resolveStrategy = Closure.DELEGATE_FIRST
         if (options.containsKey(WIDTH)) {
             Object width = options[WIDTH]

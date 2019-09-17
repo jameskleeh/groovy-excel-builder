@@ -19,9 +19,11 @@ under the License.
 package com.jameskleeh.excel
 
 import groovy.transform.CompileStatic
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
+import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap
+import org.apache.poi.xssf.usermodel.IndexedColorMap
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFFont
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
  * A class used to store fonts and styles for reuse in workbooks
@@ -34,10 +36,11 @@ class WorkbookCache {
 
     final Map<Object, XSSFFont> fonts = [:]
     final Map<Object, XSSFCellStyle> styles = [:]
+    final IndexedColorMap colorMap = new DefaultIndexedColorMap()
 
-    private final XSSFWorkbook workbook
+    private final SXSSFWorkbook workbook
 
-    WorkbookCache(XSSFWorkbook workbook) {
+    WorkbookCache(SXSSFWorkbook workbook) {
         this.workbook = workbook
     }
 

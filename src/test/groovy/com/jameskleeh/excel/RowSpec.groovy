@@ -2,14 +2,14 @@ package com.jameskleeh.excel
 
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import spock.lang.Issue
 import spock.lang.Specification
 
 class RowSpec extends Specification {
 
     void "test skipCells"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     cell()
@@ -29,7 +29,7 @@ class RowSpec extends Specification {
     }
 
     void "test skipTo"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 columns {
                     column('Foo', 'foo')
@@ -52,7 +52,7 @@ class RowSpec extends Specification {
     }
 
     void "test skipTo overwrite previous cells"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 columns {
                     column('Foo', 'foo')
@@ -79,7 +79,7 @@ class RowSpec extends Specification {
     }
 
     void "test formula(String)"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     formula('=SUM()')
@@ -109,7 +109,7 @@ class RowSpec extends Specification {
         Excel.registerCellRenderer(StringBuilder) {
             it.append('x').toString()
         }
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     cell()
@@ -141,7 +141,7 @@ class RowSpec extends Specification {
     @Issue('https://github.com/jameskleeh/groovy-excel-builder/issues/13')
     void "test cell with null value"() {
         given:
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     cell(null)
@@ -160,7 +160,7 @@ class RowSpec extends Specification {
     @Issue('https://github.com/jameskleeh/groovy-excel-builder/issues/17')
     void "test cell with number value"() {
         given:
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     cell(3)

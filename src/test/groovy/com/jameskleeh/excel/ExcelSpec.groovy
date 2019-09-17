@@ -1,6 +1,6 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import spock.lang.Issue
 import spock.lang.Specification
 
@@ -127,7 +127,7 @@ class ExcelSpec extends Specification {
         Excel.registerCellFormat(BigDecimal, 0xa)
 
         when:
-        XSSFWorkbook wb = ExcelBuilder.build {
+        SXSSFWorkbook wb = ExcelBuilder.build {
             sheet {
                 row {
                     cell(1.32G)

@@ -1,6 +1,6 @@
 package com.jameskleeh.excel
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -9,10 +9,10 @@ import spock.lang.Specification
  */
 class WorkbookCacheSpec extends Specification {
 
-    @Shared XSSFWorkbook workbook
+    @Shared SXSSFWorkbook workbook
 
     void setupSpec() {
-        workbook = new XSSFWorkbook()
+        workbook = new SXSSFWorkbook()
     }
 
     void "test contains style"() {

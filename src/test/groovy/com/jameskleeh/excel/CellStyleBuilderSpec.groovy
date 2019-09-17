@@ -1,15 +1,16 @@
 package com.jameskleeh.excel
 
+import com.jameskleeh.excel.Font
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.VerticalAlignment
-import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.streaming.SXSSFCell
+import org.apache.poi.xssf.streaming.SXSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import spock.lang.Specification
 
-import java.awt.Color
+import java.awt.*
 
 /**
  * Created by jameskleeh on 9/25/16.
@@ -23,7 +24,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test convertSimpleOptions"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         Map<String, Object> options = [border: BorderStyle.DASHED]
 
         when:
@@ -77,7 +78,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle format"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
         Excel.registerCellFormat(String, 'bar')
 
@@ -108,7 +109,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle font"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -223,7 +224,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle hidden"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -247,7 +248,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle locked"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -271,7 +272,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle wrapped"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -295,7 +296,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle horizontal alignment"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -325,7 +326,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle vertical alignment"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -355,7 +356,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle rotation"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -379,7 +380,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle indention"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -403,7 +404,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle border"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -453,7 +454,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle fill"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -489,7 +490,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle foreground color"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when:
@@ -519,7 +520,7 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test buildStyle background color"() {
         given:
-        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new XSSFWorkbook())
+        CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(new SXSSFWorkbook())
         XSSFCellStyle cellStyle
 
         when: 'Only the background color is specified'
@@ -557,7 +558,7 @@ class CellStyleBuilderSpec extends Specification {
     }
 
     void "test getStyle pulls from cache"() {
-        XSSFWorkbook workbook = new XSSFWorkbook()
+        SXSSFWorkbook workbook = new SXSSFWorkbook()
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
 
         when:
@@ -571,12 +572,12 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test setStyle cell no options"() {
         given:
-        XSSFWorkbook workbook = new XSSFWorkbook()
+        SXSSFWorkbook workbook = new SXSSFWorkbook()
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
-        XSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
+        SXSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
 
         when:
-        XSSFCell cell = defaultCell.row.createCell(1)
+        SXSSFCell cell = defaultCell.row.createCell(1)
         cellStyleBuilder.setStyle('', cell, null)
 
         then:
@@ -585,12 +586,12 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test setStyle cell options"() {
         given:
-        XSSFWorkbook workbook = new XSSFWorkbook()
+        SXSSFWorkbook workbook = new SXSSFWorkbook()
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
-        XSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
+        SXSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
 
         when:
-        XSSFCell cell = defaultCell.row.createCell(1)
+        SXSSFCell cell = defaultCell.row.createCell(1)
         cellStyleBuilder.setStyle('', cell, [font: Font.ITALIC])
 
         then:
@@ -599,12 +600,12 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test setStyle cell options are merged"() {
         given:
-        XSSFWorkbook workbook = new XSSFWorkbook()
+        SXSSFWorkbook workbook = new SXSSFWorkbook()
         CellStyleBuilder cellStyleBuilder = new CellStyleBuilder(workbook)
-        XSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
+        SXSSFCell defaultCell = workbook.createSheet().createRow(0).createCell(0)
 
         when:
-        XSSFCell cell = defaultCell.row.createCell(1)
+        SXSSFCell cell = defaultCell.row.createCell(1)
         cellStyleBuilder.setStyle('', cell, [font: Font.ITALIC, border: [left: BorderStyle.DOUBLE]], [font: Font.BOLD, border: BorderStyle.DASH_DOT])
         XSSFCellStyle style = cell.cellStyle
 
@@ -619,13 +620,13 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test merging of options with rows"() {
         given:
-        XSSFCell testCellLeft
-        XSSFCell testCellMiddle
-        XSSFCell testCellMiddle2
-        XSSFCell testCellRight
-        XSSFCell testCell2
-        XSSFCell testCell3
-        XSSFCell testCell4
+        SXSSFCell testCellLeft
+        SXSSFCell testCellMiddle
+        SXSSFCell testCellMiddle2
+        SXSSFCell testCellRight
+        SXSSFCell testCell2
+        SXSSFCell testCell3
+        SXSSFCell testCell4
 
         ExcelBuilder.build {
             sheet {
@@ -697,13 +698,13 @@ class CellStyleBuilderSpec extends Specification {
 
     void "test merging of options with columns"() {
         given:
-        XSSFCell testCellTop
-        XSSFCell testCellMiddle
-        XSSFCell testCellMiddle2
-        XSSFCell testCellBottom
-        XSSFCell testCell2
-        XSSFCell testCell3
-        XSSFCell testCell4
+        SXSSFCell testCellTop
+        SXSSFCell testCellMiddle
+        SXSSFCell testCellMiddle2
+        SXSSFCell testCellBottom
+        SXSSFCell testCell2
+        SXSSFCell testCell3
+        SXSSFCell testCell4
         ExcelBuilder.build {
             sheet {
                 defaultStyle([border: BorderStyle.MEDIUM])
@@ -773,7 +774,7 @@ class CellStyleBuilderSpec extends Specification {
     }
 
     void "test number of styles created"() {
-        XSSFWorkbook workbook = ExcelBuilder.build {
+        SXSSFWorkbook workbook = ExcelBuilder.build {
             sheet {
                 row {
                     merge([font: [color: Color.YELLOW], border: [style: BorderStyle.DOTTED, color: Color.RED, left: [color: Color.BLUE], right: [style: BorderStyle.DASHED], bottom: [color: '7900bf'], top: [color: '#2AB54A']]]) {
