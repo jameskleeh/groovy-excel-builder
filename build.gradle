@@ -149,18 +149,18 @@ task docs(type:Copy, dependsOn:[groovydoc, asciidoctor])  {
     into "$buildDir/docs"
 }
 
-githubPages {
+gitPublish {
 
     beforeEvaluate {
         System.setProperty("org.ajoberstar.grgit.auth.username", project.hasProperty('githubKey') ? project.property('githubKey') : System.getenv('GITHUB_KEY'))
     }
 
-    repoUri = "${project.githubUrl}.git"
+    repoUri = "${project.githubUrl}.git".toString()
 
     branch = 'gh-pages'
 
     contents {
-        from "build/docs" {
+        from("build/docs") {
             into "0.4"
         }
     }
