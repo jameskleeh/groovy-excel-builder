@@ -14,7 +14,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH =~ ^master|[012]\..\.x$ && $TRAVIS_
     ./gradlew bintrayUpload || EXIT_STATUS=$?
 
     if [[ $EXIT_STATUS == 0 ]]; then
-        ./gradlew publishGhPages || EXIT_STATUS=$?
+        ./gradlew gitPublishPush || EXIT_STATUS=$?
     fi
 
   else

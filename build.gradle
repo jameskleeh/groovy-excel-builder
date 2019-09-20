@@ -1,8 +1,8 @@
 plugins {
-    id "com.jfrog.bintray" version "1.7.3"
+    id "com.jfrog.bintray" version "1.8.4"
     id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
     id "nebula.provided-base" version "3.1.0"
-    id 'org.ajoberstar.github-pages' version '1.1.0'
+    id 'org.ajoberstar.git-publish' version '2.1.1'
     id "com.jfrog.artifactory" version "4.9.8"
 }
 
@@ -159,20 +159,26 @@ task docs(type:Copy, dependsOn:[groovydoc, asciidoctor])  {
     into "$buildDir/docs"
 }
 
-githubPages {
-    repoUri = "${project.githubUrl}.git"
+gitPublish {
 
-    credentials {
-        username = project.hasProperty('githubKey') ? project.property('githubKey') : System.getenv('GITHUB_KEY')
-        password = ''
+    repoUri = "${project.githubUrl}.git".toString()
+
+    branch = 'gh-pages'
+
+    contents {
+        from("build/docs") {
+            into "0.4"
+        }
     }
 
-    pages {
-        from file("build/docs")
+    preserve {
+        include "1.0/**"
     }
+
+    commitMessage = 'Publish documentation'
 }
 
-publishGhPages.dependsOn docs
+gitPublishPush.dependsOn docs
 
 codenarc {
     toolVersion = '1.4'
