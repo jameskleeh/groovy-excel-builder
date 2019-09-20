@@ -151,10 +151,6 @@ task docs(type:Copy, dependsOn:[groovydoc, asciidoctor])  {
 
 gitPublish {
 
-    beforeEvaluate {
-        System.setProperty("org.ajoberstar.grgit.auth.username", project.hasProperty('githubKey') ? project.property('githubKey') : System.getenv('GITHUB_KEY'))
-    }
-
     repoUri = "${project.githubUrl}.git".toString()
 
     branch = 'gh-pages'
