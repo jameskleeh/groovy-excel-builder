@@ -1,5 +1,5 @@
 plugins {
-    id "com.jfrog.bintray" version "1.7.3"
+    id "com.jfrog.bintray" version "1.8.4"
     id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
     id "nebula.provided-base" version "3.1.0"
     id 'org.ajoberstar.git-publish' version '2.1.1'
