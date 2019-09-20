@@ -17,8 +17,8 @@ apply plugin: "jacoco"
 group 'com.jameskleeh'
 version '1.0.0.BUILD-SNAPSHOT'
 
-targetCompatibility = 1.7
-sourceCompatibility = 1.7
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
 
 configurations {
     documentation
@@ -167,12 +167,12 @@ gitPublish {
 
     contents {
         from("build/docs") {
-            into "0.4"
+            into "1.0"
         }
     }
 
     preserve {
-        include "1.0/**"
+        include "0.4/**"
     }
 
     commitMessage = 'Publish documentation'
